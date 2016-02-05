@@ -299,11 +299,12 @@ int main(void)
         u_char x = KbGetKey();
         if(x == KEY_OK){
             LcdBackLight(LCD_BACKLIGHT_ON);
-            //NutSleep(3000);
+            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
         }
-        if(x == KEY_ESC){
-            LcdBackLight(LCD_BACKLIGHT_OFF);
-        }
+
+        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
+            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
+        }                                       // ^
 
         if(x == KEY_ALT){
             LcdClear();
