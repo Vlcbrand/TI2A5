@@ -127,6 +127,59 @@ void LcdChar(char MyChar)
 }
 
 
+void LcdMoveCursorHome() {
+    LcdWriteByte(WRITE_COMMAND, 0b0000000010);
+}
+
+void LcdSetupDisplay() {
+    //LCD man http://mil.ufl.edu/3744/docs/lcdmanual/commands.html
+
+    LcdWriteByte(WRITE_COMMAND, 0b0000001110);
+
+}
+
+void LcdMoveCursorPos(int count) {
+    LcdMoveCursorHome();
+    int i = 0;
+    for (i = 0; i < count; i++) {
+        LcdMoveCursor(1);
+    }
+}
+
+void LcdMoveCursor(int dir)
+{
+    if(dir < 0) //shift left
+    {
+        LcdWriteByte(WRITE_COMMAND, 0b0000010000);
+
+    }
+    else{
+        LcdWriteByte(WRITE_COMMAND, 0b0000010100);
+    }
+}
+
+void LcdStr(char *str) {
+    int strIndex = 0;
+    while (str[strIndex] != '\0') {
+        LcdChar(str[strIndex]);
+        strIndex++;
+    }
+
+}
+
+void LcdClear()
+{
+    LcdWriteByte(WRITE_COMMAND, 0x01);          // display clear
+    NutDelay(5);
+}
+
+
+
+
+
+
+
+
 /* อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ */
 /*!
  * \brief Low-level routine to write a byte to LCD-controller

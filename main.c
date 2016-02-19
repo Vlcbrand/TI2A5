@@ -265,60 +265,169 @@ int main(void)
 
 	/* Enable global interrupts */
 	sei();
-/**
-    for (;;)
-    {
-        NutSleep(100);
-		if( !((t++)%15) )
+	
+	
+    LcdSetupDisplay();
+
+    char *timeStr = malloc(sizeof(char) * 50);
+    int minutes = 0, seconds = 0, hours = 0;
+    if (X12RtcGetClock(&gmt) == 0) {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    }
+	
+	int count = 0;
+    int cursorpos = 0;
+    for (; ;) {
+        u_char x = KbGetKey();
+        
+		if(KbGetKey() != KEY_UNDEFINED)
 		{
-			LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"),t);
-			
-			LedControl(LED_TOGGLE);
-		
-			if( x )
+			if(count != 0)
 			{
+				count = 0;
+				LedControl(LED_ON);
 				LcdBackLight(LCD_BACKLIGHT_ON);
-				x = 0;
-			}
-			else
+			}	
+		}
+		else
+		{
+			if(count < 100)
 			{
+				LedControl(LED_OFF);
+				count++;
+			}
+			else{
 				LcdBackLight(LCD_BACKLIGHT_OFF);
-				x = 1;
 			}
 		}
 		
-        WatchDogRestart();
-    }
-**/
-    LedControl(LED_ON);
-    LcdBackLight(LCD_BACKLIGHT_OFF);
+		LcdClear();
+		    X12RtcGetClock(&gmt);
+            sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+			LcdStr(timeStr);
+			LcdMoveCursorPos(cursorpos);
 
-    char string[1000];
-    strcpy(string, "RADIO TEST");
-    LcdBackLight(LCD_BACKLIGHT_ON);
-    LcdChar('test');
-
-    for(;;){
-        u_char x = KbGetKey();
-        if(x == KEY_OK){
-            LcdBackLight(LCD_BACKLIGHT_ON);
-            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
+        switch (x) {
+            case KEY_DOWN:
+                switch (cursorpos) {
+                    case 0:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour - 1;
+                        if(gmt.tm_hour<0){
+                            gmt.tm_hour = 23;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 1:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour - 1;
+                        if(gmt.tm_hour>0){
+                            gmt.tm_hour = 23;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 3:
+                        //min
+                        gmt.tm_min = gmt.tm_min - 1;
+                        if(gmt.tm_min<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 4:
+                        //min
+                        gmt.tm_min = gmt.tm_min - 1;
+                        if(gmt.tm_min<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 6:
+                        //sec
+                        gmt.tm_sec = gmt.tm_sec - 1;
+                        if(gmt.tm_sec<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 7:
+                        //sec
+                        if(gmt.tm_sec<0){
+                            gmt.tm_sec = 59;
+                        }
+                        gmt.tm_sec = gmt.tm_sec - 1;
+                        X12RtcSetClock(&gmt);
+                        break;
+                }
+                break;
+            case KEY_UP:
+//                LcdBackLight(LCD_BACKLIGHT_OFF);
+                switch (cursorpos) {
+                    case 0:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour + 1;
+                        if(gmt.tm_hour>23){
+                            gmt.tm_hour = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 1:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour + 1;
+                        if(gmt.tm_hour>23){
+                            gmt.tm_hour = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 3:
+                        //min
+                        gmt.tm_min = gmt.tm_min + 1;
+                        if(gmt.tm_min>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 4:
+                        //min
+                        gmt.tm_min = gmt.tm_min + 1;
+                        if(gmt.tm_min>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 6:
+                        //sec
+                        gmt.tm_sec = gmt.tm_sec + 1;
+                        if(gmt.tm_sec>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 7:
+                        //sec
+                        if(gmt.tm_sec>59){
+                            gmt.tm_sec = 0;
+                        }
+                        gmt.tm_sec = gmt.tm_sec + 1;
+                        X12RtcSetClock(&gmt);
+                        break;
+                }
+                break;
+            case KEY_RIGHT:
+                LcdMoveCursor(1);
+                if (cursorpos < 16) {
+                    cursorpos++;
+                }
+                break;
+            case KEY_LEFT:
+                LcdMoveCursor(-1);
+                if (cursorpos > 0) {
+                    cursorpos--;
+                }
+                break;
         }
-
-        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
-            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
-        }                                       // ^
-
-        if(x == KEY_ALT){
-            for(i = 0; i < strlen(string); i++) {
-                LcdChar(string[i]);
-            }
-        }
-
-        if(x == KEY_POWER){
-        }
-    }
-
+        NutSleep(100);
+}
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
 /* ---------- end of module ------------------------------------------------ */
