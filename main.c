@@ -292,14 +292,24 @@ int main(void)
 **/
     LedControl(LED_ON);
     LcdBackLight(LCD_BACKLIGHT_OFF);
+    LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"),1337);
 
     char string[1000];
     strcpy(string, "RADIO TEST");
     LcdBackLight(LCD_BACKLIGHT_ON);
     LcdChar('test');
 
+    X12Init();
+    char* str;
+    if (X12RtcGetClock(&gmt) == 0)
+    {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
+        sprintf(str, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    }
+
     for(;;){
         u_char x = KbGetKey();
+        LcdChar(str);
         if(x == KEY_OK){
             LcdBackLight(LCD_BACKLIGHT_ON);
             //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
@@ -321,7 +331,5 @@ int main(void)
 
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
-/* ---------- end of module ------------------------------------------------ */
 
-/*@}*/
 
