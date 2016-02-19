@@ -309,24 +309,30 @@ int main(void)
 
     for(;;){
         u_char x = KbGetKey();
-        LcdChar(str);
-        if(x == KEY_OK){
-            LcdBackLight(LCD_BACKLIGHT_ON);
-            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
+        LcdClear();
+        while ((str++)!= '\0'){
+            LcdChar(str);
         }
 
-        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
-            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
-        }                                       // ^
 
-        if(x == KEY_ALT){
-            for(i = 0; i < strlen(string); i++) {
-                LcdChar(string[i]);
-            }
-        }
-
-        if(x == KEY_POWER){
-        }
+//        if(x == KEY_OK){
+//            LcdBackLight(LCD_BACKLIGHT_ON);
+//            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
+//        }
+//
+//        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
+//            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
+//        }                                       // ^
+//
+//        if(x == KEY_ALT){
+//            for(i = 0; i < strlen(string); i++) {
+//                LcdChar(string[i]);
+//            }
+//        }
+//
+//        if(x == KEY_POWER){
+//        }
+        NutSleep(1000);
     }
 
     return(0);      // never reached, but 'main()' returns a non-void, so.....
