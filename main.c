@@ -292,6 +292,7 @@ int main(void)
 **/
     LedControl(LED_ON);
     LcdBackLight(LCD_BACKLIGHT_OFF);
+    LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"),t);
 
     char string[1000];
     strcpy(string, "RADIO TEST");
@@ -321,7 +322,5 @@ int main(void)
 
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
-/* ---------- end of module ------------------------------------------------ */
 
-/*@}*/
 
