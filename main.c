@@ -12,9 +12,9 @@
  *  COPYRIGHT (C) STREAMIT BV 2010
  *  \date 19 december 2003
  */
- 
- 
- 
+
+
+
 
 #define LOG_MODULE  LOG_MAIN_MODULE
 
@@ -58,7 +58,8 @@
 /*-------------------------------------------------------------------------*/
 /* local routines (prototyping)                                            */
 /*-------------------------------------------------------------------------*/
-static void SysMainBeatInterrupt(void*);
+static void SysMainBeatInterrupt(void *);
+
 static void SysControlMainBeat(u_char);
 
 /*-------------------------------------------------------------------------*/
@@ -89,8 +90,7 @@ static void SysControlMainBeat(u_char);
  * \param *p not used (might be used to pass parms from the ISR)
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-static void SysMainBeatInterrupt(void *p)
-{
+static void SysMainBeatInterrupt(void *p) {
 
     /*
      *  scan for valid keys AND check if a MMCard is inserted or removed
@@ -109,8 +109,7 @@ static void SysMainBeatInterrupt(void *p)
  *  is written to the pin (PORTxn='1')
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-void SysInitIO(void)
-{
+void SysInitIO(void) {
     /*
      *  Port B:     VS1011, MMC CS/WP, SPI
      *  output:     all, except b3 (SPI Master In)
@@ -171,20 +170,16 @@ void SysInitIO(void)
  * \param OnOff indicates if the mainbeat needs to start or to stop
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-static void SysControlMainBeat(u_char OnOff)
-{
+static void SysControlMainBeat(u_char OnOff) {
     int nError = 0;
 
-    if (OnOff==ON)
-    {
+    if (OnOff == ON) {
         nError = NutRegisterIrqHandler(&OVERFLOW_SIGNAL, SysMainBeatInterrupt, NULL);
-        if (nError == 0)
-        {
+        if (nError == 0) {
             init_8_bit_timer();
         }
     }
-    else
-    {
+    else {
         // disable overflow interrupt
         disable_8_bit_timer_ovfl_int();
     }
@@ -202,18 +197,17 @@ static void SysControlMainBeat(u_char OnOff)
  * \return \b never returns
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-int main(void)
-{
+int main(void) {
     int i;
-	/* 
-	 * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
-	 *
-	 */
-	tm gmt;
-	/*
-	 * Kroeske: Ook kan 'struct _tm gmt' Zie bovenstaande link
-	 */
-	
+    /*
+     * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
+     *
+     */
+    tm gmt;
+    /*
+     * Kroeske: Ook kan 'struct _tm gmt' Zie bovenstaande link
+     */
+
     /*
      *  First disable the watchdog
      */
@@ -222,39 +216,37 @@ int main(void)
     NutDelay(100);
 
     SysInitIO();
-	
-	SPIinit();
-    
-	LedInit();
-	
-	LcdLowLevelInit();
+
+    SPIinit();
+
+    LedInit();
+
+    LcdLowLevelInit();
 
     Uart0DriverInit();
     Uart0DriverStart();
-	LogInit();
-	LogMsg_P(LOG_INFO, PSTR("Hello World"));
+    LogInit();
+    LogMsg_P(LOG_INFO, PSTR("Hello World"));
 
     CardInit();
 
-	/*
-	 * Kroeske: sources in rtc.c en rtc.h
-	 */
+    /*
+     * Kroeske: sources in rtc.c en rtc.h
+     */
     X12Init();
-    if (X12RtcGetClock(&gmt) == 0)
-    {
-		LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
+    if (X12RtcGetClock(&gmt) == 0) {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
     }
 
 
-    if (At45dbInit()==AT45DB041B)
-    {
+    if (At45dbInit() == AT45DB041B) {
         // ......
     }
 
 
     RcInit();
-    
-	KbInit();
+
+    KbInit();
 
     SysControlMainBeat(ON);             // enable 4.4 msecs hartbeat interrupt
 
@@ -263,8 +255,8 @@ int main(void)
      */
     NutThreadSetPriority(1);
 
-	/* Enable global interrupts */
-	sei();
+    /* Enable global interrupts */
+    sei();
 /**
     for (;;)
     {
@@ -292,44 +284,183 @@ int main(void)
 **/
     LedControl(LED_ON);
     LcdBackLight(LCD_BACKLIGHT_OFF);
-    LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"),1337);
+    LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"), 1337);
 
     char string[1000];
     strcpy(string, "RADIO TEST");
     LcdBackLight(LCD_BACKLIGHT_ON);
-    LcdChar('test');
+    LcdSetupDisplay();
+//    LcdChar('test');
 
-    X12Init();
-    char* str;
-    if (X12RtcGetClock(&gmt) == 0)
-    {
-        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
-        sprintf(str, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    char *timeStr = malloc(sizeof(char) * 50);
+    int minutes = 0, seconds = 0, hours = 0;
+    if (X12RtcGetClock(&gmt) == 0) {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
     }
 
-    for(;;){
+    int cursorpos = 0;
+    for (; ;) {
         u_char x = KbGetKey();
-        LcdChar(str);
-        if(x == KEY_OK){
+        LcdClear();
+//        if ( == 0) {
+            X12RtcGetClock(&gmt);
+            sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+//        }
+//        sprintf(timeStr, "%02d:%02d:%02d", hours, minutes, seconds);
+        LcdStr(timeStr);
+        LcdMoveCursorPos(cursorpos);
+//        LcdStr("hi");
+//        LcdMoveCursor(-1);
+
+
+        if (x == KEY_OK) {
             LcdBackLight(LCD_BACKLIGHT_ON);
             //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
         }
 
-        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
+        if (x == KEY_ESC) {                       // dit uit commenten als je opdracht 1 wil tonen.
             LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
         }                                       // ^
 
-        if(x == KEY_ALT){
-            for(i = 0; i < strlen(string); i++) {
-                LcdChar(string[i]);
-            }
+        switch (x) {
+            case KEY_DOWN:
+//                LcdBackLight(LCD_BACKLIGHT_ON);
+                switch (cursorpos) {
+                    case 0:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour - 1;
+                        if(gmt.tm_hour<0){
+                            gmt.tm_hour = 23;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 1:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour - 1;
+                        if(gmt.tm_hour>0){
+                            gmt.tm_hour = 23;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 3:
+                        //min
+                        gmt.tm_min = gmt.tm_min - 1;
+                        if(gmt.tm_min<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 4:
+                        //min
+                        gmt.tm_min = gmt.tm_min - 1;
+                        if(gmt.tm_min<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 6:
+                        //sec
+                        gmt.tm_sec = gmt.tm_sec - 1;
+                        if(gmt.tm_sec<0){
+                            gmt.tm_min = 59;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 7:
+                        //sec
+                        if(gmt.tm_sec<0){
+                            gmt.tm_sec = 59;
+                        }
+                        gmt.tm_sec = gmt.tm_sec - 1;
+                        X12RtcSetClock(&gmt);
+                        break;
+                }
+                break;
+            case KEY_UP:
+//                LcdBackLight(LCD_BACKLIGHT_OFF);
+                switch (cursorpos) {
+                    case 0:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour + 1;
+                        if(gmt.tm_hour>23){
+                            gmt.tm_hour = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 1:
+                        //hour
+                        gmt.tm_hour = gmt.tm_hour + 1;
+                        if(gmt.tm_hour>23){
+                            gmt.tm_hour = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 3:
+                        //min
+                        gmt.tm_min = gmt.tm_min + 1;
+                        if(gmt.tm_min>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 4:
+                        //min
+                        gmt.tm_min = gmt.tm_min + 1;
+                        if(gmt.tm_min>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 6:
+                        //sec
+                        gmt.tm_sec = gmt.tm_sec + 1;
+                        if(gmt.tm_sec>59){
+                            gmt.tm_min = 0;
+                        }
+                        X12RtcSetClock(&gmt);
+                        break;
+                    case 7:
+                        //sec
+                        if(gmt.tm_sec>59){
+                            gmt.tm_sec = 0;
+                        }
+                        gmt.tm_sec = gmt.tm_sec + 1;
+                        X12RtcSetClock(&gmt);
+                        break;
+                }
+                break;
+            case KEY_RIGHT:
+                LcdMoveCursor(1);
+                if (cursorpos < 16) {
+                    cursorpos++;
+                }
+                break;
+            case KEY_LEFT:
+                LcdMoveCursor(-1);
+                if (cursorpos > 0) {
+                    cursorpos--;
+                }
+                break;
         }
 
-        if(x == KEY_POWER){
-        }
+//        if(x == KEY_POWER){
+//        }
+        NutSleep(1000);
+//        seconds++;
+//        if (seconds > 59) {
+//            seconds = 0;
+//            minutes++;
+//        }
+//        if(minutes> 59){
+//            minutes = 0;
+//            hours++;
+//        }
+//        if(hours > 23){
+//            hours = 0;
+//        }
     }
 
-    return(0);      // never reached, but 'main()' returns a non-void, so.....
+    return (0);      // never reached, but 'main()' returns a non-void, so.....
 }
 
 
