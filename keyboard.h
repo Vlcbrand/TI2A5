@@ -75,7 +75,7 @@
 // remove these, not available on SIR100
 #define KEY_00         0xFC
 
-#define IS_IR_KEY(key)  (((key>=KEY_01) && (key<=KEY_09)) || (key==KEY_00))
+#define IS_IR_KEY(key)  (((key>=KEY_01) && (key<=KEY_05)) || (key==KEY_00))
 
 /* definition of virtual special keys ------------------------------------- */
 #define KEY_UNDEFINED  0x88

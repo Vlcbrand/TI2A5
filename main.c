@@ -204,7 +204,6 @@ static void SysControlMainBeat(u_char OnOff)
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void)
 {
-    int i;
 	/* 
 	 * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
 	 *
@@ -290,38 +289,33 @@ int main(void)
         WatchDogRestart();
     }
 **/
-    LedControl(LED_ON);
-    LcdBackLight(LCD_BACKLIGHT_OFF);
 
-    char string[1000];
-    strcpy(string, "RADIO TEST");
-    LcdBackLight(LCD_BACKLIGHT_ON);
-    LcdChar('test');
-
-    for(;;){
-        u_char x = KbGetKey();
-        if(x == KEY_OK){
-            LcdBackLight(LCD_BACKLIGHT_ON);
-            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
-        }
-
-        if(x == KEY_ESC){                       // dit uit commenten als je opdracht 1 wil tonen.
-            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
-        }                                       // ^
-
-        if(x == KEY_ALT){
-            for(i = 0; i < strlen(string); i++) {
-                LcdChar(string[i]);
-            }
-        }
-
-        if(x == KEY_POWER){
-        }
-    }
-
+	int count = 0;
+	for(;;)
+	{
+		if(KbGetKey() != KEY_UNDEFINED)
+		{
+			count = 0;
+			LedControl(LED_ON);
+			LcdBackLight(LCD_BACKLIGHT_ON);
+		}
+		else
+		{
+			if(count < 100)
+			{
+				LedControl(LED_OFF);
+				count++;
+			}
+			else{
+				LcdBackLight(LCD_BACKLIGHT_OFF);
+			}
+			NutSleep(100);
+		}
+		
+		
+	}
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
 /* ---------- end of module ------------------------------------------------ */
-
 /*@}*/
 
