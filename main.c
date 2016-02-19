@@ -195,7 +195,9 @@ void ToggleBackLight(u_char Mode){
 }
 
 void checkButtons(){
-	
+	if(KbGetKey() != KEY_UNDEFINED){
+		ToggleBackLight(LCD_BACKLIGHT_ON);
+	}
 }
 
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
@@ -273,6 +275,10 @@ int main(void)
 
 	/* Enable global interrupts */
 	sei();
+	
+	for(;;)
+	checkButtons();
+
 /**
     for (;;)
     {
@@ -297,7 +303,7 @@ int main(void)
 		
         WatchDogRestart();
     }
-**/
+
     LedControl(LED_ON);
     LcdBackLight(LCD_BACKLIGHT_OFF);
 
@@ -325,8 +331,9 @@ int main(void)
 
         if(x == KEY_POWER){
         }
+		
     }
-
+**/
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
 /* ---------- end of module ------------------------------------------------ */

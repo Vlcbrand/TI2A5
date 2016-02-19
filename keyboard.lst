@@ -1,0 +1,411 @@
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 1
+
+
+   1               		.file	"keyboard.c"
+   2               		.arch atmega2561
+   3               	__SREG__ = 0x3f
+   4               	__SP_H__ = 0x3e
+   5               	__SP_L__ = 0x3d
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	KbSetKeyRepeating
+  12               		.type	KbSetKeyRepeating, @function
+  13               	KbSetKeyRepeating:
+  14               	/* prologue: frame size=0 */
+  15               	/* prologue end (size=0) */
+  16 0000 E82F      		mov r30,r24
+  17 0002 862F      		mov r24,r22
+  18 0004 8150      		subi r24,lo8(-(-1))
+  19 0006 8230      		cpi r24,lo8(2)
+  20 0008 00F4      		brsh .L5
+  21 000a E031      		cpi r30,lo8(16)
+  22 000c 00F4      		brsh .L5
+  23 000e FF27      		clr r31
+  24 0010 E050      		subi r30,lo8(-(KeyRepeatArray))
+  25 0012 F040      		sbci r31,hi8(-(KeyRepeatArray))
+  26 0014 6083      		st Z,r22
+  27               	.L5:
+  28 0016 0895      		ret
+  29               	/* epilogue: frame size=0 */
+  30               	/* epilogue: noreturn */
+  31               	/* epilogue end (size=0) */
+  32               	/* function KbSetKeyRepeating size 12 (12) */
+  33               		.size	KbSetKeyRepeating, .-KbSetKeyRepeating
+  34               	.global	KbGetKey
+  35               		.type	KbGetKey, @function
+  36               	KbGetKey:
+  37               	/* prologue: frame size=0 */
+  38               	/* prologue end (size=0) */
+  39 0018 8091 0000 		lds r24,KeyBuffer
+  40 001c 9927      		clr r25
+  41               	/* epilogue: frame size=0 */
+  42 001e 0895      		ret
+  43               	/* epilogue end (size=1) */
+  44               	/* function KbGetKey size 4 (3) */
+  45               		.size	KbGetKey, .-KbGetKey
+  46               	.global	KbInjectKey
+  47               		.type	KbInjectKey, @function
+  48               	KbInjectKey:
+  49               	/* prologue: frame size=0 */
+  50               	/* prologue end (size=0) */
+  51 0020 8093 0000 		sts KeyBuffer,r24
+  52 0024 E091 0000 		lds r30,hKBEvent
+  53 0028 F091 0000 		lds r31,(hKBEvent)+1
+  54 002c 3097      		sbiw r30,0
+  55 002e 01F4      		brne .L9
+  56 0030 8FEF      		ldi r24,lo8(-1)
+  57 0032 9FEF      		ldi r25,hi8(-1)
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 2
+
+
+  58 0034 9093 0000 		sts (hKBEvent)+1,r25
+  59 0038 8093 0000 		sts hKBEvent,r24
+  60 003c 0895      		ret
+  61               	.L9:
+  62 003e 8FEF      		ldi r24,hi8(-1)
+  63 0040 EF3F      		cpi r30,lo8(-1)
+  64 0042 F807      		cpc r31,r24
+  65 0044 01F0      		breq .L13
+  66 0046 8481      		ldd r24,Z+4
+  67 0048 9581      		ldd r25,Z+5
+  68 004a 0196      		adiw r24,1
+  69 004c 9583      		std Z+5,r25
+  70 004e 8483      		std Z+4,r24
+  71               	.L13:
+  72 0050 0895      		ret
+  73               	/* epilogue: frame size=0 */
+  74               	/* epilogue: noreturn */
+  75               	/* epilogue end (size=0) */
+  76               	/* function KbInjectKey size 25 (25) */
+  77               		.size	KbInjectKey, .-KbInjectKey
+  78               	.global	KbScan
+  79               		.type	KbScan, @function
+  80               	KbScan:
+  81               	/* prologue: frame size=0 */
+  82               	/* prologue end (size=0) */
+  83 0052 A398      		cbi 52-0x20,3
+  84               	/* #APP */
+  85 0054 0000      		nop
+  86 0056 0000      		nop
+  87               	/* #NOAPP */
+  88 0058 6FB1      		in r22,47-0x20
+  89 005a A39A      		sbi 52-0x20,3
+  90 005c A498      		cbi 52-0x20,4
+  91               	/* #APP */
+  92 005e 0000      		nop
+  93 0060 0000      		nop
+  94               	/* #NOAPP */
+  95 0062 4FB1      		in r20,47-0x20
+  96 0064 A49A      		sbi 52-0x20,4
+  97 0066 5B98      		cbi 43-0x20,3
+  98               	/* #APP */
+  99 0068 0000      		nop
+ 100 006a 0000      		nop
+ 101               	/* #NOAPP */
+ 102 006c 8FB1      		in r24,47-0x20
+ 103 006e 5B9A      		sbi 43-0x20,3
+ 104 0070 5A98      		cbi 43-0x20,2
+ 105               	/* #APP */
+ 106 0072 0000      		nop
+ 107 0074 0000      		nop
+ 108               	/* #NOAPP */
+ 109 0076 2FB1      		in r18,47-0x20
+ 110 0078 5A9A      		sbi 43-0x20,2
+ 111 007a 6295      		swap r22
+ 112 007c 6F70      		andi r22,0x0f
+ 113 007e 7727      		clr r23
+ 114 0080 407F      		andi r20,lo8(-16)
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 3
+
+
+ 115 0082 5527      		clr r21
+ 116 0084 642B      		or r22,r20
+ 117 0086 752B      		or r23,r21
+ 118 0088 807F      		andi r24,lo8(-16)
+ 119 008a 9927      		clr r25
+ 120 008c 34E0      		ldi r19,4
+ 121 008e 880F      	1:	lsl r24
+ 122 0090 991F      		rol r25
+ 123 0092 3A95      		dec r19
+ 124 0094 01F4      		brne 1b
+ 125 0096 682B      		or r22,r24
+ 126 0098 792B      		or r23,r25
+ 127 009a 207F      		andi r18,lo8(-16)
+ 128 009c 3327      		clr r19
+ 129 009e 322F      		mov r19,r18
+ 130 00a0 2227      		clr r18
+ 131 00a2 622B      		or r22,r18
+ 132 00a4 732B      		or r23,r19
+ 133 00a6 7093 0000 		sts (KeyFound)+1,r23
+ 134 00aa 6093 0000 		sts KeyFound,r22
+ 135 00ae 8FEF      		ldi r24,hi8(-65)
+ 136 00b0 6F3B      		cpi r22,lo8(-65)
+ 137 00b2 7807      		cpc r23,r24
+ 138 00b4 01F4      		brne .+2
+ 139 00b6 00C0      		rjmp .L22
+ 140 00b8 8FEF      		ldi r24,hi8(-64)
+ 141 00ba 603C      		cpi r22,lo8(-64)
+ 142 00bc 7807      		cpc r23,r24
+ 143 00be 00F4      		brsh .L30
+ 144 00c0 8BEF      		ldi r24,hi8(-1025)
+ 145 00c2 6F3F      		cpi r22,lo8(-1025)
+ 146 00c4 7807      		cpc r23,r24
+ 147 00c6 01F4      		brne .+2
+ 148 00c8 00C0      		rjmp .L18
+ 149 00ca 8CEF      		ldi r24,hi8(-1024)
+ 150 00cc 6030      		cpi r22,lo8(-1024)
+ 151 00ce 7807      		cpc r23,r24
+ 152 00d0 00F4      		brsh .L31
+ 153 00d2 8FEE      		ldi r24,hi8(-4097)
+ 154 00d4 6F3F      		cpi r22,lo8(-4097)
+ 155 00d6 7807      		cpc r23,r24
+ 156 00d8 01F4      		brne .+2
+ 157 00da 00C0      		rjmp .L16
+ 158 00dc 6F5F      		subi r22,lo8(-2049)
+ 159 00de 774F      		sbci r23,hi8(-2049)
+ 160 00e0 01F4      		brne .L15
+ 161 00e2 00C0      		rjmp .L17
+ 162               	.L31:
+ 163 00e4 8EEF      		ldi r24,hi8(-257)
+ 164 00e6 6F3F      		cpi r22,lo8(-257)
+ 165 00e8 7807      		cpc r23,r24
+ 166 00ea 01F4      		brne .+2
+ 167 00ec 00C0      		rjmp .L20
+ 168 00ee 8FEF      		ldi r24,hi8(-129)
+ 169 00f0 6F37      		cpi r22,lo8(-129)
+ 170 00f2 7807      		cpc r23,r24
+ 171 00f4 01F0      		breq .L21
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 4
+
+
+ 172 00f6 6F5F      		subi r22,lo8(-513)
+ 173 00f8 7D4F      		sbci r23,hi8(-513)
+ 174 00fa 01F4      		brne .L15
+ 175 00fc 00C0      		rjmp .L19
+ 176               	.L30:
+ 177 00fe 8FEF      		ldi r24,hi8(-9)
+ 178 0100 673F      		cpi r22,lo8(-9)
+ 179 0102 7807      		cpc r23,r24
+ 180 0104 01F0      		breq .L26
+ 181 0106 8FEF      		ldi r24,hi8(-8)
+ 182 0108 683F      		cpi r22,lo8(-8)
+ 183 010a 7807      		cpc r23,r24
+ 184 010c 00F4      		brsh .L32
+ 185 010e 8FEF      		ldi r24,hi8(-33)
+ 186 0110 6F3D      		cpi r22,lo8(-33)
+ 187 0112 7807      		cpc r23,r24
+ 188 0114 01F0      		breq .L24
+ 189 0116 8FEF      		ldi r24,hi8(-17)
+ 190 0118 6F3E      		cpi r22,lo8(-17)
+ 191 011a 7807      		cpc r23,r24
+ 192 011c 01F0      		breq .L25
+ 193 011e 6F5C      		subi r22,lo8(-49)
+ 194 0120 7F4F      		sbci r23,hi8(-49)
+ 195 0122 01F4      		brne .L15
+ 196 0124 00C0      		rjmp .L23
+ 197               	.L32:
+ 198 0126 8FEF      		ldi r24,hi8(-3)
+ 199 0128 6D3F      		cpi r22,lo8(-3)
+ 200 012a 7807      		cpc r23,r24
+ 201 012c 01F0      		breq .L28
+ 202 012e 8FEF      		ldi r24,hi8(-2)
+ 203 0130 6E3F      		cpi r22,lo8(-2)
+ 204 0132 7807      		cpc r23,r24
+ 205 0134 01F0      		breq .L29
+ 206 0136 6B5F      		subi r22,lo8(-5)
+ 207 0138 7F4F      		sbci r23,hi8(-5)
+ 208 013a 01F4      		brne .L15
+ 209 013c 00C0      		rjmp .L27
+ 210               	.L23:
+ 211 013e 8EE0      		ldi r24,lo8(14)
+ 212 0140 90E0      		ldi r25,hi8(14)
+ 213 0142 00C0      		rjmp .L33
+ 214               	.L15:
+ 215 0144 88E8      		ldi r24,lo8(136)
+ 216 0146 90E0      		ldi r25,hi8(136)
+ 217 0148 00C0      		rjmp .L33
+ 218               	.L27:
+ 219 014a 81E0      		ldi r24,lo8(1)
+ 220 014c 90E0      		ldi r25,hi8(1)
+ 221 014e 00C0      		rjmp .L33
+ 222               	.L28:
+ 223 0150 82E0      		ldi r24,lo8(2)
+ 224 0152 90E0      		ldi r25,hi8(2)
+ 225 0154 00C0      		rjmp .L33
+ 226               	.L21:
+ 227 0156 83E0      		ldi r24,lo8(3)
+ 228 0158 90E0      		ldi r25,hi8(3)
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 5
+
+
+ 229 015a 00C0      		rjmp .L33
+ 230               	.L26:
+ 231 015c 84E0      		ldi r24,lo8(4)
+ 232 015e 90E0      		ldi r25,hi8(4)
+ 233 0160 00C0      		rjmp .L33
+ 234               	.L29:
+ 235 0162 85E0      		ldi r24,lo8(5)
+ 236 0164 90E0      		ldi r25,hi8(5)
+ 237 0166 00C0      		rjmp .L33
+ 238               	.L22:
+ 239 0168 86E0      		ldi r24,lo8(6)
+ 240 016a 90E0      		ldi r25,hi8(6)
+ 241 016c 00C0      		rjmp .L33
+ 242               	.L25:
+ 243 016e 87E0      		ldi r24,lo8(7)
+ 244 0170 90E0      		ldi r25,hi8(7)
+ 245 0172 00C0      		rjmp .L33
+ 246               	.L17:
+ 247 0174 88E0      		ldi r24,lo8(8)
+ 248 0176 90E0      		ldi r25,hi8(8)
+ 249 0178 00C0      		rjmp .L33
+ 250               	.L24:
+ 251 017a 89E0      		ldi r24,lo8(9)
+ 252 017c 90E0      		ldi r25,hi8(9)
+ 253 017e 00C0      		rjmp .L33
+ 254               	.L20:
+ 255 0180 8AE0      		ldi r24,lo8(10)
+ 256 0182 90E0      		ldi r25,hi8(10)
+ 257 0184 00C0      		rjmp .L33
+ 258               	.L18:
+ 259 0186 8BE0      		ldi r24,lo8(11)
+ 260 0188 90E0      		ldi r25,hi8(11)
+ 261 018a 00C0      		rjmp .L33
+ 262               	.L19:
+ 263 018c 8CE0      		ldi r24,lo8(12)
+ 264 018e 90E0      		ldi r25,hi8(12)
+ 265 0190 00C0      		rjmp .L33
+ 266               	.L16:
+ 267 0192 8DE0      		ldi r24,lo8(13)
+ 268 0194 90E0      		ldi r25,hi8(13)
+ 269               	.L33:
+ 270 0196 0E94 0000 		call KbInjectKey
+ 271               	/* epilogue: frame size=0 */
+ 272 019a 0895      		ret
+ 273               	/* epilogue end (size=1) */
+ 274               	/* function KbScan size 177 (176) */
+ 275               		.size	KbScan, .-KbScan
+ 276               	.global	KbInit
+ 277               		.type	KbInit, @function
+ 278               	KbInit:
+ 279               	/* prologue: frame size=0 */
+ 280               	/* prologue end (size=0) */
+ 281 019c A39A      		sbi 52-0x20,3
+ 282 019e A49A      		sbi 52-0x20,4
+ 283 01a0 5B9A      		sbi 43-0x20,3
+ 284 01a2 5A9A      		sbi 43-0x20,2
+ 285 01a4 1092 0000 		sts KbState,__zero_reg__
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 6
+
+
+ 286 01a8 8FEF      		ldi r24,lo8(-1)
+ 287 01aa 9FEF      		ldi r25,hi8(-1)
+ 288 01ac 9093 0000 		sts (KeyFound)+1,r25
+ 289 01b0 8093 0000 		sts KeyFound,r24
+ 290               	/* #APP */
+ 291 01b4 0FB6      		in  __tmp_reg__, __SREG__
+ 292 01b6 F894      		cli
+ 293 01b8 0F92      		push __tmp_reg__
+ 294               		
+ 295               	/* #NOAPP */
+ 296 01ba 1092 0000 		sts (hKBEvent)+1,__zero_reg__
+ 297 01be 1092 0000 		sts hKBEvent,__zero_reg__
+ 298               	/* #APP */
+ 299 01c2 0F90      		pop __tmp_reg__
+ 300 01c4 0FBE      		out __SREG__, __tmp_reg__
+ 301               		
+ 302               	/* #NOAPP */
+ 303 01c6 8FEF      		ldi r24,lo8(-1)
+ 304 01c8 8093 0000 		sts KeyBuffer,r24
+ 305 01cc E0E0      		ldi r30,lo8(KeyRepeatArray)
+ 306 01ce F0E0      		ldi r31,hi8(KeyRepeatArray)
+ 307 01d0 82E0      		ldi r24,lo8(2)
+ 308               	.L36:
+ 309 01d2 8193      		st Z+,r24
+ 310 01d4 90E0      		ldi r25,hi8(KeyRepeatArray+16)
+ 311 01d6 E030      		cpi r30,lo8(KeyRepeatArray+16)
+ 312 01d8 F907      		cpc r31,r25
+ 313 01da 01F4      		brne .L36
+ 314 01dc 1092 0000 		sts (HoldCounter)+1,__zero_reg__
+ 315 01e0 1092 0000 		sts HoldCounter,__zero_reg__
+ 316 01e4 61E0      		ldi r22,lo8(1)
+ 317 01e6 88E0      		ldi r24,lo8(8)
+ 318 01e8 0E94 0000 		call KbSetKeyRepeating
+ 319 01ec 61E0      		ldi r22,lo8(1)
+ 320 01ee 8BE0      		ldi r24,lo8(11)
+ 321 01f0 0E94 0000 		call KbSetKeyRepeating
+ 322 01f4 61E0      		ldi r22,lo8(1)
+ 323 01f6 8AE0      		ldi r24,lo8(10)
+ 324 01f8 0E94 0000 		call KbSetKeyRepeating
+ 325 01fc 61E0      		ldi r22,lo8(1)
+ 326 01fe 8CE0      		ldi r24,lo8(12)
+ 327 0200 0E94 0000 		call KbSetKeyRepeating
+ 328               	/* epilogue: frame size=0 */
+ 329 0204 0895      		ret
+ 330               	/* epilogue end (size=1) */
+ 331               	/* function KbInit size 62 (61) */
+ 332               		.size	KbInit, .-KbInit
+ 333               	.global	KbWaitForKeyEvent
+ 334               		.type	KbWaitForKeyEvent, @function
+ 335               	KbWaitForKeyEvent:
+ 336               	/* prologue: frame size=0 */
+ 337               	/* prologue end (size=0) */
+ 338 0206 AB01      		movw r20,r22
+ 339 0208 BC01      		movw r22,r24
+ 340 020a 80E0      		ldi r24,lo8(hKBEvent)
+ 341 020c 90E0      		ldi r25,hi8(hKBEvent)
+ 342 020e 0E94 0000 		call NutEventWait
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 7
+
+
+ 343 0212 20E0      		ldi r18,lo8(0)
+ 344 0214 30E0      		ldi r19,hi8(0)
+ 345 0216 8F5F      		subi r24,lo8(-1)
+ 346 0218 9F4F      		sbci r25,hi8(-1)
+ 347 021a 01F4      		brne .L42
+ 348 021c 21E0      		ldi r18,lo8(1)
+ 349 021e 30E0      		ldi r19,hi8(1)
+ 350               	.L42:
+ 351 0220 C901      		movw r24,r18
+ 352               	/* epilogue: frame size=0 */
+ 353 0222 0895      		ret
+ 354               	/* epilogue end (size=1) */
+ 355               	/* function KbWaitForKeyEvent size 16 (15) */
+ 356               		.size	KbWaitForKeyEvent, .-KbWaitForKeyEvent
+ 357               		.lcomm hKBEvent,2
+ 358               		.lcomm KeyFound,2
+ 359               		.lcomm KeyBuffer,1
+ 360               		.lcomm HoldCounter,2
+ 361               		.lcomm KbState,1
+ 362               		.lcomm KeyRepeatArray,16
+ 363               	/* File "keyboard.c": code  296 = 0x0128 ( 292), prologues   0, epilogues   4 */
+GAS LISTING C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 keyboard.c
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:3      *ABS*:0000003f __SREG__
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:4      *ABS*:0000003e __SP_H__
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:5      *ABS*:0000003d __SP_L__
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:13     .text:00000000 KbSetKeyRepeating
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:361    .bss:00000008 KeyRepeatArray
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:36     .text:00000018 KbGetKey
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:358    .bss:00000004 KeyBuffer
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:48     .text:00000020 KbInjectKey
+                             .bss:00000000 hKBEvent
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:80     .text:00000052 KbScan
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:357    .bss:00000002 KeyFound
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:278    .text:0000019c KbInit
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:360    .bss:00000007 KbState
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:359    .bss:00000005 HoldCounter
+C:\Users\jeroe\AppData\Local\Temp/cc3bwGVq.s:335    .text:00000206 KbWaitForKeyEvent
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+NutEventWait
