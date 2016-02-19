@@ -40,6 +40,8 @@
 #include "mmc.h"
 #include "watchdog.h"
 #include "flash.h"
+
+#include "buttonHandler.c" 
 #include "spidrv.h"
 
 #include <time.h>
@@ -290,6 +292,14 @@ int main(void)
     }
 **/
 
+for(;;)
+{
+	pollButtons();
+	NutSleep(100);	
+}
+
+
+/*
 	int count = 0;
 	for(;;)
 	{
@@ -313,7 +323,7 @@ int main(void)
 		}
 		
 		
-	}
+	}*/
     return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
 /* ---------- end of module ------------------------------------------------ */
