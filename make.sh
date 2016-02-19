@@ -2,7 +2,7 @@
 if [ "$1" == "" ]; then
 	echo "Only building, not flashing. Add a tty port for flashing."
 else
-	port="/dev/ttyUSB0";
+	port="$1";
 fi
 
 

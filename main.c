@@ -299,8 +299,16 @@ int main(void)
     LcdBackLight(LCD_BACKLIGHT_ON);
     LcdChar('test');
 
+    X12Init();
+    if (X12RtcGetClock(&gmt) == 0)
+    {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
+        sprintf(str, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    }
+
     for(;;){
         u_char x = KbGetKey();
+        LcdChar("")
         if(x == KEY_OK){
             LcdBackLight(LCD_BACKLIGHT_ON);
             //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
