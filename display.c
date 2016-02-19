@@ -126,6 +126,15 @@ void LcdChar(char MyChar)
     LcdWriteByte(WRITE_COMMAND, 0x80);          // DD-RAM address counter (cursor pos) to '0'
 }
 
+void LcdStr(char *str) {
+    int strIndex = 0;
+    while (str[strIndex] != '\0') {
+        LcdChar(str[strIndex]);
+        strIndex++;
+    }
+
+}
+
 void LcdClear()
 {
     LcdWriteByte(WRITE_COMMAND, 0x01);          // display clear

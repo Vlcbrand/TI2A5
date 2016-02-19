@@ -297,22 +297,24 @@ int main(void)
     char string[1000];
     strcpy(string, "RADIO TEST");
     LcdBackLight(LCD_BACKLIGHT_ON);
-    LcdChar('test');
+//    LcdChar('test');
 
-    X12Init();
-    char* str;
+    char *timeStr = malloc(sizeof(char) * 50);
+    int minutes =0, seconds = 0, hours = 0;
     if (X12RtcGetClock(&gmt) == 0)
     {
         LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
-        sprintf(str, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
     }
 
     for(;;){
-        u_char x = KbGetKey();
+//        u_char x = KbGetKey();
         LcdClear();
-        while ((str++)!= '\0'){
-            LcdChar(str);
+        if (X12RtcGetClock(&gmt) == 0) {
+            sprintf(timeStr, "%02d:%02d:%02d",  gmt.tm_hour, gmt.tm_min, gmt.tm_sec );
         }
+//        sprintf(timeStr, "%02d:%02d:%02d", hours, minutes, seconds);
+        LcdStr(timeStr);
+//        LcdStr("hi");
 
 
 //        if(x == KEY_OK){
@@ -332,7 +334,19 @@ int main(void)
 //
 //        if(x == KEY_POWER){
 //        }
-        NutSleep(1000);
+        NutSleep(100);
+        seconds++;
+        if (seconds > 59) {
+            seconds = 0;
+            minutes++;
+        }
+        if(minutes> 59){
+            minutes = 0;
+            hours++;
+        }
+        if(hours > 23){
+            hours = 0;
+        }
     }
 
     return(0);      // never reached, but 'main()' returns a non-void, so.....

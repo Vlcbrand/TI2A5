@@ -50,6 +50,7 @@
 /* export global routines (interface)                                      */
 /*-------------------------------------------------------------------------*/
 extern void LcdChar(char);
+extern void LcdStr(char *);
 extern void LcdClear(void);
 extern void LcdBackLight(u_char);
 extern void LcdInit(void);
