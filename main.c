@@ -255,76 +255,54 @@ int main(void) {
      */
     NutThreadSetPriority(1);
 
-    /* Enable global interrupts */
-    sei();
-/**
-    for (;;)
-    {
-        NutSleep(100);
-		if( !((t++)%15) )
-		{
-			LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"),t);
-			
-			LedControl(LED_TOGGLE);
-		
-			if( x )
-			{
-				LcdBackLight(LCD_BACKLIGHT_ON);
-				x = 0;
-			}
-			else
-			{
-				LcdBackLight(LCD_BACKLIGHT_OFF);
-				x = 1;
-			}
-		}
-		
-        WatchDogRestart();
-    }
-**/
-    LedControl(LED_ON);
-    LcdBackLight(LCD_BACKLIGHT_OFF);
-    LogMsg_P(LOG_INFO, PSTR("Yes!, I'm alive ... [%d]"), 1337);
 
-    char string[1000];
-    strcpy(string, "RADIO TEST");
-    LcdBackLight(LCD_BACKLIGHT_ON);
+	/* Enable global interrupts */
+	sei();
+	
+	
     LcdSetupDisplay();
-//    LcdChar('test');
 
     char *timeStr = malloc(sizeof(char) * 50);
     int minutes = 0, seconds = 0, hours = 0;
     if (X12RtcGetClock(&gmt) == 0) {
         LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
     }
-
+	
+	int count = 0;
     int cursorpos = 0;
     for (; ;) {
         u_char x = KbGetKey();
-        LcdClear();
-//        if ( == 0) {
-            X12RtcGetClock(&gmt);
+        
+		if(KbGetKey() != KEY_UNDEFINED)
+		{
+			if(count != 0)
+			{
+				count = 0;
+				LedControl(LED_ON);
+				LcdBackLight(LCD_BACKLIGHT_ON);
+			}	
+		}
+		else
+		{
+			if(count < 100)
+			{
+				LedControl(LED_OFF);
+				count++;
+			}
+			else{
+				LcdBackLight(LCD_BACKLIGHT_OFF);
+			}
+		}
+		
+
+		LcdClear();
+		    X12RtcGetClock(&gmt);
             sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-//        }
-//        sprintf(timeStr, "%02d:%02d:%02d", hours, minutes, seconds);
-        LcdStr(timeStr);
-        LcdMoveCursorPos(cursorpos);
-//        LcdStr("hi");
-//        LcdMoveCursor(-1);
-
-
-        if (x == KEY_OK) {
-            LcdBackLight(LCD_BACKLIGHT_ON);
-            //NutSleep(3000);                   // dit weer terug zetten als je opdracht 1 wil tonen.
-        }
-
-        if (x == KEY_ESC) {                       // dit uit commenten als je opdracht 1 wil tonen.
-            LcdBackLight(LCD_BACKLIGHT_OFF);    // ^
-        }                                       // ^
+			LcdStr(timeStr);
+			LcdMoveCursorPos(cursorpos);
 
         switch (x) {
             case KEY_DOWN:
-//                LcdBackLight(LCD_BACKLIGHT_ON);
                 switch (cursorpos) {
                     case 0:
                         //hour
@@ -337,7 +315,7 @@ int main(void) {
                     case 1:
                         //hour
                         gmt.tm_hour = gmt.tm_hour - 1;
-                        if(gmt.tm_hour>0){
+                        if(gmt.tm_hour<0){
                             gmt.tm_hour = 23;
                         }
                         X12RtcSetClock(&gmt);
@@ -442,25 +420,9 @@ int main(void) {
                 }
                 break;
         }
-
-//        if(x == KEY_POWER){
-//        }
-        NutSleep(1000);
-//        seconds++;
-//        if (seconds > 59) {
-//            seconds = 0;
-//            minutes++;
-//        }
-//        if(minutes> 59){
-//            minutes = 0;
-//            hours++;
-//        }
-//        if(hours > 23){
-//            hours = 0;
-//        }
-    }
-
-    return (0);      // never reached, but 'main()' returns a non-void, so.....
+        NutSleep(100);
+}
+    return(0);      // never reached, but 'main()' returns a non-void, so.....
 }
 
 
