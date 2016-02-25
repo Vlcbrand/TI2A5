@@ -237,6 +237,9 @@ int main(void) {
     CardInit();
 
     X12Init();
+    X12RtcGetClock(&gmt);
+    gmt.tm_year = 116; //default to 2016
+    X12RtcSetClock(&gmt);
 
 
 
@@ -291,10 +294,8 @@ int main(void) {
         LcdClear();
         X12RtcGetClock(&gmt);
         sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year);
-//        LcdStr(timeStr);
+        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
         LcdCursorOff();
-//        showTimeAndDate("12:13:14", "12/12/2016");
         showTimeAndDate(timeStr,dateStr);
         LcdMoveCursorPos(cursorpos);
 
@@ -304,10 +305,12 @@ int main(void) {
 
         switch (x) {
             case KEY_UP:
-                X12RtcIncrementClock(1, 1, 1);
+//                X12RtcIncrementClock(1, 1, 1);
+                X12RtcIncrementDate(1, 1, 1);
                 break;
             case KEY_DOWN:
-                X12RtcIncrementClock(-1, -1, -1);
+//                X12RtcIncrementClock(-1, -1, -1);
+                X12RtcIncrementDate(-1, -1, -1);
                 break;
             case KEY_RIGHT:
                 LcdMoveCursor(1);
