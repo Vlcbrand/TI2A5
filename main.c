@@ -44,6 +44,7 @@
 
 #include <time.h>
 #include "rtc.h"
+#include "showTime.h"
 
 
 /*-------------------------------------------------------------------------*/
@@ -71,6 +72,11 @@ static void SysControlMainBeat(u_char);
  */
 
 /*@{*/
+
+/*-------------------------------------------------------------------------*/
+/*                          test methods                                   */
+/*-------------------------------------------------------------------------*/
+void testTimeShowing();
 
 
 /*-------------------------------------------------------------------------*/
@@ -257,6 +263,7 @@ int main(void) {
     LcdSetupDisplay();
 
     char *timeStr = malloc(sizeof(char) * 50);
+    char *dateStr = malloc(sizeof(char) * 50);
 
     int count = 0;
     int cursorpos = 0;
@@ -284,7 +291,11 @@ int main(void) {
         LcdClear();
         X12RtcGetClock(&gmt);
         sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        LcdStr(timeStr);
+        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year);
+//        LcdStr(timeStr);
+        LcdCursorOff();
+//        showTimeAndDate("12:13:14", "12/12/2016");
+        showTimeAndDate(timeStr,dateStr);
         LcdMoveCursorPos(cursorpos);
 
         if (X12RtcGetClock(&gmt) == 0) {
@@ -313,7 +324,12 @@ int main(void) {
         }
         NutSleep(1000);
     }
-    return (0);      // never reached, but 'main()' returns a non-void, so.....
+    return (0);      // never reached, but 'main()' returns a non-void, so...
+}
+
+
+void testTimeShowing(){
+
 }
 
 
