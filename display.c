@@ -263,6 +263,33 @@ static void LcdWaitBusy()
     cbi (LCD_RW_PORT, LCD_RW);              // we are going to write
 }
 
+/*-----cursor blink-----*/
+void LcdCursorBlink(int BLINK){
+    if(BLINK == BLINK_ON){
+        LcdWriteByte(WRITE_COMMAND, 0b0000001111);
+    }else if(BLINK == BLINK_OFF){
+        LcdWriteByte(WRITE_COMMAND, 0b0000001110);
+    }
+}
+
+/*-----cursor off-----*/
+void LcdCursorOff(){
+    LcdWriteByte(WRITE_COMMAND, 0b0000001100);
+}
+
+
+/*------dd ram------*/
+void LcdDDRamStartPos(int line, int pos){
+    switch(line){
+        case LINE_0:
+            LcdWriteByte(WRITE_COMMAND, 0b0010000000 + pos);
+            break;
+        case LINE_1:
+            LcdWriteByte(WRITE_COMMAND, 0b0010000000 + pos + 0x40);
+            break;
+    }
+}
+
 /* ---------- end of module ------------------------------------------------ */
 
 /*@}*/

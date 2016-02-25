@@ -44,6 +44,7 @@
 
 #include <time.h>
 #include "rtc.h"
+#include "showTime.h"
 
 
 /*-------------------------------------------------------------------------*/
@@ -71,6 +72,11 @@ static void SysControlMainBeat(u_char);
  */
 
 /*@{*/
+
+/*-------------------------------------------------------------------------*/
+/*                          test methods                                   */
+/*-------------------------------------------------------------------------*/
+void testTimeShowing();
 
 
 /*-------------------------------------------------------------------------*/
@@ -262,167 +268,178 @@ int main(void) {
 	
     LcdSetupDisplay();
 
-    char *timeStr = malloc(sizeof(char) * 50);
-    int minutes = 0, seconds = 0, hours = 0;
-    if (X12RtcGetClock(&gmt) == 0) {
-        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    //test time display
+    testTimeShowing();
+//    char *timeStr = malloc(sizeof(char) * 50);
+//    int minutes = 0, seconds = 0, hours = 0;
+//    if (X12RtcGetClock(&gmt) == 0) {
+//        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+//    }
+//
+//	int count = 0;
+//    int cursorpos = 0;
+//    for (; ;) {
+//        u_char x = KbGetKey();
+//
+//		if(KbGetKey() != KEY_UNDEFINED)
+//		{
+//			if(count != 0)
+//			{
+//				count = 0;
+//				LedControl(LED_ON);
+//				LcdBackLight(LCD_BACKLIGHT_ON);
+//			}
+//		}
+//		else
+//		{
+//			if(count < 100)
+//			{
+//				LedControl(LED_OFF);
+//				count++;
+//			}
+//			else{
+//				LcdBackLight(LCD_BACKLIGHT_OFF);
+//			}
+//		}
+
+
+//		LcdClear();
+//		    X12RtcGetClock(&gmt);
+//            sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+//			LcdStr(timeStr);
+//			LcdMoveCursorPos(cursorpos);
+
+//        switch (x) {
+//            case KEY_DOWN:
+//                switch (cursorpos) {
+//                    case 0:
+//                        //hour
+//                        gmt.tm_hour = gmt.tm_hour - 1;
+//                        if(gmt.tm_hour<0){
+//                            gmt.tm_hour = 23;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 1:
+//                        //hour
+//                        gmt.tm_hour = gmt.tm_hour - 1;
+//                        if(gmt.tm_hour<0){
+//                            gmt.tm_hour = 23;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 3:
+//                        //min
+//                        gmt.tm_min = gmt.tm_min - 1;
+//                        if(gmt.tm_min<0){
+//                            gmt.tm_min = 59;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 4:
+//                        //min
+//                        gmt.tm_min = gmt.tm_min - 1;
+//                        if(gmt.tm_min<0){
+//                            gmt.tm_min = 59;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 6:
+//                        //sec
+//                        gmt.tm_sec = gmt.tm_sec - 1;
+//                        if(gmt.tm_sec<0){
+//                            gmt.tm_min = 59;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 7:
+//                        //sec
+//                        if(gmt.tm_sec<0){
+//                            gmt.tm_sec = 59;
+//                        }
+//                        gmt.tm_sec = gmt.tm_sec - 1;
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                }
+//                break;
+//            case KEY_UP:
+////                LcdBackLight(LCD_BACKLIGHT_OFF);
+//                switch (cursorpos) {
+//                    case 0:
+//                        //hour
+//                        gmt.tm_hour = gmt.tm_hour + 1;
+//                        if(gmt.tm_hour>23){
+//                            gmt.tm_hour = 0;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 1:
+//                        //hour
+//                        gmt.tm_hour = gmt.tm_hour + 1;
+//                        if(gmt.tm_hour>23){
+//                            gmt.tm_hour = 0;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 3:
+//                        //min
+//                        gmt.tm_min = gmt.tm_min + 1;
+//                        if(gmt.tm_min>59){
+//                            gmt.tm_min = 0;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 4:
+//                        //min
+//                        gmt.tm_min = gmt.tm_min + 1;
+//                        if(gmt.tm_min>59){
+//                            gmt.tm_min = 0;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 6:
+//                        //sec
+//                        gmt.tm_sec = gmt.tm_sec + 1;
+//                        if(gmt.tm_sec>59){
+//                            gmt.tm_min = 0;
+//                        }
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                    case 7:
+//                        //sec
+//                        if(gmt.tm_sec>59){
+//                            gmt.tm_sec = 0;
+//                        }
+//                        gmt.tm_sec = gmt.tm_sec + 1;
+//                        X12RtcSetClock(&gmt);
+//                        break;
+//                }
+//                break;
+//            case KEY_RIGHT:
+//                LcdMoveCursor(1);
+//                if (cursorpos < 16) {
+//                    cursorpos++;
+//                }
+//                break;
+//            case KEY_LEFT:
+//                LcdMoveCursor(-1);
+//                if (cursorpos > 0) {
+//                    cursorpos--;
+//                }
+//                break;
+//
+    //NutSleep(100);
+    while(1){
+
     }
-	
-	int count = 0;
-    int cursorpos = 0;
-    for (; ;) {
-        u_char x = KbGetKey();
-        
-		if(KbGetKey() != KEY_UNDEFINED)
-		{
-			if(count != 0)
-			{
-				count = 0;
-				LedControl(LED_ON);
-				LcdBackLight(LCD_BACKLIGHT_ON);
-			}	
-		}
-		else
-		{
-			if(count < 100)
-			{
-				LedControl(LED_OFF);
-				count++;
-			}
-			else{
-				LcdBackLight(LCD_BACKLIGHT_OFF);
-			}
-		}
-		
-
-		LcdClear();
-		    X12RtcGetClock(&gmt);
-            sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-			LcdStr(timeStr);
-			LcdMoveCursorPos(cursorpos);
-
-        switch (x) {
-            case KEY_DOWN:
-                switch (cursorpos) {
-                    case 0:
-                        //hour
-                        gmt.tm_hour = gmt.tm_hour - 1;
-                        if(gmt.tm_hour<0){
-                            gmt.tm_hour = 23;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 1:
-                        //hour
-                        gmt.tm_hour = gmt.tm_hour - 1;
-                        if(gmt.tm_hour<0){
-                            gmt.tm_hour = 23;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 3:
-                        //min
-                        gmt.tm_min = gmt.tm_min - 1;
-                        if(gmt.tm_min<0){
-                            gmt.tm_min = 59;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 4:
-                        //min
-                        gmt.tm_min = gmt.tm_min - 1;
-                        if(gmt.tm_min<0){
-                            gmt.tm_min = 59;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 6:
-                        //sec
-                        gmt.tm_sec = gmt.tm_sec - 1;
-                        if(gmt.tm_sec<0){
-                            gmt.tm_min = 59;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 7:
-                        //sec
-                        if(gmt.tm_sec<0){
-                            gmt.tm_sec = 59;
-                        }
-                        gmt.tm_sec = gmt.tm_sec - 1;
-                        X12RtcSetClock(&gmt);
-                        break;
-                }
-                break;
-            case KEY_UP:
-//                LcdBackLight(LCD_BACKLIGHT_OFF);
-                switch (cursorpos) {
-                    case 0:
-                        //hour
-                        gmt.tm_hour = gmt.tm_hour + 1;
-                        if(gmt.tm_hour>23){
-                            gmt.tm_hour = 0;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 1:
-                        //hour
-                        gmt.tm_hour = gmt.tm_hour + 1;
-                        if(gmt.tm_hour>23){
-                            gmt.tm_hour = 0;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 3:
-                        //min
-                        gmt.tm_min = gmt.tm_min + 1;
-                        if(gmt.tm_min>59){
-                            gmt.tm_min = 0;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 4:
-                        //min
-                        gmt.tm_min = gmt.tm_min + 1;
-                        if(gmt.tm_min>59){
-                            gmt.tm_min = 0;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 6:
-                        //sec
-                        gmt.tm_sec = gmt.tm_sec + 1;
-                        if(gmt.tm_sec>59){
-                            gmt.tm_min = 0;
-                        }
-                        X12RtcSetClock(&gmt);
-                        break;
-                    case 7:
-                        //sec
-                        if(gmt.tm_sec>59){
-                            gmt.tm_sec = 0;
-                        }
-                        gmt.tm_sec = gmt.tm_sec + 1;
-                        X12RtcSetClock(&gmt);
-                        break;
-                }
-                break;
-            case KEY_RIGHT:
-                LcdMoveCursor(1);
-                if (cursorpos < 16) {
-                    cursorpos++;
-                }
-                break;
-            case KEY_LEFT:
-                LcdMoveCursor(-1);
-                if (cursorpos > 0) {
-                    cursorpos--;
-                }
-                break;
-        }
-        NutSleep(100);
-}
     return(0);      // never reached, but 'main()' returns a non-void, so.....
+}
+
+
+void testTimeShowing(){
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    LcdCursorOff();
+    showTimeAndDate("12:13:14", "12/12/2016");
 }
 
 

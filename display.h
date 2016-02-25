@@ -38,6 +38,10 @@
 #define READ_DATA         			0x06      // 0000 0110 B
 
 
+/*-----cursor blink-----*/
+#define BLINK_ON 1
+#define BLINK_OFF 0
+
 /*-------------------------------------------------------------------------*/
 /* typedefs & structs                                                      */
 /*-------------------------------------------------------------------------*/
@@ -61,6 +65,14 @@ extern void LcdMoveCursor(int dir);
 extern void LcdMoveCursorHome(void);
 
 extern void LcdMoveCursorPos(int);
+
+//cursor
+extern void LcdCursorBlink(int BLINK);
+extern void LcdCursorOff();
+
+//dd ram
+extern void LcdDDRamStartPos(int line, int pos);
+
 
 #endif /* _Display_H */
 /*  ����  End Of File  �������� �������������������������������������������� */
