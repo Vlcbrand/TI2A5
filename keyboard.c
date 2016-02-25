@@ -157,6 +157,7 @@ void KbScan()
     KeyFound |= ((KeyNibble3<<8) & 0xF000);     // b7..b4 in 'KeyNibble3' to b15..b12 in 'KeyFound' << shift 8 left
     KbInjectKey(KbRemapKey(KeyFound));
 
+    KbInjectKey(KbRemapKey(KeyFound));
 
 #endif  // USE_JTAG
 

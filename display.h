@@ -55,8 +55,8 @@ extern void LcdClear(void);
 extern void LcdBackLight(u_char);
 extern void LcdInit(void);
 extern void LcdLowLevelInit(void);
-extern void LcdMoveCursor(int dir);
 extern void LcdSetupDisplay(void);
+extern void LcdMoveCursor(int dir);
 
 extern void LcdMoveCursorHome(void);
 

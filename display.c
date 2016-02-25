@@ -173,7 +173,6 @@ void LcdClear()
 }
 
 
-/* ����������������������������������������������������������������������� */
 /*!
  * \brief Low-level routine to write a byte to LCD-controller
  *
