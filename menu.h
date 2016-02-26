@@ -15,7 +15,8 @@ typedef struct MenuNode {
 void init_menu(void);
 int nextMenuItem(void);
 int childMenuItem(void);
-//int prevMenuItem(void);
+char *getCurrentName(void);
+int prevMenuItem(void);
 
 short menuItemIndex;
 

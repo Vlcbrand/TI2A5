@@ -331,7 +331,7 @@ int main(void) {
 		
 		/*
 		###################################
-		###				Start Menu										###
+		###				Start Menu		###
 		###################################*/
 		init_menu();		
 		LcdClear();
@@ -342,20 +342,21 @@ int main(void) {
 		switch (x) {
             case KEY_RIGHT:
 				LcdClear();
+				nextMenuItem();
 				LcdStr(getCurrentName());
                 break;
             case KEY_LEFT:
                 LcdClear();
+				prevMenuItem();
+				LcdStr(getCurrentName());
                 break;
 			case KEY_OK:
                 LcdClear();
+				
+				LcdStr(getCurrentName());
                 break;
         }
         NutSleep(1000);
     }
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
-
-
-
-

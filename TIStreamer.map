@@ -290,7 +290,7 @@ LOAD c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x9498
+.text           0x00000000     0x94fe
  *(.vectors)
  .vectors       0x00000000       0xcc c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6/crtm2561.o
                 0x00000000                __vectors
@@ -452,318 +452,319 @@ LOAD c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a
                 0x00002a56                LogChar_P
                 0x00002cf0                LogInit
                 0x000028b2                LogSetLevel
- .text          0x00002cfc      0x138 main.o
+ .text          0x00002cfc      0x146 main.o
                 0x00002d36                NutAppMain
                 0x00002cfc                SysInitIO
- .text          0x00002e34      0x1c0 menu.o
-                0x00002f2e                init_menu
-                0x00002e34                getCurrentName
-                0x00002e42                nextMenuItem
-                0x00002e8a                ChildNode
-                0x00002e66                childMenuItem
-                0x00002ec0                Level1Node
- .text          0x00002ff4      0x2ac mmc.o
-                0x00002ff4                CardCheckCard
-                0x00003092                CardCheckPresent
-                0x000030a4                CardClose
-                0x000030a6                CardInit
-                0x00003126                CardInitCard
-                0x00003228                CardPresent
-                0x0000309a                CardStatus
- .text          0x000032a0      0x708 mmcdrv.o
-                0x0000390a                MMCInit
-                0x000032ac                MMCUnMountDevice
-                0x00003628                MMCReadSectors
-                0x000032a0                MMCIsCDROMDevice
-                0x00003426                MMCWriteSectors
-                0x00003772                MMCGetSectorSize
-                0x000032a6                MMCIsZIPDevice
-                0x0000379e                MMCMountAllDevices
-                0x00003736                MMCGetTotalSectors
- .text          0x000039a8       0x4c remcon.o
-                0x000039aa                RcInit
- .text          0x000039f4      0xbf4 rtc.o
-                0x00004502                X12RtcIncrementClock
-                0x00003a2a                X12EepromRead
-                0x00003bd8                X12RtcGetClock
-                0x000042c0                X12RtcSetClock
-                0x00003aa4                X12RtcReadRegs
-                0x00003fba                X12RtcSetAlarm
-                0x000039f4                X12RtcClearStatus
-                0x00003b1a                X12RtcGetStatus
-                0x00003ba0                X12Init
-                0x00003f42                X12RtcWrite
-                0x00004418                X12RtcIncrementDate
-                0x0000411a                X12RtcGetAlarm
-                0x00003e40                X12EepromWrite
- .text          0x000045e8       0x3a showtime.o
-                0x000045e8                showTimeAndDate
- .text          0x00004622       0xc2 spidrv.o
-                0x00004638                SPIputByte
-                0x00004660                SPIinit
-                0x00004642                SPIgetByte
-                0x00004630                SPIgetmode
-                0x00004652                SPItransferByte
-                0x00004668                SPIselect
-                0x00004622                SPIdeselect
-                0x0000462a                SPImode
- .text          0x000046e4      0x11c uart0driver.o
-                0x000047e8                Uart0DriverInit
-                0x000046ee                Uart0DriverStop
-                0x000046e4                Uart0DriverGetStream
-                0x00004708                Uart0DriverSetCookedMode
-                0x00004750                Uart0DriverStart
- .text          0x00004800      0x6d6 vs10xx.o
-                0x0000484a                VsGetStatus
-                0x00004a30                VsBeepStart
-                0x00004ba6                VsRegInfo
-                0x0000482a                VsPlayerStop
-                0x00004e76                VsMemoryTest
-                0x00004b80                VsGetVolume
-                0x00004800                VsPlayerInterrupts
-                0x00004af4                VsPlayerReset
-                0x0000499a                VsPlayerSetMode
-                0x000049c6                VsBeepStartRaw
-                0x00004a50                VsBeep
-                0x00004dec                VsPlayerKick
-                0x0000485c                VsGetTypeHex
-                0x00004bce                VsStreamValid
-                0x00004c52                VsPlayerInit
-                0x00004908                VsRegWrite
-                0x0000495a                VsSetVolume
-                0x000048a0                VsBeepStop
-                0x00004852                VsGetType
- .text          0x00004ed6       0xec watchdog.o
-                0x00004f64                WatchDogRestart
-                0x00004f88                WatchDogEnable
-                0x00004f68                WatchDogDisable
-                0x00004ed6                WatchDogStart
- .text          0x00004fc2       0x58 c:/ethernut-4.3.3/build/gcc/atmega2561/lib/nutinit.o
-                0x00004fc8                NutIdle
-                0x00004fc2                NutThreadSetSleepMode
- .text          0x0000501a      0x202 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(heap.o)
-                0x000051e8                NutHeapAvailable
-                0x00005100                NutHeapFree
-                0x0000501a                NutHeapAlloc
-                0x000051da                NutHeapAdd
-                0x000051f2                NutHeapAllocClear
- .text          0x0000521c      0x436 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(bankmem.o)
-                0x0000535a                NutSegBufWriteCommit
-                0x000055fa                NutSegBufUsed
-                0x0000549e                NutSegBufWriteLast
-                0x0000521c                NutSegBufReset
-                0x0000560c                NutBufRemovePage
-                0x00005290                NutSegBufWriteRequest
-                0x000053ea                NutSegBufReadCommit
-                0x000052e8                NutSegBufReadRequest
-                0x000055d0                NutSegBufAvailable
-                0x00005524                NutSegBufReadLast
-                0x0000525a                NutSegBufInit
- .text          0x00005652      0x308 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(thread.o)
-                0x00005764                NutThreadWake
-                0x00005822                NutThreadSetPriority
-                0x000057b8                NutThreadDestroy
-                0x00005898                NutThreadExit
-                0x000056ee                NutThreadRemoveQueue
-                0x00005652                NutThreadAddPriQueue
-                0x000058a0                NutThreadResume
-                0x000057d6                NutThreadKill
-                0x0000592a                NutThreadYield
-                0x0000577a                GetThreadByName
- .text          0x0000595a      0x68c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(timer.o)
-                0x000059b6                NutDelay
-                0x00005bda                NutSleep
-                0x00005adc                NutGetTickCount
-                0x00005bb4                NutTimerStart
-                0x00005dbe                NutTimerProcessElapsed
-                0x00005a5c                NutTimerStop
-                0x00005ed6                NutTimerInit
-                0x00005c86                NutGetMillis
-                0x00005d7e                NutGetSeconds
-                0x00005982                NutMicroDelay
-                0x000059d2                NutTimerInsert
-                0x00005b96                NutTimerStartTicks
-                0x00005af8                NutTimerCreate
- .text          0x00005fe6      0x2b8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(event.o)
-                0x000060ee                NutEventBroadcast
-                0x000061aa                NutEventWait
-                0x00006084                NutEventBroadcastAsync
-                0x0000627c                NutEventWaitNext
-                0x00005fe6                NutEventPostAsync
-                0x00006104                NutEventPost
-                0x0000611a                NutEventTimeout
- .text          0x0000629e       0x90 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(devreg.o)
-                0x000062d6                NutRegisterDevice
-                0x0000629e                NutDeviceLookup
- .text          0x0000632e       0x6a c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(confos.o)
-                0x00006360                NutLoadConfig
-                0x0000632e                NutSaveConfig
- .text          0x00006398      0x18c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutdev.a(ihndlr.o)
-                0x00006398                CallHandler
-                0x000064b0                NutIrqSetMode
-                0x000063f4                NutIrqEnable
-                0x00006418                NutIrqDisable
-                0x0000643c                NutIrqSetPriority
-                0x000063b4                NutRegisterIrqHandler
- .text          0x00006524        0xc c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutdev.a(nvmem.o)
-                0x0000652a                NutNvMemLoad
-                0x00006524                NutNvMemSave
- .text          0x00006530      0x1cc c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(context_gcc.o)
-                0x000065be                NutThreadCreate
-                0x00006574                thread_start
-                0x00006540                NutThreadSwitch
- .text          0x000066fc       0x96 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ostimer.o)
-                0x0000670e                NutGetTickClock
-                0x00006718                NutRegisterTimer
-                0x00006762                NutTimerMillisToTicks
-                0x000066fc                NutGetCpuClock
- .text          0x00006792      0x178 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_int4.o)
-                0x000068be                __vector_5
- .text          0x0000690a      0x178 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_int6.o)
-                0x00006a36                __vector_7
- .text          0x00006a82       0xec c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_timer0_ovf.o)
-                0x00006b22                __vector_23
- .text          0x00006b6e       0xec c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_timer2_comp.o)
-                0x00006c0e                __vector_13
- .text          0x00006c5a        0x0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(uart0.o)
- .text          0x00006c5a      0xaee c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(uartavr.o)
-                0x000075e0                UartAvrWrite_P
-                0x000075f0                UartAvrWrite
-                0x00006df8                UartAvrOpen
-                0x0000732e                UartAvrInit
-                0x0000743e                UartAvrFlush
-                0x00006dcc                UartAvrSize
-                0x00006dee                UartAvrClose
-                0x00007490                UartAvrPut
-                0x0000765c                UartAvrRead
-                0x00006ea8                UartAvrIOCtl
-                0x00006d46                UartAvrOutput
-                0x00007600                UartAvrInput
- .text          0x00007748      0x9ba c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(twif.o)
-                0x00007fc2                TwMasterTransact
-                0x00007dba                TwInit
-                0x00007e3e                TwSlaveRespond
-                0x00007f00                TwSlaveListen
-                0x00007bfe                TwMasterError
-                0x00007c16                TwIOCtl
-                0x00007c0a                TwSlaveError
- .text          0x00008102       0x60 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(eeprom.o)
-                0x00008102                OnChipNvMemSave
-                0x00008142                OnChipNvMemLoad
- .text          0x00008162       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_twi.o)
-                0x0000820a                __vector_39
- .text          0x00008256       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart0_rx.o)
-                0x000082fe                __vector_25
- .text          0x0000834a       0xf6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart0_tx.o)
-                0x000083f4                __vector_27
- .text          0x00008440       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart1_rx.o)
-                0x000084e8                __vector_36
- .text          0x00008534       0xf6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart1_tx.o)
-                0x000085de                __vector_38
- .text          0x0000862a       0x2c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(close.o)
-                0x0000862a                _close
- .text          0x00008656       0x24 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(ioctl.o)
-                0x00008656                _ioctl
- .text          0x0000867a       0xb0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(open.o)
-                0x0000867a                _open
- .text          0x0000872a       0x80 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fclose.o)
-                0x0000872a                fclose
- .text          0x000087aa       0x22 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fflush.o)
-                0x000087aa                fflush
- .text          0x000087cc        0x8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fileno.o)
-                0x000087cc                _fileno
- .text          0x000087d4       0xb8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fopen.o)
-                0x000087d4                fopen
- .text          0x0000888c       0xd6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(freopen.o)
-                0x0000888c                freopen
- .text          0x00008962       0x50 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputc.o)
-                0x00008962                fputc
- .text          0x000089b2       0x22 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputs.o)
-                0x000089b2                fputs
- .text          0x000089d4       0x28 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputs_p.o)
-                0x000089d4                fputs_P
- .text          0x000089fc       0x72 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(vfprintf_p.o)
-                0x000089fc                vfprintf_P
- .text          0x00008a6e       0x80 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(time.o)
-                0x00008aaa                time
-                0x00008a6e                stime
- .text          0x00008aee        0x0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(errno.o)
- .text          0x00008aee       0x20 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(malloc.o)
-                0x00008af4                malloc
-                0x00008aee                free
- .text          0x00008b0e      0x6f2 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(putf.o)
-                0x00008b5e                _putf
- .text          0x00009200       0x26 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(write.o)
-                0x00009200                _write
- .text          0x00009226       0x26 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(write_p.o)
-                0x00009226                _write_P
- .text          0x0000924c       0x58 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fmode.o)
-                0x0000924c                _fmode
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_mulsi3.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodqi4.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodhi4.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_divmodhi4.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodsi4.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_clear_bss.o)
- .text          0x000092a4        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(toupper.o)
- .text          0x000092a4       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcpy_P.o)
-                0x000092a4                memcpy_P
- .text          0x000092b6        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcpy_P.o)
-                0x000092b6                strcpy_P
- .text          0x000092c4       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strlen_P.o)
-                0x000092c4                strlen_P
- .text          0x000092d6       0x1a c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memchr.o)
-                0x000092d6                memchr
- .text          0x000092f0       0x1a c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcmp.o)
-                0x000092f0                memcmp
- .text          0x0000930a       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcpy.o)
-                0x0000930a                memcpy
- .text          0x0000931c        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memset.o)
-                0x0000931c                memset
- .text          0x0000932a       0x16 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strchr.o)
-                0x0000932a                strchr
- .text          0x00009340       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcmp.o)
-                0x00009340                strcmp
- .text          0x00009352        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcpy.o)
-                0x00009352                strcpy
- .text          0x00009360        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_rb.1F2021.o)
- .text          0x00009360        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_wb.1F2021.o)
- .text          0x00009360        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(isalpha.o)
- .text          0x00009360        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(cty_isfalse.o)
-                0x00009360                . = ALIGN (0x2)
+ .text          0x00002e42      0x218 menu.o
+                0x00002f94                init_menu
+                0x00002e42                getCurrentName
+                0x00002e50                nextMenuItem
+                0x00002ef0                ChildNode
+                0x00002e8e                prevMenuItem
+                0x00002ecc                childMenuItem
+                0x00002f26                Level1Node
+ .text          0x0000305a      0x2ac mmc.o
+                0x0000305a                CardCheckCard
+                0x000030f8                CardCheckPresent
+                0x0000310a                CardClose
+                0x0000310c                CardInit
+                0x0000318c                CardInitCard
+                0x0000328e                CardPresent
+                0x00003100                CardStatus
+ .text          0x00003306      0x708 mmcdrv.o
+                0x00003970                MMCInit
+                0x00003312                MMCUnMountDevice
+                0x0000368e                MMCReadSectors
+                0x00003306                MMCIsCDROMDevice
+                0x0000348c                MMCWriteSectors
+                0x000037d8                MMCGetSectorSize
+                0x0000330c                MMCIsZIPDevice
+                0x00003804                MMCMountAllDevices
+                0x0000379c                MMCGetTotalSectors
+ .text          0x00003a0e       0x4c remcon.o
+                0x00003a10                RcInit
+ .text          0x00003a5a      0xbf4 rtc.o
+                0x00004568                X12RtcIncrementClock
+                0x00003a90                X12EepromRead
+                0x00003c3e                X12RtcGetClock
+                0x00004326                X12RtcSetClock
+                0x00003b0a                X12RtcReadRegs
+                0x00004020                X12RtcSetAlarm
+                0x00003a5a                X12RtcClearStatus
+                0x00003b80                X12RtcGetStatus
+                0x00003c06                X12Init
+                0x00003fa8                X12RtcWrite
+                0x0000447e                X12RtcIncrementDate
+                0x00004180                X12RtcGetAlarm
+                0x00003ea6                X12EepromWrite
+ .text          0x0000464e       0x3a showtime.o
+                0x0000464e                showTimeAndDate
+ .text          0x00004688       0xc2 spidrv.o
+                0x0000469e                SPIputByte
+                0x000046c6                SPIinit
+                0x000046a8                SPIgetByte
+                0x00004696                SPIgetmode
+                0x000046b8                SPItransferByte
+                0x000046ce                SPIselect
+                0x00004688                SPIdeselect
+                0x00004690                SPImode
+ .text          0x0000474a      0x11c uart0driver.o
+                0x0000484e                Uart0DriverInit
+                0x00004754                Uart0DriverStop
+                0x0000474a                Uart0DriverGetStream
+                0x0000476e                Uart0DriverSetCookedMode
+                0x000047b6                Uart0DriverStart
+ .text          0x00004866      0x6d6 vs10xx.o
+                0x000048b0                VsGetStatus
+                0x00004a96                VsBeepStart
+                0x00004c0c                VsRegInfo
+                0x00004890                VsPlayerStop
+                0x00004edc                VsMemoryTest
+                0x00004be6                VsGetVolume
+                0x00004866                VsPlayerInterrupts
+                0x00004b5a                VsPlayerReset
+                0x00004a00                VsPlayerSetMode
+                0x00004a2c                VsBeepStartRaw
+                0x00004ab6                VsBeep
+                0x00004e52                VsPlayerKick
+                0x000048c2                VsGetTypeHex
+                0x00004c34                VsStreamValid
+                0x00004cb8                VsPlayerInit
+                0x0000496e                VsRegWrite
+                0x000049c0                VsSetVolume
+                0x00004906                VsBeepStop
+                0x000048b8                VsGetType
+ .text          0x00004f3c       0xec watchdog.o
+                0x00004fca                WatchDogRestart
+                0x00004fee                WatchDogEnable
+                0x00004fce                WatchDogDisable
+                0x00004f3c                WatchDogStart
+ .text          0x00005028       0x58 c:/ethernut-4.3.3/build/gcc/atmega2561/lib/nutinit.o
+                0x0000502e                NutIdle
+                0x00005028                NutThreadSetSleepMode
+ .text          0x00005080      0x202 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(heap.o)
+                0x0000524e                NutHeapAvailable
+                0x00005166                NutHeapFree
+                0x00005080                NutHeapAlloc
+                0x00005240                NutHeapAdd
+                0x00005258                NutHeapAllocClear
+ .text          0x00005282      0x436 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(bankmem.o)
+                0x000053c0                NutSegBufWriteCommit
+                0x00005660                NutSegBufUsed
+                0x00005504                NutSegBufWriteLast
+                0x00005282                NutSegBufReset
+                0x00005672                NutBufRemovePage
+                0x000052f6                NutSegBufWriteRequest
+                0x00005450                NutSegBufReadCommit
+                0x0000534e                NutSegBufReadRequest
+                0x00005636                NutSegBufAvailable
+                0x0000558a                NutSegBufReadLast
+                0x000052c0                NutSegBufInit
+ .text          0x000056b8      0x308 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(thread.o)
+                0x000057ca                NutThreadWake
+                0x00005888                NutThreadSetPriority
+                0x0000581e                NutThreadDestroy
+                0x000058fe                NutThreadExit
+                0x00005754                NutThreadRemoveQueue
+                0x000056b8                NutThreadAddPriQueue
+                0x00005906                NutThreadResume
+                0x0000583c                NutThreadKill
+                0x00005990                NutThreadYield
+                0x000057e0                GetThreadByName
+ .text          0x000059c0      0x68c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(timer.o)
+                0x00005a1c                NutDelay
+                0x00005c40                NutSleep
+                0x00005b42                NutGetTickCount
+                0x00005c1a                NutTimerStart
+                0x00005e24                NutTimerProcessElapsed
+                0x00005ac2                NutTimerStop
+                0x00005f3c                NutTimerInit
+                0x00005cec                NutGetMillis
+                0x00005de4                NutGetSeconds
+                0x000059e8                NutMicroDelay
+                0x00005a38                NutTimerInsert
+                0x00005bfc                NutTimerStartTicks
+                0x00005b5e                NutTimerCreate
+ .text          0x0000604c      0x2b8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(event.o)
+                0x00006154                NutEventBroadcast
+                0x00006210                NutEventWait
+                0x000060ea                NutEventBroadcastAsync
+                0x000062e2                NutEventWaitNext
+                0x0000604c                NutEventPostAsync
+                0x0000616a                NutEventPost
+                0x00006180                NutEventTimeout
+ .text          0x00006304       0x90 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(devreg.o)
+                0x0000633c                NutRegisterDevice
+                0x00006304                NutDeviceLookup
+ .text          0x00006394       0x6a c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(confos.o)
+                0x000063c6                NutLoadConfig
+                0x00006394                NutSaveConfig
+ .text          0x000063fe      0x18c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutdev.a(ihndlr.o)
+                0x000063fe                CallHandler
+                0x00006516                NutIrqSetMode
+                0x0000645a                NutIrqEnable
+                0x0000647e                NutIrqDisable
+                0x000064a2                NutIrqSetPriority
+                0x0000641a                NutRegisterIrqHandler
+ .text          0x0000658a        0xc c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutdev.a(nvmem.o)
+                0x00006590                NutNvMemLoad
+                0x0000658a                NutNvMemSave
+ .text          0x00006596      0x1cc c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(context_gcc.o)
+                0x00006624                NutThreadCreate
+                0x000065da                thread_start
+                0x000065a6                NutThreadSwitch
+ .text          0x00006762       0x96 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ostimer.o)
+                0x00006774                NutGetTickClock
+                0x0000677e                NutRegisterTimer
+                0x000067c8                NutTimerMillisToTicks
+                0x00006762                NutGetCpuClock
+ .text          0x000067f8      0x178 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_int4.o)
+                0x00006924                __vector_5
+ .text          0x00006970      0x178 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_int6.o)
+                0x00006a9c                __vector_7
+ .text          0x00006ae8       0xec c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_timer0_ovf.o)
+                0x00006b88                __vector_23
+ .text          0x00006bd4       0xec c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_timer2_comp.o)
+                0x00006c74                __vector_13
+ .text          0x00006cc0        0x0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(uart0.o)
+ .text          0x00006cc0      0xaee c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(uartavr.o)
+                0x00007646                UartAvrWrite_P
+                0x00007656                UartAvrWrite
+                0x00006e5e                UartAvrOpen
+                0x00007394                UartAvrInit
+                0x000074a4                UartAvrFlush
+                0x00006e32                UartAvrSize
+                0x00006e54                UartAvrClose
+                0x000074f6                UartAvrPut
+                0x000076c2                UartAvrRead
+                0x00006f0e                UartAvrIOCtl
+                0x00006dac                UartAvrOutput
+                0x00007666                UartAvrInput
+ .text          0x000077ae      0x9ba c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(twif.o)
+                0x00008028                TwMasterTransact
+                0x00007e20                TwInit
+                0x00007ea4                TwSlaveRespond
+                0x00007f66                TwSlaveListen
+                0x00007c64                TwMasterError
+                0x00007c7c                TwIOCtl
+                0x00007c70                TwSlaveError
+ .text          0x00008168       0x60 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(eeprom.o)
+                0x00008168                OnChipNvMemSave
+                0x000081a8                OnChipNvMemLoad
+ .text          0x000081c8       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_twi.o)
+                0x00008270                __vector_39
+ .text          0x000082bc       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart0_rx.o)
+                0x00008364                __vector_25
+ .text          0x000083b0       0xf6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart0_tx.o)
+                0x0000845a                __vector_27
+ .text          0x000084a6       0xf4 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart1_rx.o)
+                0x0000854e                __vector_36
+ .text          0x0000859a       0xf6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(ih_usart1_tx.o)
+                0x00008644                __vector_38
+ .text          0x00008690       0x2c c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(close.o)
+                0x00008690                _close
+ .text          0x000086bc       0x24 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(ioctl.o)
+                0x000086bc                _ioctl
+ .text          0x000086e0       0xb0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(open.o)
+                0x000086e0                _open
+ .text          0x00008790       0x80 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fclose.o)
+                0x00008790                fclose
+ .text          0x00008810       0x22 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fflush.o)
+                0x00008810                fflush
+ .text          0x00008832        0x8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fileno.o)
+                0x00008832                _fileno
+ .text          0x0000883a       0xb8 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fopen.o)
+                0x0000883a                fopen
+ .text          0x000088f2       0xd6 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(freopen.o)
+                0x000088f2                freopen
+ .text          0x000089c8       0x50 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputc.o)
+                0x000089c8                fputc
+ .text          0x00008a18       0x22 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputs.o)
+                0x00008a18                fputs
+ .text          0x00008a3a       0x28 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fputs_p.o)
+                0x00008a3a                fputs_P
+ .text          0x00008a62       0x72 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(vfprintf_p.o)
+                0x00008a62                vfprintf_P
+ .text          0x00008ad4       0x80 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(time.o)
+                0x00008b10                time
+                0x00008ad4                stime
+ .text          0x00008b54        0x0 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(errno.o)
+ .text          0x00008b54       0x20 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(malloc.o)
+                0x00008b5a                malloc
+                0x00008b54                free
+ .text          0x00008b74      0x6f2 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(putf.o)
+                0x00008bc4                _putf
+ .text          0x00009266       0x26 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(write.o)
+                0x00009266                _write
+ .text          0x0000928c       0x26 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(write_p.o)
+                0x0000928c                _write_P
+ .text          0x000092b2       0x58 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(fmode.o)
+                0x000092b2                _fmode
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_mulsi3.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodqi4.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodhi4.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_divmodhi4.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodsi4.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_clear_bss.o)
+ .text          0x0000930a        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(toupper.o)
+ .text          0x0000930a       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcpy_P.o)
+                0x0000930a                memcpy_P
+ .text          0x0000931c        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcpy_P.o)
+                0x0000931c                strcpy_P
+ .text          0x0000932a       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strlen_P.o)
+                0x0000932a                strlen_P
+ .text          0x0000933c       0x1a c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memchr.o)
+                0x0000933c                memchr
+ .text          0x00009356       0x1a c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcmp.o)
+                0x00009356                memcmp
+ .text          0x00009370       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memcpy.o)
+                0x00009370                memcpy
+ .text          0x00009382        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(memset.o)
+                0x00009382                memset
+ .text          0x00009390       0x16 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strchr.o)
+                0x00009390                strchr
+ .text          0x000093a6       0x12 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcmp.o)
+                0x000093a6                strcmp
+ .text          0x000093b8        0xe c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(strcpy.o)
+                0x000093b8                strcpy
+ .text          0x000093c6        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_rb.1F2021.o)
+ .text          0x000093c6        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_wb.1F2021.o)
+ .text          0x000093c6        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(isalpha.o)
+ .text          0x000093c6        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(cty_isfalse.o)
+                0x000093c6                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00009360       0x3e c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_mulsi3.o)
-                0x00009360                __mulsi3
- .text.libgcc   0x0000939e       0x18 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodqi4.o)
-                0x0000939e                __udivmodqi4
- .text.libgcc   0x000093b6       0x28 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodhi4.o)
-                0x000093b6                __udivmodhi4
- .text.libgcc   0x000093de       0x26 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_divmodhi4.o)
-                0x000093de                __divmodhi4
-                0x000093de                _div
- .text.libgcc   0x00009404       0x44 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodsi4.o)
-                0x00009404                __udivmodsi4
- .text.libgcc   0x00009448        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
- .text.libgcc   0x00009448        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_clear_bss.o)
- .text.ctype    0x00009448        0xc c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(toupper.o)
-                0x00009448                toupper
- .text.eeprom   0x00009454       0x10 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_rb.1F2021.o)
-                0x00009454                __eeprom_read_byte_1F2021
- .text.eeprom   0x00009464       0x18 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_wb.1F2021.o)
-                0x00009464                __eeprom_write_byte_1F2021
- .text.ctype    0x0000947c       0x14 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(isalpha.o)
-                0x00009482                islower
-                0x0000947c                isupper
-                0x00009480                isalpha
- .text.ctype    0x00009490        0x6 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(cty_isfalse.o)
-                0x00009494                __ctype_istrue
-                0x00009490                __ctype_isfalse
-                0x00009496                . = ALIGN (0x2)
+ .text.libgcc   0x000093c6       0x3e c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_mulsi3.o)
+                0x000093c6                __mulsi3
+ .text.libgcc   0x00009404       0x18 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodqi4.o)
+                0x00009404                __udivmodqi4
+ .text.libgcc   0x0000941c       0x28 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodhi4.o)
+                0x0000941c                __udivmodhi4
+ .text.libgcc   0x00009444       0x26 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_divmodhi4.o)
+                0x00009444                __divmodhi4
+                0x00009444                _div
+ .text.libgcc   0x0000946a       0x44 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_udivmodsi4.o)
+                0x0000946a                __udivmodsi4
+ .text.libgcc   0x000094ae        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
+ .text.libgcc   0x000094ae        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_clear_bss.o)
+ .text.ctype    0x000094ae        0xc c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(toupper.o)
+                0x000094ae                toupper
+ .text.eeprom   0x000094ba       0x10 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_rb.1F2021.o)
+                0x000094ba                __eeprom_read_byte_1F2021
+ .text.eeprom   0x000094ca       0x18 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(ee_wb.1F2021.o)
+                0x000094ca                __eeprom_write_byte_1F2021
+ .text.ctype    0x000094e2       0x14 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(isalpha.o)
+                0x000094e8                islower
+                0x000094e2                isupper
+                0x000094e6                isalpha
+ .text.ctype    0x000094f6        0x6 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6\libc.a(cty_isfalse.o)
+                0x000094fa                __ctype_istrue
+                0x000094f6                __ctype_isfalse
+                0x000094fc                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00009496        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
-                0x00009496                exit
-                0x00009496                _exit
+ .fini9         0x000094fc        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
+                0x000094fc                exit
+                0x000094fc                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -782,11 +783,11 @@ LOAD c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00009496        0x2 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
+ .fini0         0x000094fc        0x2 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00009498                _etext = .
+                0x000094fe                _etext = .
 
-.data           0x00800200      0x1ba load address 0x00009498
+.data           0x00800200      0x1ba load address 0x000094fe
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800200        0x0 c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/../../../../avr/lib/avr6/crtm2561.o
@@ -1015,8 +1016,8 @@ LOAD c:/winavr-20070525/bin/../lib/gcc/avr/4.1.2/avr6\libgcc.a
  COMMON         0x00800748        0x2 c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutcrt.a(errno.o)
                 0x00800748                errno
                 0x0080074a                PROVIDE (__bss_end, .)
-                0x00009498                __data_load_start = LOADADDR (.data)
-                0x00009652                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000094fe                __data_load_start = LOADADDR (.data)
+                0x000096b8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080074a        0x0
                 0x0080074a                PROVIDE (__noinit_start, .)
@@ -1782,6 +1783,7 @@ menuItemIndex                                     menu.o
                                                   main.o
 ms62_5                                            c:/ethernut-4.3.3/build/gcc/atmega2561/lib/nutinit.o
 nextMenuItem                                      menu.o
+                                                  main.o
 nutDeviceList                                     c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(devreg.o)
 nutThreadList                                     c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(context_gcc.o)
                                                   c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(thread.o)
@@ -1789,6 +1791,8 @@ nutTimerList                                      c:/ethernut-4.3.3/build/gcc/at
 nut_delay_loops                                   c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(timer.o)
 nut_ticks                                         c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(timer.o)
 nutmem_onchip                                     c:/ethernut-4.3.3/build/gcc/atmega2561/lib/nutinit.o
+prevMenuItem                                      menu.o
+                                                  main.o
 runQueue                                          c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutarch.a(context_gcc.o)
                                                   c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(event.o)
                                                   c:/ethernut-4.3.3/build/gcc/atmega2561/lib\libnutos.a(timer.o)

@@ -75,8 +75,23 @@ void init_menu()
 
 int nextMenuItem(void)
 {
-	if (currentMenuItem->next != NULL) {
+	if(currentMenuItem == NULL){
+		currentMenuItem = head;
+		return SUCCESS;
+	} else if (currentMenuItem->next != NULL) {
 		currentMenuItem = currentMenuItem->next;
+		return SUCCESS;
+	} else {
+		return ERROR;
+	}
+}
+
+int prevMenuItem(void){
+	if(currentMenuItem == NULL){
+		currentMenuItem = head;
+		return SUCCESS;
+	} else if (currentMenuItem->prev != NULL) {
+		currentMenuItem = currentMenuItem->prev;
 		return SUCCESS;
 	} else {
 		return ERROR;
