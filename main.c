@@ -352,11 +352,14 @@ int main(void) {
                 break;
 			case KEY_OK:
                 LcdClear();
-				
-				LcdStr(getCurrentName());
+				childMenuItem();
                 break;
+			case KEY_ESC:
+				parentMenuItem();
+				break;
         }
-        NutSleep(1000);
+		LcdStr(getCurrentName());
+        NutSleep(500);
     }
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

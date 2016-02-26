@@ -107,3 +107,17 @@ int childMenuItem(void)
 		return ERROR;
 	}
 }
+
+int parentMenuItem(void)
+{
+	if(currentMenuItem->parent != NULL)
+	{
+		currentMenuItem = currentMenuItem->parent;
+		return SUCCESS;
+	}
+	else{
+		return ERROR;
+	}
+	
+}
+
