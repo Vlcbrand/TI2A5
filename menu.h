@@ -1,27 +1,23 @@
+#ifndef _Menu_H
+#define _Menu_H
+
 #include <stdio.h>
 
-// Hoofdmenu Item
-typedef struct menu_node {
-    char *name;
-    struct menu_node *parent;
-    struct menu_node *child;
-} MENU_NODE;
+typedef struct MenuNode {
+	struct MenuNode *prev;
+	struct MenuNode *next;
+	struct MenuNode *parent;
+	struct MenuNode *child;
+	char *name;
+	// TODO Functiepointer toevoegen
+} MenuNode;
 
-// Submenu Item
-typedef struct Node {
-    MENU_NODE *menu_item;
-    struct Node *next;
-    struct Node *prev;
-} NODE;
+void init_menu(void);
+int nextMenuItem(void);
+int childMenuItem(void);
+//int prevMenuItem(void);
 
-// Laatste menu item
-NODE *head;
+short menuItemIndex;
 
-MENU_NODE *create_menu_node(char[], MENU_NODE *, MENU_NODE *) ;
-
-void llist_show();
-void llist_add(MENU_NODE *);
-void llist_remove(char *);
-void llist_clear();
-void llist_nrItems();
-void llist_exists(char *);
+#endif /* _Menu_H */
+/*  ����  End Of File  �������� �������������������������������������������� */

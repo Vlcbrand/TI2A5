@@ -46,6 +46,8 @@
 #include "rtc.h"
 #include "showTime.h"
 
+#include "menu.h"
+
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -76,7 +78,7 @@ static void SysControlMainBeat(u_char);
 /*-------------------------------------------------------------------------*/
 /*                          test methods                                   */
 /*-------------------------------------------------------------------------*/
-void testTimeShowing();
+void testTimeShowing(void);
 
 
 /*-------------------------------------------------------------------------*/
@@ -204,7 +206,6 @@ static void SysControlMainBeat(u_char OnOff) {
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
-    int i;
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
      *
@@ -265,7 +266,7 @@ int main(void) {
 
     LcdSetupDisplay();
 
-    char *timeStr = malloc(sizeof(char) * 50);
+   /* char *timeStr = malloc(sizeof(char) * 50);
     char *dateStr = malloc(sizeof(char) * 50);
 
     int count = 0;
@@ -290,9 +291,9 @@ int main(void) {
             }
         }
 
-
+*/
         LcdClear();
-        X12RtcGetClock(&gmt);
+        /*X12RtcGetClock(&gmt);
         sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
         sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
         LcdCursorOff();
@@ -324,6 +325,31 @@ int main(void) {
                     cursorpos--;
                 }
                 break;
+        }*/
+		
+		
+		
+		/*
+		###################################
+		###				Start Menu										###
+		###################################*/
+		init_menu();		
+		LcdClear();
+		
+		for (; ;) {
+        u_char x = KbGetKey();
+		
+		switch (x) {
+            case KEY_RIGHT:
+				LcdClear();
+				LcdStr(getCurrentName());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                break;
+			case KEY_OK:
+                LcdClear();
+                break;
         }
         NutSleep(1000);
     }
@@ -331,8 +357,5 @@ int main(void) {
 }
 
 
-void testTimeShowing(){
-
-}
 
 
