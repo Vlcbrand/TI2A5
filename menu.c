@@ -1,64 +1,144 @@
 #include <stdio.h>
+#include <malloc.h>
 #include <string.h>
-#include "system.h"
-#include "menustruct.h"
-#include "menu.h"
 
-typedef struct Node{
-    Menu_struct *menuitem;
-    struct Node *next;
-    struct Node *prev;
-}NODE;
-
-struct Node *head;
+#define NEWLINE "\n"
+#define TRUE 1
+#define FALSE 0
 
 
-void llist_show()
-{
+
+MENU_NODE *create_menu_node(char s[17], MENU_NODE *par, MENU_NODE *chil) {
+    MENU_NODE *tmp = malloc(sizeof(MENU_NODE));
+    tmp->name = s;
+    tmp->parent = par;
+    tmp->child = chil;
+    return tmp;
+}
+
+
+void llist_show() {
     NODE *temp = head;
-    printf("Printing all values in list\n");
+    printf("Printing all values in list");
+    printf(NEWLINE);
+
+    struct menu_node *children;
+
     while (temp != NULL) {
-        printf("Value: %s\n", temp->menuitem->name);
+        printf("Value: %s", temp->menu_item->name);
+        printf(NEWLINE);
+
+        if (temp->menu_item->child != NULL) {
+            children = temp->menu_item->child;
+            while (children != NULL) {
+                printf("Value: %s", children->name);
+                printf(NEWLINE);
+                children = children->child;
+            }
+        }
+
         temp = temp->next;
     }
 }
 
-void list_add(Menu_struct *str){
-	NODE *temp = head;
+void llist_add(MENU_NODE *node) {
+    NODE *temp = head;
     NODE *newNode = (NODE *) malloc(sizeof(NODE));
     newNode->prev = NULL;
     newNode->next = NULL;
-    newNode->string= str;
+    newNode->menu_item = node;
     if (head == NULL) {
         head = newNode;
         return;
     }
-    while(temp->next != NULL) temp = temp->next;
-    temp->next=newNode;
+    while (temp->next != NULL) temp = temp->next;
+    temp->next = newNode;
     newNode->prev = temp;
+
 }
 
-Menu_struct* create_struct(char[17] name, Menu_struct *hoofdmenu, Menu_struct *submenu){	
-	Menu_struct *tmp = malloc(sizeof(Menu_struct));
-	tmp->name = name;
-	tmp->hoofdmenuItem = hoofdmenu;
-	tmp->submenu = submenu;
-	return tmp;
+void llist_remove(char *str) {
+    NODE *temp = head;
+    while (temp != NULL) {
+        //TODO
+//        if (strcmp(temp->string, str) == 0) {
+//            //found our string, remove it
+//            if (temp->next != NULL) {
+//                temp->next->prev = temp->prev;
+//            }
+//            if (temp->prev != NULL) {
+//                temp->prev->next = temp->next;
+//            }
+//            free(temp);
+//            temp = NULL;
+//            return;
+//        }
+        temp = temp->next;
+    }
 }
 
-void initMenu(){
-//	menuItems[0] = Menu_struct{"Tijdsetings\0", NULL, NULL, "x"}";
-//	menuItems[1] = Menu_struct{"Datumsettings\0", NULL, NULL, "y"};
-//	menuItems[2] = Menu_struct{"Alarm\0", Insert(Menu_struct{"Add alarm\0", NULL, menuItems[2], "q"}), NULL, NULL};
-	head = malloc(sizeof(Menu_struct)*50);
-	
-	list_add(create_struct("Time",NULL,NULL));
-	list_add(create_struct("Date",NULL,NULL));
-	list_add(create_struct("Alarm",NULL,NULL));
-	
+void llist_clear() {
+    NODE *temp = head;
+    while (temp != NULL) {
+        NODE *nextPtr = temp->next;
+        temp->next = NULL;
+        temp->prev = NULL;
+        temp = nextPtr;
+        free(nextPtr);
+        //TODO: free children too
+    }
+    head = NULL;
 }
 
-void main(){
-	initMenu();
-	llist_show();
+int llist_nrItems() {
+    NODE *temp = head;
+    int i = 0;
+    while (temp != NULL) {
+        i++;
+        temp = temp->next;
+    }
+    return i;
+}
+
+int llist_exists(char *str) {
+    NODE *temp = head;
+    //TODO
+//    while(temp != NULL) {
+//        if (strcmp(temp->string, str) == 0) {
+//            return TRUE;
+//        }
+//        temp = temp->next;
+//    }
+    return FALSE;
+}
+
+void init_menu()
+{
+    head = NULL;
+
+    MENU_NODE *taalNode = create_menu_node("Taal", NULL, NULL);
+    MENU_NODE *tijdNode = create_menu_node("Tijd", NULL, NULL);
+    MENU_NODE *alarmNode = create_menu_node("Alarm", NULL, NULL);
+    MENU_NODE *ntpNode = create_menu_node("NTP", NULL, NULL);
+    MENU_NODE *netwerkNode = create_menu_node("Netwerk", NULL, NULL);
+    MENU_NODE *dhcpNode = create_menu_node("DHCP", NULL, NULL);
+
+    alarmNode->child = alarm1Node;
+    alarm1Node->child = alarm2Node;
+
+    alarm1Node->parent = alarmNode;
+    alarm2Node->parent = alarmNode;
+
+    netwerkNode->child = ntpNode;
+    ntpNode->child = dhcpNode;
+
+    ntpNode->parent = ntpNode;
+    dhcpNode->parent = netwerkNode;
+
+
+    llist_add(taalNode);
+    llist_add(tijdNode);
+    llist_add(alarmNode);
+    llist_add(netwerkNode);
+    llist_show();
 }
