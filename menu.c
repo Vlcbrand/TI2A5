@@ -75,12 +75,29 @@ void init_menu()
 
 int nextMenuItem(void)
 {
-	if (currentMenuItem->next != NULL) {
+	if (currentMenuItem->next != NULL) 
+	{
 		currentMenuItem = currentMenuItem->next;
 		return SUCCESS;
 	} else {
 		return ERROR;
 	}
+}
+
+int prevMenuItem(void)
+{
+	if(currentMenuItem->prev != NULL)
+	{
+		currentMenuItem = currentMenuItem->prev;
+		return SUCCESS;
+	}
+	else{
+			return ERROR;
+	}
+	
+	
+	
+	
 }
 
 int childMenuItem(void)
@@ -91,4 +108,17 @@ int childMenuItem(void)
 	} else {
 		return ERROR;
 	}
+}
+
+int parentMenuItem(void)
+{
+	if(currentMenuItem->parent != NULL)
+	{
+		currentMenuItem = currentMenuItem->parent;
+		return SUCCESS;
+	}
+	else{
+		return ERROR;
+	}
+	
 }

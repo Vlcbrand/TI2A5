@@ -342,16 +342,22 @@ int main(void) {
 		switch (x) {
             case KEY_RIGHT:
 				LcdClear();
-				LcdStr(getCurrentName());
+				nextMenuItem();
                 break;
             case KEY_LEFT:
                 LcdClear();
+				prevMenuItem();
                 break;
 			case KEY_OK:
                 LcdClear();
+				childMenuItem();
                 break;
+			case KEY_ESC:
+				parentMenuItem();
+				break;
         }
-        NutSleep(1000);
+		LcdStr(getCurrentName());
+        NutSleep(500);
     }
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
