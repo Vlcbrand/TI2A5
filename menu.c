@@ -40,13 +40,14 @@ MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
     tmp->name = s;
     tmp->parent = par;
+	par->child = tmp;
     tmp->child = chil;
     return tmp;	
 }
 
 char* getCurrentName()
 {
-		return currentMenuItem->name;
+	return currentMenuItem->name;
 }
 
 
@@ -69,7 +70,6 @@ void init_menu()
     MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL);
 	ntpNode->next = dhcpNode;
 	dhcpNode->next = ntpNode;
-	
 }
 
 
@@ -100,6 +100,10 @@ int prevMenuItem(void){
 
 int childMenuItem(void)
 {
+	if(currentMenuItem == NULL){
+		currentMenuItem = head;
+		return ERROR;
+	}
 	if (currentMenuItem->child != NULL) {
 		currentMenuItem = currentMenuItem->child;
 		return SUCCESS;
@@ -110,6 +114,10 @@ int childMenuItem(void)
 
 int parentMenuItem(void)
 {
+	if(currentMenuItem == NULL){
+		currentMenuItem = head;
+		return ERROR;
+	}
 	if(currentMenuItem->parent != NULL)
 	{
 		currentMenuItem = currentMenuItem->parent;

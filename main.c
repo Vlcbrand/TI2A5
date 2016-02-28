@@ -351,14 +351,17 @@ int main(void) {
 				LcdStr(getCurrentName());
                 break;
 			case KEY_OK:
-                LcdClear();
+				LcdClear();
 				childMenuItem();
+				LcdStr(getCurrentName());
                 break;
 			case KEY_ESC:
+				LcdClear();
 				parentMenuItem();
+				LcdStr(getCurrentName());
 				break;
         }
-		LcdStr(getCurrentName());
+//		LcdStr(getCurrentName());
         NutSleep(500);
     }
     return (0);      // never reached, but 'main()' returns a non-void, so...
