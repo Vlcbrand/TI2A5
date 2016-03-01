@@ -10,7 +10,6 @@ typedef struct MenuNode {
 	struct MenuNode *child;
 	char *name;
 	void (*excecuting)(void);
-	// TODO Functiepointer toevoegen
 } MenuNode;
 
 void init_menu(void);
@@ -19,6 +18,7 @@ int prevMenuItem(void);
 int childMenuItem(void);
 char *getCurrentName(void);
 int parentMenuItem(void);
+int menuAction(void);
 
 
 MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil);

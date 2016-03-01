@@ -352,8 +352,7 @@ int main(void) {
                 break;
 			case KEY_OK:
 				LcdClear();
-				childMenuItem();
-				LcdStr(getCurrentName());
+				menuAction();
                 break;
 			case KEY_ESC:
 				LcdClear();

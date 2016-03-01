@@ -129,3 +129,17 @@ int parentMenuItem(void)
 	
 }
 
+int menuAction()
+{
+	if(currentMenuItem->child != NULL)
+	{
+			childMenuItem();
+			LcdStr(currentMenuItem->name);	
+	}
+	else
+	{
+		(*(currentMenuItem->excecuting))();
+	}
+		
+	return 0;
+}
