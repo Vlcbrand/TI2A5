@@ -12,12 +12,13 @@
 MenuNode *currentMenuItem = NULL;
 MenuNode *head = NULL;
 
-MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil) {
+MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
     tmp->name = s;
     tmp->parent = par;
     tmp->child = chil;
 	tmp->next = NULL;
+	tmp->executing = ex;
 	
 	if (head == NULL) 
 	{
@@ -36,12 +37,13 @@ MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil) {
     return tmp;	
 }
 
-MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil) {
+MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
     tmp->name = s;
     tmp->parent = par;
 	par->child = tmp;
     tmp->child = chil;
+	tmp->executing = ex;
     return tmp;	
 }
 
@@ -55,19 +57,19 @@ void init_menu()
 {
 	menuItemIndex = 1;
 
-    MenuNode *taalNode = Level1Node("Taal", NULL, NULL);
-    MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL);
-    MenuNode *alarmNode = Level1Node("Alarm", NULL, NULL);
-    MenuNode *netwerkNode = Level1Node("Netwerk", NULL, NULL);
+    MenuNode *taalNode = Level1Node("Taal", NULL, NULL, NULL); //de laatste is de functiepointer
+    MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL, NULL);
+    MenuNode *alarmNode = Level1Node("Alarm", NULL, NULL, NULL);
+    MenuNode *netwerkNode = Level1Node("Netwerk", NULL, NULL, NULL);
 	
 	
-    MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL);
-    MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL);	
+    MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
+    MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);	
 	alarm1Node->next = alarm2Node;
 	alarm2Node->prev = alarm1Node;
 	
-    MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL);
-    MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL);
+    MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
+    MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
 	ntpNode->next = dhcpNode;
 	dhcpNode->next = ntpNode;
 }
