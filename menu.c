@@ -11,7 +11,6 @@
 #define ERROR -1
 
 MenuNode *currentMenuItem = NULL;
-MenuNode *currChildItem = NULL;
 MenuNode *head = NULL;
 
 MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
@@ -48,6 +47,7 @@ MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 
 MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
+	MenuNode *currChildItem = NULL;
 	
     tmp->name = s;
     tmp->parent = par;
@@ -76,8 +76,6 @@ char* getCurrentName()
 
 void init_menu()
 {
-	menuItemIndex = 1;
-
     MenuNode *taalNode = Level1Node("Taal", NULL, NULL, NULL); //de laatste is de functiepointer
     MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL, &time_loop);
     MenuNode *alarmNode = Level1Node("Alarm", NULL, NULL, NULL);
