@@ -9,7 +9,7 @@ typedef struct MenuNode {
 	struct MenuNode *parent;
 	struct MenuNode *child;
 	char *name;
-	void (*excecuting)(void);
+	void (*executing)(void);
 } MenuNode;
 
 void init_menu(void);
@@ -21,8 +21,8 @@ int parentMenuItem(void);
 int menuAction(void);
 
 
-MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil);
-MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil);
+MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil,void * ex);
+MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex);
 
 short menuItemIndex;
 

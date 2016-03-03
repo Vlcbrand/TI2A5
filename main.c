@@ -47,6 +47,7 @@
 #include "showTime.h"
 
 #include "menu.h"
+#include "main.h    "
 
 
 /*-------------------------------------------------------------------------*/
@@ -193,7 +194,67 @@ static void SysControlMainBeat(u_char OnOff) {
     }
 }
 
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+void time_loop(){
+    for (; ;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+                nextMenuItem();
+                LcdStr(getCurrentName());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                prevMenuItem();
+                LcdStr(getCurrentName());
+                break;
+            case KEY_OK:
+                LcdClear();
+                menuAction();
+                break;
+            case KEY_ESC:
+                LcdClear();
+                parentMenuItem();
+                LcdStr(getCurrentName());
+                break;
+        }
+//		LcdStr(getCurrentName());
+        NutSleep(500);
+    }
+}
+
+void main_loop(){
+
+    for (; ;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+                nextMenuItem();
+                LcdStr(getCurrentName());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                prevMenuItem();
+                LcdStr(getCurrentName());
+                break;
+            case KEY_OK:
+                LcdClear();
+                menuAction();
+                break;
+            case KEY_ESC:
+                LcdClear();
+                parentMenuItem();
+                LcdStr(getCurrentName());
+                break;
+        }
+//		LcdStr(getCurrentName());
+        NutSleep(500);
+    }
+}
+
 /*!
  * \brief Main entry of the SIR firmware
  *
@@ -204,7 +265,6 @@ static void SysControlMainBeat(u_char OnOff) {
  *
  * \return \b never returns
  */
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
@@ -243,7 +303,6 @@ int main(void) {
     X12RtcSetClock(&gmt);
 
 
-
     if (At45dbInit() == AT45DB041B) {
         // ......
     }
@@ -266,102 +325,75 @@ int main(void) {
 
     LcdSetupDisplay();
 
-   /* char *timeStr = malloc(sizeof(char) * 50);
-    char *dateStr = malloc(sizeof(char) * 50);
+    /* char *timeStr = malloc(sizeof(char) * 50);
+     char *dateStr = malloc(sizeof(char) * 50);
 
-    int count = 0;
-    int cursorpos = 0;
-    for (; ;) {
-        u_char x = KbGetKey();
+     int count = 0;
+     int cursorpos = 0;
+     for (; ;) {
+         u_char x = KbGetKey();
 
-        if (KbGetKey() != KEY_UNDEFINED) {
-            if (count != 0) {
-                count = 0;
-                LedControl(LED_ON);
-                LcdBackLight(LCD_BACKLIGHT_ON);
-            }
-        }
-        else {
-            if (count < 10) {
-                LedControl(LED_OFF);
-                count++;
-            }
-            else {
-                LcdBackLight(LCD_BACKLIGHT_OFF);
-            }
-        }
+         if (KbGetKey() != KEY_UNDEFINED) {
+             if (count != 0) {
+                 count = 0;
+                 LedControl(LED_ON);
+                 LcdBackLight(LCD_BACKLIGHT_ON);
+             }
+         }
+         else {
+             if (count < 10) {
+                 LedControl(LED_OFF);
+                 count++;
+             }
+             else {
+                 LcdBackLight(LCD_BACKLIGHT_OFF);
+             }
+         }
 
-*/
-        LcdClear();
-        /*X12RtcGetClock(&gmt);
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        LcdCursorOff();
-        showTimeAndDate(timeStr,dateStr);
-        LcdMoveCursorPos(cursorpos);
+ */
+    LcdClear();
+    /*X12RtcGetClock(&gmt);
+    sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
+    LcdCursorOff();
+    showTimeAndDate(timeStr,dateStr);
+    LcdMoveCursorPos(cursorpos);
 
-        if (X12RtcGetClock(&gmt) == 0) {
-            LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        }
-
-        switch (x) {
-            case KEY_UP:
-//                X12RtcIncrementClock(1, 1, 1);
-                X12RtcIncrementDate(1, 1, 1);
-                break;
-            case KEY_DOWN:
-//                X12RtcIncrementClock(-1, -1, -1);
-                X12RtcIncrementDate(-1, -1, -1);
-                break;
-            case KEY_RIGHT:
-                LcdMoveCursor(1);
-                if (cursorpos < 16) {
-                    cursorpos++;
-                }
-                break;
-            case KEY_LEFT:
-                LcdMoveCursor(-1);
-                if (cursorpos > 0) {
-                    cursorpos--;
-                }
-                break;
-        }*/
-		
-		
-		
-		/*
-		###################################
-		###				Start Menu		###
-		###################################*/
-		init_menu();		
-		LcdClear();
-		
-		for (; ;) {
-        u_char x = KbGetKey();
-		
-		switch (x) {
-            case KEY_RIGHT:
-				LcdClear();
-				nextMenuItem();
-				LcdStr(getCurrentName());
-                break;
-            case KEY_LEFT:
-                LcdClear();
-				prevMenuItem();
-				LcdStr(getCurrentName());
-                break;
-			case KEY_OK:
-				LcdClear();
-				menuAction();
-                break;
-			case KEY_ESC:
-				LcdClear();
-				parentMenuItem();
-				LcdStr(getCurrentName());
-				break;
-        }
-//		LcdStr(getCurrentName());
-        NutSleep(500);
+    if (X12RtcGetClock(&gmt) == 0) {
+        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
     }
+
+    switch (x) {
+        case KEY_UP:
+//                X12RtcIncrementClock(1, 1, 1);
+            X12RtcIncrementDate(1, 1, 1);
+            break;
+        case KEY_DOWN:
+//                X12RtcIncrementClock(-1, -1, -1);
+            X12RtcIncrementDate(-1, -1, -1);
+            break;
+        case KEY_RIGHT:
+            LcdMoveCursor(1);
+            if (cursorpos < 16) {
+                cursorpos++;
+            }
+            break;
+        case KEY_LEFT:
+            LcdMoveCursor(-1);
+            if (cursorpos > 0) {
+                cursorpos--;
+            }
+            break;
+    }*/
+
+
+
+    /*
+    ###################################
+    ###				Start Menu		###
+    ###################################*/
+    init_menu();
+    LcdClear();
+    main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

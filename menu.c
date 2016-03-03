@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "menu.h"
+#include "main.h"
 
 #define NEWLINE "\n"
 #define TRUE 1
@@ -58,7 +59,7 @@ void init_menu()
 	menuItemIndex = 1;
 
     MenuNode *taalNode = Level1Node("Taal", NULL, NULL, NULL); //de laatste is de functiepointer
-    MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL, NULL);
+    MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL, &time_loop);
     MenuNode *alarmNode = Level1Node("Alarm", NULL, NULL, NULL);
     MenuNode *netwerkNode = Level1Node("Netwerk", NULL, NULL, NULL);
 	
@@ -140,7 +141,7 @@ int menuAction()
 	}
 	else
 	{
-		(*(currentMenuItem->excecuting))();
+		(*(currentMenuItem->executing))();
 	}
 		
 	return 0;
