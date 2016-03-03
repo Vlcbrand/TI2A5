@@ -47,7 +47,7 @@
 #include "showTime.h"
 
 #include "menu.h"
-#include "main.h    "
+#include "main.h"
 
 
 /*-------------------------------------------------------------------------*/
@@ -256,12 +256,46 @@ void main_loop(){
                 break;
             case KEY_ESC:
                 LcdClear();
-                parentMenuItem();
-                LcdStr(getCurrentName());
+                if(parentMenuItem() == -1){
+                    menu_loop();
+                }
+                else {
+                    parentMenuItem();
+                    LcdStr(getCurrentName());
+                }
+
                 break;
+
         }
 //		LcdStr(getCurrentName());
         NutSleep(500);
+    }
+}
+
+void menu_loop(){
+
+    tm gmt;
+    char *timeStr = malloc(sizeof(char) * 50);
+    char *dateStr = malloc(sizeof(char) * 50);
+
+
+    for(;;){
+        u_char x = KbGetKey();
+
+        X12RtcGetClock(&gmt);
+
+        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
+        LcdCursorOff();
+        showTimeAndDate(timeStr,dateStr);
+
+        switch (x){
+            case KEY_ALT:
+                LcdClear();
+                init_menu();
+                LcdClear();
+                main_loop();
+        }
     }
 }
 
@@ -334,77 +368,8 @@ int main(void) {
     sei();
 
     LcdSetupDisplay();
-    LcdBackLight(LCD_BACKLIGHT_ON);
-
-    /* char *timeStr = malloc(sizeof(char) * 50);
-     char *dateStr = malloc(sizeof(char) * 50);
-
-     int count = 0;
-     int cursorpos = 0;
-     for (; ;) {
-         u_char x = KbGetKey();
-
-         if (KbGetKey() != KEY_UNDEFINED) {
-             if (count != 0) {
-                 count = 0;
-                 LedControl(LED_ON);
-                 LcdBackLight(LCD_BACKLIGHT_ON);
-             }
-         }
-         else {
-             if (count < 10) {
-                 LedControl(LED_OFF);
-                 count++;
-             }
-             else {
-                 LcdBackLight(LCD_BACKLIGHT_OFF);
-             }
-         }
-
- */
+    LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
     LcdClear();
-    /*X12RtcGetClock(&gmt);
-    sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-    sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-    LcdCursorOff();
-    showTimeAndDate(timeStr,dateStr);
-    LcdMoveCursorPos(cursorpos);
-
-    if (X12RtcGetClock(&gmt) == 0) {
-        LogMsg_P(LOG_INFO, PSTR("RTC time [%02d:%02d:%02d]"), gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-    }
-
-    switch (x) {
-        case KEY_UP:
-//                X12RtcIncrementClock(1, 1, 1);
-            X12RtcIncrementDate(1, 1, 1);
-            break;
-        case KEY_DOWN:
-//                X12RtcIncrementClock(-1, -1, -1);
-            X12RtcIncrementDate(-1, -1, -1);
-            break;
-        case KEY_RIGHT:
-            LcdMoveCursor(1);
-            if (cursorpos < 16) {
-                cursorpos++;
-            }
-            break;
-        case KEY_LEFT:
-            LcdMoveCursor(-1);
-            if (cursorpos > 0) {
-                cursorpos--;
-            }
-            break;
-    }*/
-
-
-
-    /*
-    ###################################
-    ###				Start Menu		###
-    ###################################*/
-    init_menu();
-    LcdClear();
-    main_loop();
+    menu_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
