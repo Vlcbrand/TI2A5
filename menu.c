@@ -2,6 +2,7 @@
 
 #include "menu.h"
 #include "main.h"
+#include "display.h"
 
 #define NEWLINE "\n"
 #define TRUE 1
@@ -48,13 +49,16 @@ MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
     return tmp;	
 }
 
-char* getCurrentName()
+char* getCurrentName(void)
 {
 	return currentMenuItem->name;
 }
 
+/* #########################  */
+/* #####  Navigation  Functions  ##### */
+/* ######################### */
 
-void init_menu()
+void init_menu(void)
 {
 	menuItemIndex = 1;
 
@@ -75,7 +79,6 @@ void init_menu()
 	dhcpNode->next = ntpNode;
 }
 
-
 int nextMenuItem(void)
 {
 	if(currentMenuItem == NULL){
@@ -89,7 +92,8 @@ int nextMenuItem(void)
 	}
 }
 
-int prevMenuItem(void){
+int prevMenuItem(void)
+{
 	if(currentMenuItem == NULL){
 		currentMenuItem = head;
 		return SUCCESS;
@@ -131,6 +135,54 @@ int parentMenuItem(void)
 	}
 	
 }
+
+
+/* #########################  */
+/* #####   Menu  Functionalities  ##### */
+/* ######################### */
+
+
+int nodeCounter(void) 
+{
+	int i = 0;
+	MenuNode *temp = currentMenuItem->parent->child;
+    while (temp != NULL) 
+	{
+		i++;
+        temp = temp->next;
+    }
+    return i;
+}
+
+int nodeIndexFinder(void)
+{
+	int i = 0;
+	MenuNode *temp = currentMenuItem->parent->child;
+    while (temp != currentMenuItem) 
+	{
+		i++;
+        temp = temp->next;
+    }
+    return i;
+}
+
+int showMenuItem(void)
+{
+		char *tempLine1 = malloc(sizeof(char)*17);
+		
+		 LcdDDRamStartPos(0, 0);
+		 LcdStr(sprintf(tempLine1, "%d/%d", nodeIndexFinder(), nodeCounter()));
+		 LcdDDRamStartPos(0, 7);
+		 
+		 /*
+		 LcdDDRamStartPos(1, 7);
+		 LcdStr(currentChild->child->name);
+		*/
+		free(tempLine1);
+		
+		return 0;
+}
+
 
 int menuAction()
 {

@@ -1,1 +1,1 @@
-void time_loop();
+void time_loop(void);

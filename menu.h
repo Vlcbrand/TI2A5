@@ -19,7 +19,7 @@ int childMenuItem(void);
 char *getCurrentName(void);
 int parentMenuItem(void);
 int menuAction(void);
-
+int nodeCounter(void);
 
 MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil,void * ex);
 MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex);

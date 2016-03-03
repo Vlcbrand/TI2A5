@@ -404,7 +404,8 @@ int main(void) {
     ###				Start Menu		###
     ###################################*/
     init_menu();
-    LcdClear();
-    main_loop();
+	LcdClear();
+    showMenuItem();
+	main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

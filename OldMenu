@@ -1,5 +1,5 @@
 
-/*
+
 #ifndef _Menu_H
 #define _Menu_H
 
@@ -18,15 +18,6 @@ typedef struct Node {
     struct Node *next;
     struct Node *prev;
 } NODE;
-
-typedef struct MenuNode {
-	struct MenuNode *prev;
-	struct MenuNode *next;
-	struct MenuNode *parent;
-	struct MenuNode *child;
-	char *name;
-	// TODO Functiepointer toevoegen
-} MenuNode;
 
 // Laatste menu item
 NODE *head;
