@@ -11,18 +11,26 @@
 #define ERROR -1
 
 MenuNode *currentMenuItem = NULL;
+MenuNode *currChildItem = NULL;
 MenuNode *head = NULL;
 
 MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
     tmp->name = s;
     tmp->parent = par;
-    tmp->child = chil;
 	tmp->next = NULL;
 	tmp->executing = ex;
 	
+	if(chil == NULL){
+		tmp->child = NULL;
+	} else{
+		tmp->child = chil;
+	}
+
+	
 	if (head == NULL) 
 	{
+		tmp->prev = NULL;
         head = tmp;
         return tmp;
     }
@@ -40,11 +48,23 @@ MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 
 MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
+	
     tmp->name = s;
     tmp->parent = par;
-	par->child = tmp;
-    tmp->child = chil;
+	tmp->child = chil;
 	tmp->executing = ex;
+	tmp->next = NULL;
+	
+	if(par->child == NULL){
+		par->child = tmp;
+	} else{
+		currChildItem = par->child;
+		while(currChildItem->next != NULL){
+			currChildItem = currChildItem->next;
+		}
+		currChildItem->next = tmp;
+		tmp->prev = currChildItem;
+	}
     return tmp;	
 }
 
@@ -64,15 +84,12 @@ void init_menu()
     MenuNode *netwerkNode = Level1Node("Netwerk", NULL, NULL, NULL);
 	
 	
-    MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
-    MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);	
-	alarm1Node->next = alarm2Node;
-	alarm2Node->prev = alarm1Node;
+	MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
+	MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);
+	MenuNode *alarm3Node = ChildNode("Alarm3", alarmNode, NULL, NULL);
 	
-    MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
-    MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
-	ntpNode->next = dhcpNode;
-	dhcpNode->next = ntpNode;
+	MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
+	MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
 }
 
 
