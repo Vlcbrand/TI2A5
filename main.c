@@ -195,9 +195,16 @@ static void SysControlMainBeat(u_char OnOff) {
 }
 
 void time_loop(){
+    tm gmt;
+     char *timeStr = malloc(sizeof(char) * 50);
+     char *dateStr = malloc(sizeof(char) * 50);
     for (; ;) {
         u_char x = KbGetKey();
-
+        X12RtcGetClock(&gmt);
+        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
+        LcdCursorOff();
+        showTimeAndDate(timeStr,dateStr);
         switch (x) {
             case KEY_RIGHT:
                 LcdClear();
@@ -209,15 +216,18 @@ void time_loop(){
                 prevMenuItem();
                 LcdStr(getCurrentName());
                 break;
+            case KEY_UP:
+                X12RtcIncrementClock(0, 0, 1);
+                break;
+            case KEY_DOWN:
+                X12RtcIncrementClock(0, 0, -1);
+                break;
             case KEY_OK:
                 LcdClear();
                 menuAction();
                 break;
             case KEY_ESC:
-                LcdClear();
-                parentMenuItem();
-                LcdStr(getCurrentName());
-                break;
+                return;
         }
 //		LcdStr(getCurrentName());
         NutSleep(500);
@@ -324,6 +334,7 @@ int main(void) {
     sei();
 
     LcdSetupDisplay();
+    LcdBackLight(LCD_BACKLIGHT_ON);
 
     /* char *timeStr = malloc(sizeof(char) * 50);
      char *dateStr = malloc(sizeof(char) * 50);
