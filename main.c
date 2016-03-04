@@ -213,13 +213,20 @@ void time_loop(){
     char *timeStr = malloc(sizeof(char) * 50);
     char *dateStr = malloc(sizeof(char) * 50);
     X12RtcGetClock(&gmt);
+
+
+
+
     for (; ;) {
         u_char x = KbGetKey();
 
         sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
         sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        LcdCursorOff();
+        //LcdCursorOff();
         showTimeAndDate(timeStr,dateStr);
+
+        LcdCursorBlink(BLINK_OFF);
+        LcdMoveCursorDir(8);
         switch (x) {
             case KEY_RIGHT:
                 LcdClear();
@@ -239,15 +246,18 @@ void time_loop(){
                 X12RtcIncrementClock(0, -1, 0);
                 X12RtcGetClock(&gmt);
                 break;
-            case KEY_OK:
+            case KEY_ALT:
                 LcdClear();
-                menuAction();
+                //menuAction();
                 parentMenuItem();
+                showMenuItem();
+                menu_loop();
                 break;
             case KEY_ESC:
                 LcdClear();
-                parentMenuItem();
-                showMenuItem();
+                //parentMenuItem();
+                //showMenuItem();
+                main_loop();
                 return;
         }
 //		LcdStr(getCurrentName());
