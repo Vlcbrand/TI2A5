@@ -270,6 +270,7 @@ void main_loop(){
         cmp_ret = compare_time(&time, &currenttime);
         if(cmp_ret == 0){
             //Beep goes alarm
+            playTone();
         }
 
         switch (x) {
@@ -411,7 +412,7 @@ int main(void) {
     LcdClear();
 
     //play tone
-    playTone();
+//    playTone();
 
     /*
     ###################################
@@ -429,7 +430,7 @@ int main(void) {
     NutSleep(200);
      */
 
-    main_loop();
+    menu_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
 
