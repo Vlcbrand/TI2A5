@@ -237,6 +237,7 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MINUTE;
             tm->tm_min = BCD2BIN(data[1]);
+            tm->tm_min = tm->tm_min - 80; //Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[2] & X12RTC_HRA_EHR)
         {
@@ -247,11 +248,13 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MDAY;
             tm->tm_mday = BCD2BIN(data[3]);
+            tm->tm_mday = tm->tm_mday - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[4] & X12RTC_MOA_EMO)
         {
             *aflgs |= RTC_ALARM_MONTH;
             tm->tm_mon = BCD2BIN(data[4]) - 1;
+            tm->tm_mon = tm->tm_mon - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[6] & X12RTC_DWA_EDW)
         {
@@ -266,7 +269,10 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
 int X12RtcIncrementClock(int hours, int minutes, int seconds) {
     tm datetime;
     if (X12RtcGetClock(&datetime) == 0) {
-        if (hours>0) {
+        if (hours == 0) {
+
+        }
+        else if (hours > 0) {
             datetime.tm_hour = datetime.tm_hour + 1;
             if (datetime.tm_hour > 23) {
                 datetime.tm_hour = 0;
@@ -277,7 +283,10 @@ int X12RtcIncrementClock(int hours, int minutes, int seconds) {
                 datetime.tm_hour = 23;
             }
         }
-        if (minutes>0) {
+        if (minutes == 0) {
+
+        }
+        else if (minutes > 0) {
             datetime.tm_min = datetime.tm_min + 1;
             if (datetime.tm_min > 59) {
                 datetime.tm_min = 0;
@@ -288,7 +297,10 @@ int X12RtcIncrementClock(int hours, int minutes, int seconds) {
                 datetime.tm_min = 59;
             }
         }
-        if (seconds>0) {
+        if (seconds == 0) {
+
+        }
+        else if (seconds > 0) {
             datetime.tm_sec = datetime.tm_sec + 1;
             if (datetime.tm_sec > 59) {
                 datetime.tm_min = 0;
