@@ -237,6 +237,7 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MINUTE;
             tm->tm_min = BCD2BIN(data[1]);
+            tm->tm_min = tm->tm_min - 80; //Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[2] & X12RTC_HRA_EHR)
         {
@@ -247,11 +248,13 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MDAY;
             tm->tm_mday = BCD2BIN(data[3]);
+            tm->tm_mday = tm->tm_mday - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[4] & X12RTC_MOA_EMO)
         {
             *aflgs |= RTC_ALARM_MONTH;
             tm->tm_mon = BCD2BIN(data[4]) - 1;
+            tm->tm_mon = tm->tm_mon - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[6] & X12RTC_DWA_EDW)
         {
