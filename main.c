@@ -49,6 +49,7 @@
 #include "menu.h"
 #include "main.h"
 
+#include "alarm.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -194,6 +195,15 @@ static void SysControlMainBeat(u_char OnOff) {
     }
 }
 
+void print_time(tm *t) {
+    printf("Time struct\n");
+    printf("mon: %d\n", t->tm_mon);
+    printf("mday: %d\n", t->tm_mday);
+    printf("hour: %d\n", t->tm_hour);
+    printf("min: %d\n", t->tm_min);
+    printf("sec: %d\n", t->tm_sec);
+}
+
 void time_loop(){
     tm gmt;
      char *timeStr = malloc(sizeof(char) * 50);
@@ -238,6 +248,21 @@ void main_loop(){
 
     for (; ;) {
         u_char x = KbGetKey();
+        //Poll for alarm
+        X12RtcGetAlarm(0, &time, &flag);
+        NutSleep(100);
+        X12RtcGetClock(&currenttime);
+//        printf("Alarm time is:\n");
+//        print_time(&time);
+//        printf("Current time: \n");
+//        print_time(&currenttime);
+//        printf("comparing alarmtime & currenttime? %d\n", compare_time(&time, &currenttime));
+//        printf("------------------\n");
+        NutSleep(100);
+        cmp_ret = compare_time(&time, &currenttime);
+        if(cmp_ret == 0){
+            //Beep goes alarm
+        }
 
         switch (x) {
             case KEY_RIGHT:
@@ -309,7 +334,9 @@ void menu_loop(){
  *
  * \return \b never returns
  */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
+    int i;
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
      *
@@ -342,9 +369,13 @@ int main(void) {
     CardInit();
 
     X12Init();
+    NutSleep(100);
     X12RtcGetClock(&gmt);
+    NutSleep(100);
     gmt.tm_year = 116; //default to 2016
     X12RtcSetClock(&gmt);
+    NutSleep(100);
+
 
 
     if (At45dbInit() == AT45DB041B) {
@@ -368,8 +399,35 @@ int main(void) {
     sei();
 
     LcdSetupDisplay();
+<<<<<<< HEAD
     LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
     LcdClear();
     menu_loop();
+=======
+    LcdBackLight(LCD_BACKLIGHT_ON);
+
+    /*
+    ###################################
+    ###				Start Menu		###
+    ###################################*/
+    init_menu();
+    LcdClear();
+    printf("Current time:\n");
+    print_time(&gmt);
+    gmt.tm_sec = gmt.tm_sec + 5;
+    printf("Setting seconds to %d\n", gmt.tm_sec);
+    NutSleep(200);
+    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
+    NutSleep(200);
+
+    main_loop();
+>>>>>>> origin/dev
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
+
+
+void testTimeShowing(){
+
+}
+
+
