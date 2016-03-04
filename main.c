@@ -246,6 +246,10 @@ void time_loop(){
 
 void main_loop(){
 
+    tm time;
+    tm currenttime;
+    int *flag;
+    int cmp_ret;
     for (; ;) {
         u_char x = KbGetKey();
         //Poll for alarm
