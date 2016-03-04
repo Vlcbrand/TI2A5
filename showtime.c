@@ -4,13 +4,54 @@
 
 #include "showTime.h"
 #include "display.h"
+#include <stddef.h>
+
+
+char *oldTime;
+char *oldDate;
 
 void showTimeAndDate(char time[], char date[]){
-    //allign center
-    LcdDDRamStartPos(LINE_0, 4);
-    LcdStr(time);
+    int i = 0;
 
-    //date
-    LcdDDRamStartPos(LINE_1, 3);
-    LcdStr(date);
+    if(oldTime != NULL){
+        //compare time
+        for(;i<strlen(time); ++i){
+//            printf("old time char: [%c] new time char: [%c]\n", oldTime[i], time[i]);
+            if(oldTime[i] != time[i]){
+                //different character
+                LcdDDRamStartPos(LINE_0, 4 + i); //set the DDRam to the char location
+                LcdChar(time[i]);
+//                printf("new char time");
+            }
+        }
+    }else{
+        LcdDDRamStartPos(LINE_0, 4);
+        LcdStr(time);
+        oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
+    }
+
+    //set the oldTime to the new time, so it can be compared the next time this method is called.
+    oldTime = &time;
+
+
+    //reset i
+    i = 0;
+
+    //compare time
+    if(oldDate != NULL){
+        for(;i<strlen(date); ++i){
+            if(oldDate[i] != date[i]){
+                //different character
+                LcdDDRamStartPos(LINE_1, 3 + i); //set the DDRam to the char location
+                LcdChar(date[i]);
+            }
+        }
+    }else{
+        LcdDDRamStartPos(LINE_1, 3);
+        LcdStr(date);
+        oldDate = malloc(sizeof(strlen(date)*stlren(date[0])));
+    }
+
+    //set the oldDate to the new date, so it can be compared the next time this method is called.
+    oldDate = &date;
 }
