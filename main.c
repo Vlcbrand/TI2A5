@@ -268,8 +268,6 @@ int main(void) {
     char *timeStr = malloc(sizeof(char) * 50);
     char *dateStr = malloc(sizeof(char) * 50);
 
-    LcdBackLight(LCD_BACKLIGHT_ON);
-
 
     int count = 0;
     int cursorpos = 0;
@@ -289,7 +287,7 @@ int main(void) {
                 count++;
             }
             else {
-                //LcdBackLight(LCD_BACKLIGHT_OFF);
+                LcdBackLight(LCD_BACKLIGHT_OFF);
             }
         }
 
