@@ -24,7 +24,7 @@ if [ "$output" = "success" ]; then
 	if [ "$port" != "" ]; then
 		echo "Starting flash..";
 		mono internetradioflash.exe f=ipac.hex p="$port"
-#    cat "$port"
+    cat "$port"
 	fi
 else
 	echo "Errors when making; Stopped";

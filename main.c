@@ -250,28 +250,8 @@ void time_loop(){
 
 void main_loop(){
 
-    tm time;
-    tm currenttime;
-    int *flag;
-    int cmp_ret;
     for (; ;) {
         u_char x = KbGetKey();
-        //Poll for alarm
-        X12RtcGetAlarm(0, &time, &flag);
-        NutSleep(100);
-        X12RtcGetClock(&currenttime);
-//        printf("Alarm time is:\n");
-//        print_time(&time);
-//        printf("Current time: \n");
-//        print_time(&currenttime);
-//        printf("comparing alarmtime & currenttime? %d\n", compare_time(&time, &currenttime));
-//        printf("------------------\n");
-        NutSleep(100);
-        cmp_ret = compare_time(&time, &currenttime);
-        if(cmp_ret == 0){
-            //Beep goes alarm
-            playTone();
-        }
 
         switch (x) {
             case KEY_RIGHT:
@@ -312,6 +292,10 @@ void menu_loop(){
     char *timeStr = malloc(sizeof(char) * 50);
     char *dateStr = malloc(sizeof(char) * 50);
 
+    tm time;
+    tm currenttime;
+    int *flag;
+    int cmp_ret;
 
     for(;;){
         u_char x = KbGetKey();
@@ -323,6 +307,22 @@ void menu_loop(){
         LcdCursorOff();
         showTimeAndDate(timeStr,dateStr);
 
+        //ALARM LOGIC
+        X12RtcGetAlarm(0, &time, &flag);
+        NutSleep(100);
+        printf("Alarm time is:\n");
+        print_time(&time);
+        printf("Current time: \n");
+        print_time(&gmt);
+        printf("comparing alarmtime & currenttime? %d\n", compare_time(&time, &gmt));
+        printf("------------------\n");
+        NutSleep(100);
+        cmp_ret = compare_time(&time, &gmt);
+        if(cmp_ret == 0){
+            //Beep goes alarm
+            playTone();
+        }
+
         switch (x){
             case KEY_ALT:
                 LcdClear();
@@ -330,6 +330,7 @@ void menu_loop(){
                 LcdClear();
                 main_loop();
         }
+        NutSleep(500);
     }
 }
 
@@ -420,7 +421,7 @@ int main(void) {
     ###################################*/
     init_menu();
     LcdClear();
-    /*
+
     printf("Current time:\n");
     print_time(&gmt);
     gmt.tm_sec = gmt.tm_sec + 5;
@@ -428,7 +429,7 @@ int main(void) {
     NutSleep(200);
     printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
     NutSleep(200);
-     */
+
 
     menu_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...

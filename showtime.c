@@ -16,12 +16,12 @@ void showTimeAndDate(char time[], char date[]){
     if(oldTime != NULL){
         //compare time
         for(;i<strlen(time); ++i){
-            printf("old time char: [%c] new time char: [%c]\n", oldTime[i], time[i]);
+//            printf("old time char: [%c] new time char: [%c]\n", oldTime[i], time[i]);
             if(oldTime[i] != time[i]){
                 //different character
                 LcdDDRamStartPos(LINE_0, 4 + i); //set the DDRam to the char location
                 LcdChar(time[i]);
-                printf("new char time");
+//                printf("new char time");
             }
         }
     }else{
