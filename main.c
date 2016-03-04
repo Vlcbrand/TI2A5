@@ -403,11 +403,9 @@ int main(void) {
     sei();
 
     LcdSetupDisplay();
-<<<<<<< HEAD
     LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
     LcdClear();
     menu_loop();
-=======
     LcdBackLight(LCD_BACKLIGHT_ON);
 
     /*
@@ -425,7 +423,6 @@ int main(void) {
     NutSleep(200);
 
     main_loop();
->>>>>>> origin/dev
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
 
