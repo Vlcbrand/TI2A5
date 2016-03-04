@@ -405,8 +405,6 @@ int main(void) {
     LcdSetupDisplay();
     LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
     LcdClear();
-    menu_loop();
-    LcdBackLight(LCD_BACKLIGHT_ON);
 
     /*
     ###################################
