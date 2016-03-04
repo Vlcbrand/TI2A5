@@ -215,7 +215,8 @@ void time_loop(){
     X12RtcGetClock(&gmt);
 
 
-
+    int up = 0;
+    int down = 0;
 
     for (; ;) {
         u_char x = KbGetKey();
@@ -226,7 +227,7 @@ void time_loop(){
         showTimeAndDate(timeStr,dateStr);
 
         LcdCursorBlink(BLINK_OFF);
-        LcdMoveCursorDir(8);
+        //LcdMoveCursorDir(8);
         switch (x) {
             case KEY_RIGHT:
                 LcdClear();
@@ -239,24 +240,39 @@ void time_loop(){
 				showMenuItem();
                 break;
             case KEY_UP:
+                up ++;
                 X12RtcIncrementClock(0, 1, 0);
                 X12RtcGetClock(&gmt);
                 break;
             case KEY_DOWN:
+                down ++;
                 X12RtcIncrementClock(0, -1, 0);
                 X12RtcGetClock(&gmt);
                 break;
             case KEY_ALT:
+                LcdCursorOff();
                 LcdClear();
-                //menuAction();
                 parentMenuItem();
                 showMenuItem();
-                menu_loop();
+                main_loop();
                 break;
             case KEY_ESC:
+                if(up > down){
+                    int i;
+                    for(i = 0; i < up-down; i++){
+                        X12RtcIncrementClock(0, -1, 0);
+                    }
+                }
+                else{
+                    int ix;
+                    for(ix = 0; ix > up-down; ix--){
+                        X12RtcIncrementClock(0, 1, 0);
+                    }
+                }
+                LcdCursorOff();
                 LcdClear();
-                //parentMenuItem();
-                //showMenuItem();
+                parentMenuItem();
+                showMenuItem();
                 main_loop();
                 return;
         }
