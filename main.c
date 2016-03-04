@@ -268,6 +268,8 @@ int main(void) {
     char *timeStr = malloc(sizeof(char) * 50);
     char *dateStr = malloc(sizeof(char) * 50);
 
+    LcdBackLight(LCD_BACKLIGHT_ON);
+
 
     int count = 0;
     int cursorpos = 0;
@@ -287,16 +289,17 @@ int main(void) {
                 count++;
             }
             else {
-                LcdBackLight(LCD_BACKLIGHT_OFF);
+                //LcdBackLight(LCD_BACKLIGHT_OFF);
             }
         }
+
 
 
         //LcdClear();
         X12RtcGetClock(&gmt);
         sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
         sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        LcdCursorOff();
+        LcdCursorBlink(BLINK_OFF);
         showTimeAndDate(timeStr,dateStr);
         LcdMoveCursorPos(cursorpos);
 
