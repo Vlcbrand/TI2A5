@@ -12,19 +12,36 @@ typedef struct MenuNode {
 	void (*executing)(void);
 } MenuNode;
 
+/* #########################  */
+/* #####    Structure   Functions  ##### */
+/* ######################### */
+
+//  Allocate new Nodes
+MenuNode *Level1Node(char s[17],void * ex);
+MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex);
+
+// Add Nodes after last known Node
+void AddL1Node(MenuNode*);
+void AddChildNode(MenuNode*);
+
+
+/* #########################  */
+/* #####  Navigation  Functions  ##### */
+/* ######################### */
+
 void init_menu(void);
 int nextMenuItem(void);
 int prevMenuItem(void);
 int childMenuItem(void);
-char *getCurrentName(void);
 int parentMenuItem(void);
+
+
+/* #########################  */
+/* #####   Menu  Functionalities  ##### */
+/* ######################### */
+
 int menuAction(void);
-int nodeCounter(void);
-
-MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil,void * ex);
-MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex);
-
-short menuItemIndex;
+int showMenuItem(void);
 
 #endif /* _Menu_H */
 /*  ����  End Of File  �������� �������������������������������������������� */

@@ -14,25 +14,37 @@
 MenuNode *currentMenuItem = NULL;
 MenuNode *head = NULL;
 
-MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
+
+/* #########################  */
+/* ####    Initialization   Functions    ### */
+/* ######################### */
+
+MenuNode *Level1Node(char s[17], void * ex) {
 	MenuNode *tmp = malloc(sizeof(MenuNode));
     tmp->name = s;
-    tmp->parent = par;
+    tmp->parent = NULL;
+	tmp->child = NULL;
 	tmp->next = NULL;
 	tmp->executing = ex;
-	
-	if(chil == NULL){
-		tmp->child = NULL;
-	} else{
-		tmp->child = chil;
-	}
+    return tmp;	
+}
 
-	
+MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
+	MenuNode *tmp = malloc(sizeof(MenuNode));	
+    tmp->name = s;
+    tmp->parent = par;
+	tmp->child = chil;
+	tmp->executing = ex;
+	tmp->next = NULL;
+    return tmp;	
+}
+
+void AddL1Node(MenuNode* node)
+{
 	if (head == NULL) 
 	{
-		tmp->prev = NULL;
-        head = tmp;
-        return tmp;
+		node->prev = NULL;
+        head = node;
     }
 	else
 	{
@@ -40,39 +52,29 @@ MenuNode *Level1Node(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
 		while(items->next != NULL){
 			items = items->next;
 		}
-		items->next = tmp;
-		tmp->prev = items;
+		items->next = node;
+		node->prev = items;
 	}
-    return tmp;	
 }
 
-MenuNode *ChildNode(char s[17], MenuNode *par, MenuNode *chil, void * ex) {
-	MenuNode *tmp = malloc(sizeof(MenuNode));
+void AddChildNode(MenuNode* node)
+{
 	MenuNode *currChildItem = NULL;
-	
-    tmp->name = s;
-    tmp->parent = par;
-	tmp->child = chil;
-	tmp->executing = ex;
-	tmp->next = NULL;
-	
-	if(par->child == NULL){
-		par->child = tmp;
-	} else{
-		currChildItem = par->child;
-		while(currChildItem->next != NULL){
+	if(node->parent->child == NULL)
+	{
+		node->parent->child = node;
+	} else
+	{
+		currChildItem = node->parent->child;
+		while(currChildItem->next != NULL)
+		{
 			currChildItem = currChildItem->next;
 		}
-		currChildItem->next = tmp;
-		tmp->prev = currChildItem;
+		currChildItem->next = node;
+		node->prev = currChildItem;
 	}
-    return tmp;	
 }
 
-char* getCurrentName(void)
-{
-	return currentMenuItem->name;
-}
 
 /* #########################  */
 /* #####  Navigation  Functions  ##### */
@@ -80,11 +82,10 @@ char* getCurrentName(void)
 
 void init_menu(void)
 {
-    MenuNode *taalNode = Level1Node("Taal", NULL, NULL, NULL); //de laatste is de functiepointer
-    MenuNode *tijdNode = Level1Node("Tijd", NULL, NULL, &time_loop);
-    MenuNode *alarmNode = Level1Node("Alarm", NULL, NULL, NULL);
-    MenuNode *netwerkNode = Level1Node("Netwerk", NULL, NULL, NULL);
-	
+    MenuNode *taalNode = Level1Node("Taal",  NULL); //de laatste is de functiepointer
+    MenuNode *tijdNode = Level1Node("Tijd", &time_loop);
+    MenuNode *alarmNode = Level1Node("Alarm", NULL);
+    MenuNode *netwerkNode = Level1Node("Netwerk",  NULL);
 	
 	MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
 	MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);
@@ -92,6 +93,20 @@ void init_menu(void)
 	
 	MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
 	MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
+	
+	AddL1Node(taalNode);
+	AddL1Node(tijdNode);
+	AddL1Node(alarmNode);
+	AddL1Node(netwerkNode);
+	
+	AddChildNode(alarm1Node);
+	AddChildNode(alarm2Node);
+	AddChildNode(alarm3Node);
+	AddChildNode(ntpNode);
+	AddChildNode(dhcpNode);
+	
+	currentMenuItem = head;
+	printf("\nMenu Initialized");
 }
 
 int nextMenuItem(void)
@@ -159,9 +174,18 @@ int parentMenuItem(void)
 
 int nodeCounter(void) 
 {
+	MenuNode *temp = NULL;
 	int i = 0;
-	MenuNode *temp = currentMenuItem->parent->child;
-    while (temp != NULL) 
+	if(currentMenuItem->parent  != NULL)
+	{
+		temp = currentMenuItem->parent->child;		
+	}
+	else
+	{
+		temp = head;
+	}
+	
+	while (temp != NULL) 
 	{
 		i++;
         temp = temp->next;
@@ -171,40 +195,64 @@ int nodeCounter(void)
 
 int nodeIndexFinder(void)
 {
-	int i = 0;
-	MenuNode *temp = currentMenuItem->parent->child;
-    while (temp != currentMenuItem) 
+	MenuNode *temp = NULL;
+	int i = 1;
+	if(currentMenuItem->parent  != NULL)
+	{
+		temp = currentMenuItem->parent->child;		
+	}
+	else
+	{
+		temp = head;
+	}
+    
+	while (temp != currentMenuItem) 
 	{
 		i++;
         temp = temp->next;
-    }
+    }   
     return i;
 }
 
 int showMenuItem(void)
 {
-		char *tempLine1 = malloc(sizeof(char)*17);
+		char index[4]; 
+		char parentMenuName[11]; 
+		char childMenuName[11]; 
+		const int i = nodeIndexFinder();
+		const int x = nodeCounter();
+		sprintf(index, "%d/%d", i, x);
+				
+		if(currentMenuItem-> parent == NULL )
+		{
+			sprintf(parentMenuName, "Settings");
+			sprintf(childMenuName, "%s", currentMenuItem->name);
+		}
+		else if(currentMenuItem->child == NULL)
+		{
+			sprintf(parentMenuName, "%s", currentMenuItem->parent->name);
+			sprintf(childMenuName, "%s", currentMenuItem->name);
+		}
+		else
+		{
+			sprintf(parentMenuName, "%s", currentMenuItem->parent->name);
+			sprintf(childMenuName, "%s", currentMenuItem->child->name);
+		}
 		
-		 LcdDDRamStartPos(0, 0);
-		 LcdStr(sprintf(tempLine1, "%d/%d", nodeIndexFinder(), nodeCounter()));
-		 LcdDDRamStartPos(0, 7);
-		 
-		 /*
-		 LcdDDRamStartPos(1, 7);
-		 LcdStr(currentChild->child->name);
-		*/
-		free(tempLine1);
-		
+		LcdDDRamStartPos(0, 0);
+		LcdStr(index);
+		LcdDDRamStartPos(0, 5);
+		LcdStr(parentMenuName);
+		LcdDDRamStartPos(1, 5);
+		LcdStr(childMenuName);		
 		return 0;
 }
-
 
 int menuAction()
 {
 	if(currentMenuItem->child != NULL)
 	{
 			childMenuItem();
-			LcdStr(currentMenuItem->name);	
 	}
 	else
 	{

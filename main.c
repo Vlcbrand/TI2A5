@@ -209,12 +209,12 @@ void time_loop(){
             case KEY_RIGHT:
                 LcdClear();
                 nextMenuItem();
-                LcdStr(getCurrentName());
+                showMenuItem();
                 break;
             case KEY_LEFT:
                 LcdClear();
                 prevMenuItem();
-                LcdStr(getCurrentName());
+				showMenuItem();
                 break;
             case KEY_UP:
                 X12RtcIncrementClock(0, 0, 1);
@@ -235,7 +235,7 @@ void time_loop(){
 }
 
 void main_loop(){
-
+	
     for (; ;) {
         u_char x = KbGetKey();
 
@@ -243,22 +243,23 @@ void main_loop(){
             case KEY_RIGHT:
                 LcdClear();
                 nextMenuItem();
-                LcdStr(getCurrentName());
+                showMenuItem();
                 break;
             case KEY_LEFT:
                 LcdClear();
                 prevMenuItem();
-                LcdStr(getCurrentName());
-                break;
+                showMenuItem();
+				break;
             case KEY_OK:
                 LcdClear();
                 menuAction();
-                break;
+                showMenuItem();
+				break;
             case KEY_ESC:
                 LcdClear();
                 parentMenuItem();
-                LcdStr(getCurrentName());
-                break;
+                showMenuItem();
+				break;
         }
 //		LcdStr(getCurrentName());
         NutSleep(500);
