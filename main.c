@@ -414,6 +414,7 @@ int main(void) {
     ###################################*/
     init_menu();
     LcdClear();
+    /*
     printf("Current time:\n");
     print_time(&gmt);
     gmt.tm_sec = gmt.tm_sec + 5;
@@ -421,6 +422,7 @@ int main(void) {
     NutSleep(200);
     printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
     NutSleep(200);
+     */
 
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
