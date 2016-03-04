@@ -68,7 +68,7 @@ extern void LcdMoveCursorPos(int);
 
 //cursor
 extern void LcdCursorBlink(int BLINK);
-extern void LcdCursorOff();
+extern void LcdCursorOff(void);
 
 //dd ram
 extern void LcdDDRamStartPos(int line, int pos);
