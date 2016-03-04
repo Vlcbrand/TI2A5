@@ -50,7 +50,7 @@ debug:
 
 .PHONY: clean
 clean:
-	-rm -f $(OBJS)
-	-rm -f $(SRCS:.c=.lst)
-	-rm -f *.hex *.elf *.map *.bin
+	rm -f $(OBJS)
+	rm -f $(SRCS:.c=.lst)
+	rm -f *.hex *.elf *.map *.bin
 
