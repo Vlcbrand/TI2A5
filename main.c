@@ -211,7 +211,8 @@ void print_time(tm *t) {
 void time_loop(){
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
-    char *dateStr = malloc(sizeof(char) * 50);
+    char *setTime = malloc(sizeof(char) * 50);
+    //char *dateStr = malloc(sizeof(char) * 50);
     X12RtcGetClock(&gmt);
 
 
@@ -221,10 +222,11 @@ void time_loop(){
     for (; ;) {
         u_char x = KbGetKey();
 
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
+        //strcpy(timeStr, " Tijd instellen ");
+        sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
+        //sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
         //LcdCursorOff();
-        showTimeAndDate(timeStr,dateStr);
+        showTimeNoSeconds(timeStr, "Tijd instellen");
 
         LcdCursorBlink(BLINK_OFF);
         //LcdMoveCursorDir(8);
