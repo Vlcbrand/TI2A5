@@ -330,6 +330,8 @@ void menu_loop(){
     int *flag;
     int cmp_ret;
 
+    int alarmAan = 0;
+
     for(;;){
         u_char x = KbGetKey();
 
@@ -352,8 +354,12 @@ void menu_loop(){
         NutSleep(100);
         cmp_ret = compare_time(&time, &gmt);
         if(cmp_ret == 0){
+            alarmAan = 1;
+        }
+        if(alarmAan == 1) {
             //Beep goes alarm
             playTone();
+            //NutSleep(500);
         }
 
         switch (x){
@@ -361,6 +367,17 @@ void menu_loop(){
                 LcdClear();
 				showMenuItem();
                 main_loop();
+                break;
+            case KEY_ESC:
+                if(alarmAan == 1)
+                    alarmAan = 0;
+                break;
+            case KEY_OK:
+                if(alarmAan == 1){
+                    alarmAan = 0;
+                    gmt.tm_sec = gmt.tm_sec + 30;
+                    X12RtcSetAlarm(0, &gmt, 0b00011111);
+                }
         }
         NutSleep(500);
     }
