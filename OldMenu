@@ -1,0 +1,243 @@
+
+
+#ifndef _Menu_H
+#define _Menu_H
+
+#include <stdio.h>
+
+// Hoofdmenu Item
+typedef struct menu_node {
+    char *name;
+    struct menu_node *parent;
+    struct menu_node *child;
+} MENU_NODE;
+
+// Submenu Item
+typedef struct Node {
+    MENU_NODE *menu_item;
+    struct Node *next;
+    struct Node *prev;
+} NODE;
+
+// Laatste menu item
+NODE *head;
+
+NODE *currentItem;
+MENU_NODE *currentChild;
+
+extern MENU_NODE *create_menu_node(char[], MENU_NODE *, MENU_NODE *) ;
+
+extern void llist_add(MENU_NODE *);
+extern int llist_nrItems(void);
+extern void init_menu(void);
+extern MENU_NODE* child_Next(void);
+extern char* menu_Next(void);
+extern char* menu_Prev(void);
+extern char* menu_SelectChild(void);
+
+char* getName(void);
+int nextMenuItem(void);
+int childMenuItem(void);
+int prevMenuItem(void);
+
+
+
+short menuItemIndex;
+
+#endif /* _Menu_H */
+/*  ����  End Of File  �������� �������������������������������������������� */
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <string.h>
+
+#include "menu.h"
+
+#define NEWLINE "\n"
+#define TRUE 1
+#define FALSE 0
+
+#define SUCCESS 0
+#define ERROR -1
+
+MenuNode *currentMenuItem = NULL;
+MenuNode *headMenuItem = NULL;
+
+MENU_NODE *create_menu_node(char s[17], MENU_NODE *par, MENU_NODE *chil) {
+    MENU_NODE *tmp = malloc(sizeof(MENU_NODE));
+    tmp->name = s;
+    tmp->parent = par;
+    tmp->child = chil;
+    return tmp;
+}
+
+char* getName(void)
+{
+	return currentMenuItem->name;
+}
+
+int nextMenuItem(void)
+{
+	if (currentMenuItem->next != NULL) {
+		currentMenuItem = currentMenuItem->next;
+		return SUCCESS;
+	} else {
+		return ERROR;
+	}
+}
+
+int childMenuItem(void)
+{
+	if (currentMenuItem->child != NULL) {
+		currentMenuItem = currentMenuItem->child;
+		return SUCCESS;
+	} else {
+		return ERROR;
+	}
+}
+
+
+
+
+void llist_add(MENU_NODE *node) {
+    NODE *temp = head;
+    NODE *newNode = (NODE *) malloc(sizeof(NODE));
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    newNode->menu_item = node;
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+    while (temp->next != NULL) temp = temp->next;
+    temp->next = newNode;
+    newNode->prev = temp;
+
+}
+
+
+int llist_nrItems() {
+    NODE *temp = head;
+    int i = 0;
+    while (temp != NULL) {
+        if(temp->menu_item->parent == NULL)
+		{
+			i++;	
+		}
+        temp = temp->next;
+    }
+    return i;
+}
+
+char* menu_Next()
+{
+	if(currentItem->next != NULL)
+	{
+		currentItem = currentItem->next;
+		menuItemIndex++;			
+	}
+	else
+	{
+			currentItem = head;
+			menuItemIndex = 1;
+	}
+	
+		int nrItems =  llist_nrItems();
+		char *nextItem = malloc(sizeof(char)*17);
+		sprintf(nextItem, "%d/%d %s", menuItemIndex, nrItems, currentItem->menu_item->name);
+		return nextItem;
+}
+
+
+
+char* menu_Prev()
+{
+	int nrItems =  llist_nrItems();
+	if(currentItem->prev != NULL)
+	{
+		currentItem = currentItem->prev;
+		menuItemIndex--;
+	}
+	else
+	{
+		NODE *temp = head;
+		while (temp != NULL) 
+		{
+			currentItem = temp;
+			temp = temp->next;
+		}
+        
+		menuItemIndex = nrItems;
+	}
+		
+		char *nextItem = malloc(sizeof(char)*17);
+		sprintf(nextItem, "%d/%d %s", menuItemIndex, nrItems, currentItem->menu_item->name);
+		return nextItem;
+}
+
+char* menu_SelectChild()
+{
+	 char *childItem = malloc(sizeof(char)*17);
+	 int nrItems =  llist_nrItems();
+	
+	if(currentChild == NULL)
+	{
+		currentChild = currentItem->menu_item->child;
+		sprintf(childItem, "%d/%d %s", menuItemIndex, nrItems, currentChild->child->name);
+		return childItem;
+	}
+	else if(currentChild->child != NULL){
+		currentChild = currentChild->child;
+		sprintf(childItem, "%d/%d %s", menuItemIndex, nrItems, currentChild->child->name);
+	}
+		
+	return childItem;
+}
+
+
+void init_menu()
+{
+    head = NULL;
+	menuItemIndex = 1;
+
+    MENU_NODE *taalNode = create_menu_node("Taal", NULL, NULL);
+    MENU_NODE *tijdNode = create_menu_node("Tijd", NULL, NULL);
+    MENU_NODE *alarmNode = create_menu_node("Alarm", NULL, NULL);
+    MENU_NODE *alarm1Node = create_menu_node("Alarm1", NULL, NULL);
+    MENU_NODE *alarm2Node = create_menu_node("Alarm2", NULL, NULL);
+    MENU_NODE *ntpNode = create_menu_node("NTP", NULL, NULL);
+    MENU_NODE *netwerkNode = create_menu_node("Netwerk", NULL, NULL);
+    MENU_NODE *dhcpNode = create_menu_node("DHCP", NULL, NULL);
+	
+    alarmNode->child = alarm1Node;
+    alarm1Node->child = alarm2Node;
+
+    alarm1Node->parent = alarmNode;
+    alarm2Node->parent = alarmNode;
+
+    netwerkNode->child = ntpNode;
+    ntpNode->child = dhcpNode;
+
+    ntpNode->parent = ntpNode;
+    dhcpNode->parent = netwerkNode;
+
+    llist_add(taalNode);
+    llist_add(tijdNode);
+    llist_add(alarmNode);
+    llist_add(netwerkNode);
+	
+	currentItem = head;
+	
+	
+    //llist_show();
+}
+*/

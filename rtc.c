@@ -237,6 +237,7 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MINUTE;
             tm->tm_min = BCD2BIN(data[1]);
+            tm->tm_min = tm->tm_min - 80; //Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[2] & X12RTC_HRA_EHR)
         {
@@ -247,11 +248,13 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
         {
             *aflgs |= RTC_ALARM_MDAY;
             tm->tm_mday = BCD2BIN(data[3]);
+            tm->tm_mday = tm->tm_mday - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[4] & X12RTC_MOA_EMO)
         {
             *aflgs |= RTC_ALARM_MONTH;
             tm->tm_mon = BCD2BIN(data[4]) - 1;
+            tm->tm_mon = tm->tm_mon - 80;//Somehow 80 always gets added to this, so remove 80 to get the actual minutes
         }
         if (data[6] & X12RTC_DWA_EDW)
         {
@@ -261,6 +264,142 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
     }
     return(rc);
 }
+
+int X12RtcIncrementAlarm(int hours, int minutes, int alarmid) {
+    tm datetime;
+    int *flags;
+    if (X12RtcGetAlarm(alarmid, &datetime, &flags) == 0) {
+        if (hours == 0) {
+
+        }
+        else if (hours > 0) {
+            datetime.tm_hour = datetime.tm_hour + 1;
+            if (datetime.tm_hour > 23) {
+                datetime.tm_hour = 0;
+            }
+        } else {
+            datetime.tm_hour = datetime.tm_hour - 1;
+            if (datetime.tm_hour < 0) {
+                datetime.tm_hour = 23;
+            }
+        }
+        if (minutes == 0) {
+
+        }
+        else if (minutes > 0) {
+            datetime.tm_min = datetime.tm_min + 1;
+            if (datetime.tm_min > 59) {
+                datetime.tm_min = 0;
+            }
+        } else {
+            datetime.tm_min = datetime.tm_min - 1;
+            if (datetime.tm_min < 0) {
+                datetime.tm_min = 59;
+            }
+        }
+        //TODO: not use default min + hour
+        X12RtcSetAlarm(alarmid, &datetime, 0b00000110);
+        return 1;
+    }
+    return 0;
+
+}
+
+int X12RtcIncrementClock(int hours, int minutes, int seconds) {
+    tm datetime;
+    if (X12RtcGetClock(&datetime) == 0) {
+        if (hours == 0) {
+
+        }
+        else if (hours > 0) {
+            datetime.tm_hour = datetime.tm_hour + 1;
+            if (datetime.tm_hour > 23) {
+                datetime.tm_hour = 0;
+            }
+        } else {
+            datetime.tm_hour = datetime.tm_hour - 1;
+            if (datetime.tm_hour < 0) {
+                datetime.tm_hour = 23;
+            }
+        }
+        if (minutes == 0) {
+
+        }
+        else if (minutes > 0) {
+            datetime.tm_min = datetime.tm_min + 1;
+            if (datetime.tm_min > 59) {
+                datetime.tm_min = 0;
+            }
+        } else {
+            datetime.tm_min = datetime.tm_min - 1;
+            if (datetime.tm_min < 0) {
+                datetime.tm_min = 59;
+            }
+        }
+        if (seconds == 0) {
+
+        }
+        else if (seconds > 0) {
+            datetime.tm_sec = datetime.tm_sec + 1;
+            if (datetime.tm_sec > 59) {
+                datetime.tm_min = 0;
+            }
+        } else {
+            datetime.tm_sec = datetime.tm_sec - 1;
+            if (datetime.tm_sec < 0) {
+                datetime.tm_min = 59;
+            }
+        }
+        X12RtcSetClock(&datetime);
+        return 1;
+    }
+    return 0;
+
+}
+
+int X12RtcIncrementDate(int year, int month, int day) {
+    tm date;
+    if (X12RtcGetClock(&date) == 0) {
+        if (year>0) {
+            date.tm_year = date.tm_year + 1;
+            if (date.tm_year > 9999) {
+                date.tm_year = 0;
+            }
+        } else {
+            date.tm_year = date.tm_year - 1;
+            if (date.tm_year < 0) {
+                date.tm_year = 9999;
+            }
+        }
+        if (month>0) {
+            date.tm_mon = date.tm_mon + 1;
+            if (date.tm_mon > 12) {
+                date.tm_mon = 1;
+            }
+        } else {
+            date.tm_mon = date.tm_mon - 1;
+            if (date.tm_mon < 1) {
+                date.tm_mon = 12;
+            }
+        }
+        if (day>0) {
+            date.tm_mday = date.tm_mday + 1;
+            if (date.tm_mday > 31) {
+                date.tm_mon = 0;
+            }
+        } else {
+            date.tm_mday = date.tm_mday - 1;
+            if (date.tm_mday < 0) {
+                date.tm_mon = 31;
+            }
+        }
+        X12RtcSetClock(&date);
+        return 1;
+    }
+    return 0;
+
+}
+
 
 /*!
  * \brief Set alarm of an X12xx hardware clock.
