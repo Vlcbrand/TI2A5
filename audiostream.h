@@ -16,7 +16,8 @@ typedef struct radio_stream {
 RADIO_STREAM *yorick;
 RADIO_STREAM *radio_3fm;
 
-initAudioStreams();
+void initAudioStreams();
+
 
 int play_stream(RADIO_STREAM rStream);
 

@@ -520,9 +520,11 @@ void alarm_afspeel_loop(int alarmloop){
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
+    NutThreadCreate("play stream", PlayStream, yorick, 512);
 
     for(;;){
         //playTone();
+        //test
 
         printf("TOON SPEELT AF\n");
         NutSleep(500);
@@ -533,8 +535,13 @@ void alarm_afspeel_loop(int alarmloop){
         switch (x){
             case KEY_OK:
                 LcdClear();
+
+
+                //stop alarm
+                STOP_THREAD = 1;
+                puts("!!!!!!!!!!!!!!!!!!!!!!stop thread!");
+
 				return;
-                break;
             case KEY_ESC:
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
@@ -621,8 +628,8 @@ int main(void) {
     sei();
 
     //audio stream test
-//    vsPlayerInit();
-//    play_stream();
+    VsPlayerInit();
+    initAudioStreams();
     LcdSetupDisplay();
 
     /* ###################################
