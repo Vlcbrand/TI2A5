@@ -57,6 +57,7 @@
 #include "alarm.h"
 
 #include "audiostream.h"
+#include "NTP.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -441,8 +442,9 @@ int main(void) {
     sei();
 
     //audio stream test
-    vsPlayerInit();
-    play_stream();
+    VsPlayerInit();
+	initNTP();
+//    play_stream();
 
 //    LcdSetupDisplay();
 //    LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
