@@ -221,8 +221,11 @@ void time_loop(){
 
 
     for (; ;) {
-        if(checkAlarm()){
-            alarm_loop();
+        if(checkAlarm(0)){
+            alarm_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -290,8 +293,11 @@ void time_loop(){
 void main_loop(){
 
     for (; ;) {
-        if(checkAlarm()){
-            alarm_loop();
+        if(checkAlarm(0)){
+            alarm_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -336,8 +342,11 @@ void menu_loop(){
 
 
     for(;;){
-        if(checkAlarm()){
-            alarm_loop();
+        if(checkAlarm(0)){
+            alarm_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -359,7 +368,7 @@ void menu_loop(){
     }
 }
 
-void alarm_loop(){
+void alarm_loop(int alarmloop){
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
     //char *dateStr = malloc(sizeof(char) * 50);
@@ -367,28 +376,30 @@ void alarm_loop(){
     X12RtcGetClock(&gmt);
     sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
 
+    LcdClear();
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    LcdClear();
+
     for(;;){
         //playTone();
 
         printf("TOON SPEELT AF\n");
-        //NutSleep(500);
+        NutSleep(500);
 
         u_char x = KbGetKey();
 
 
         switch (x){
-            case KEY_ESC:
+            case KEY_OK:
                 LcdClear();
                 menuAction();
                 break;
-            case KEY_OK:
-                gmt.tm_sec = gmt.tm_sec + 20;
-                //set_alarm(alarm,&gmt);
-                X12RtcSetAlarm(0, &gmt, 0b00011111);
+            case KEY_ESC:
+                gmt.tm_min = gmt.tm_min + 2;
+                set_alarm(alarmloop, gmt);
+                //X12RtcSetAlarm(0, &gmt, 0b00011111);
+                //set_alarm(alarm,gmt);
                 LcdClear();
                 menuAction();
                 break;
@@ -397,21 +408,20 @@ void alarm_loop(){
     }
 }
 
-int checkAlarm(){
+int checkAlarm(int alarm){
     tm time;
     tm gmt;
 
-    //mag gecomment worden
-    int *flag;
     int cmp_ret;
 
     X12RtcGetClock(&gmt);
 
     //get_alarm(alarm);
-    X12RtcGetAlarm(0, &time, &flag);
+//    X12RtcGetAlarm(0,&gmt, 0b00011111);
+    time = get_alarm(alarm);
+    print_time(&time);
 
-
-    cmp_ret = compare_time(&time, &gmt);
+    cmp_ret = compare_time_minhour(&time, &gmt);
     if(cmp_ret == 0){
         return 1;
     }
@@ -465,9 +475,11 @@ int main(void) {
     NutSleep(100);
     X12RtcGetClock(&gmt);
     NutSleep(100);
-    gmt.tm_year = 116; //default to 2016
+    //gmt.tm_year = 116; //default to 2016
     X12RtcSetClock(&gmt);
     NutSleep(100);
+
+
 
 
 
@@ -507,11 +519,14 @@ int main(void) {
 
     printf("Current time:\n");
     print_time(&gmt);
-    gmt.tm_sec = gmt.tm_sec + 5;
+    gmt.tm_min = gmt.tm_min + 1;
     printf("Setting seconds to %d\n", gmt.tm_sec);
     NutSleep(200);
-    //printf("Return val: %d\n", set_alarm(1,&gmt);
-    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
+    //printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
+    set_alarm(0, gmt);
+
+    gmt.tm_min = gmt.tm_min + 2;
+    set_alarm(1,gmt);
     NutSleep(200);
 
 

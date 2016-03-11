@@ -74,6 +74,39 @@ int compare_time(tm *t1, tm *t2)
     return retval;
 }
 
+int compare_time_minhour(tm *t1, tm *t2)
+{
+    int retval = 0;
+    printf("Compare time\n");
+
+    if (t1->tm_hour < t2->tm_hour) {
+        retval = -1;
+        goto end;
+    }
+    else if (t1->tm_hour > t2->tm_hour) {
+        retval = 1;
+        goto end;
+    }
+    else {
+        //continue on checking members
+//                printf("hour ==\n");
+        if (t1->tm_min < t2->tm_min) {
+            retval = -1;
+            goto end;
+        }
+        else if (t1->tm_min > t2->tm_min) {
+            retval = 1;
+            goto end;
+        }
+        else {
+            retval = 0;
+            goto end;
+        }
+    }
+    end:
+    return retval;
+}
+
 tm get_alarm(int alarmid){
     tm time;
     int* flags;
