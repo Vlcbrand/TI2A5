@@ -639,7 +639,6 @@ int main(void) {
 
     //audio stream test
     VsPlayerInit();
-	initNtp();
 
     initAudioStreams();
     LcdSetupDisplay();
