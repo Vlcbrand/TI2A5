@@ -376,6 +376,7 @@ void alarm_afspeel_loop(int alarmloop){
     X12RtcGetClock(&gmt);
     sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
 
+    LcdCursorOff();
     LcdClear();
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
