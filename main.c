@@ -491,7 +491,6 @@ void main_loop(){
 void alarm_afspeel_loop(int alarmloop){
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
-    //char *dateStr = malloc(sizeof(char) * 50);
 
     X12RtcGetClock(&gmt);
     sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
@@ -501,8 +500,6 @@ void alarm_afspeel_loop(int alarmloop){
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    int *afspelen;
-    afspelen = (int)&alarmAan;
 
 
     int *snoozes;
@@ -525,37 +522,24 @@ void alarm_afspeel_loop(int alarmloop){
                 if (aan == 1) {
 
                     printf("doei snooze\n");
-                    //sprintf("snoooooooooozes: ",snoozes);
-                    //for (i = 0; i < theSnoozes; i++) {
                         for(i = 0; i < snoozes; i++){
                         gmt.tm_min = gmt.tm_min - 2;
                     }
                     set_alarm(alarmloop, gmt);
-                    alarmAan = 0;
-                    afspelen = 0;
                     aan = 0;
                 }
 
-                alarmAan = 0;
-                afspelen = 0;
                 aan = 0;
 
                 LcdClear();
                 return;
                 break;
             case KEY_ESC:
-                //&aantalSnoozes ++;
-                //snoozes ++;
                 theSnoozes++;
-                //sprintf("snoozes: ",&aantalSnoozes);
                 printf("aantal snoozes bitch\n");
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
-                //gmt.tm_min = gmt.tm_min - 2;
                 aan = 0;
-
-                afspelen = 0;
-                alarmAan = 0;
                 LcdClear();
                 return;
                 break;
@@ -567,18 +551,13 @@ int checkAlarm(int alarm){
     tm time;
     tm gmt;
     int cmp_ret;
-    int *afspelen;
-    afspelen = (int)&alarmAan;
 
     X12RtcGetClock(&gmt);
     time = get_alarm(alarm);
-    //print_time(&time);
 
     cmp_ret = compare_time_minhour(&time, &gmt);
     if(cmp_ret == 0){
         aan = 1;
-        afspelen = 1;
-        alarmAan = 1;
         return 1;
     }
     return 0;
