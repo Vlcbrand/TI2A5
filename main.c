@@ -435,25 +435,26 @@ void volume_loop()
         switch (x) {
             case KEY_RIGHT:
                 LcdClear();
-                nextMenuItem();
-                showMenuItem();
+				volume_up(get_volume());
                 break;
             case KEY_LEFT:
                 LcdClear();
-                prevMenuItem();
-                showMenuItem();
+                volume_down(get_volume());
 				break;
             case KEY_OK:
                 LcdClear();
-                menuAction();
+				showMenuItem();
+				return;
 				break;
             case KEY_ESC:
                 LcdClear();
-                if( parentMenuItem() == -1 ){ return; }                  
-				parentMenuItem();
                 showMenuItem();
+				return;
                 break;
         }
+		showVolume(get_volume());
+		printf("%d\n", get_volume());
+		
         NutSleep(500);
     }
 	
@@ -532,13 +533,13 @@ void alarm_afspeel_loop(int alarmloop){
         switch (x){
             case KEY_OK:
                 LcdClear();
-                menuAction();
+				return;
                 break;
             case KEY_ESC:
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
                 LcdClear();
-                menuAction();
+				return;
                 break;
         }
 
@@ -640,6 +641,8 @@ int main(void) {
     set_alarm(1,gmt);
     NutSleep(200);
 
+	set_volume(get_volume());
+	
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

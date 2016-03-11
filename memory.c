@@ -40,7 +40,7 @@ void set_timezone(int timezone){
     save();
 }
 
-void set_volume(int volume)
+void save_volume(int volume)
 {	
 	uconf.volume = volume;
 	save();

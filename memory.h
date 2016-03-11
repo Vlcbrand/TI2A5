@@ -7,10 +7,10 @@ struct _USER_CONFIG {
 
 void set_timezone(int timezone);
 
-int get_timezone();
+int get_timezone(void);
 
-void set_volume(int);
-int get_volume();
+void save_volume(int);
+int get_volume(void);
 
-void memory_init();
+void memory_init(void);
 

@@ -66,7 +66,7 @@
 #include "portio.h"    // for debug purposes only
 #include "spidrv.h"    // for debug purposes only
 #include "watchdog.h"
-
+#include "memory.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -797,12 +797,59 @@ int VsSetVolume(u_char left, u_char right)
     return(0);
 }
 
-// Volume 255 - volume / 17
-int set_volume(int volume);
+/*!
+ * \brief Set volume calculate real volume.
+ *
+ * \param volume  volume between 1-15.
+ *
+ * \return 0 on success, -1 otherwise.
+ */
+int set_volume(int volume)
 {
-	int realVol = 255 - (volume*17);
-	VsSetVolume(realVol, realVol);	
+	printf(" SET: %d", volume);
+	int realVol = 255 - (volume*18);
+	VsSetVolume(realVol, realVol);
+	save_volume(volume);
+	return(0);
 }
+
+
+int volume_up(int curVol)
+{
+	int tempVol = curVol;
+	if(tempVol < 14)
+	{
+		tempVol += 1;
+		set_volume(tempVol);
+	}
+	return(0);
+}
+
+int volume_down(int curVol)
+{
+	int tempVol = curVol;
+	if(tempVol != 0)
+	{
+		tempVol -= 1;
+		set_volume(tempVol);
+	}
+	return(0);
+}
+
+void showVolume(int volume)
+{
+	unsigned char c;
+	int i = 0;
+	for(i; i <= volume; i++)
+	{
+		LcdDDRamStartPos(0,5);
+		LcdStr("Volume");
+		
+		LcdDDRamStartPos(1, i+1);
+		LcdChar("%c",0x16);
+	}
+}
+
 
 /*!
  * \brief Get volume.
@@ -828,7 +875,6 @@ u_short VsGetType(void)
 {
     return(g_vs_type);
 }
-
 
 /*!
  * \brief Return the number of the VS10xx chip.
