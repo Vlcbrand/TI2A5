@@ -61,6 +61,7 @@
 #include "memory.h"
 
 #include "audiostream.h"
+#include "NTP.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -529,9 +530,11 @@ void alarm_afspeel_loop(int alarmloop) {
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
+    NutThreadCreate("play stream", PlayStream, yorick, 512);
 
     for (; ;) {
         //playTone();
+        //test
 
         printf("TOON SPEELT AF\n");
         NutSleep(500);
@@ -543,6 +546,11 @@ void alarm_afspeel_loop(int alarmloop) {
             case KEY_OK:
                 LcdClear();
                 menuAction();
+
+                //stop alarm
+                STOP_THREAD = 1;
+                puts("!!!!!!!!!!!!!!!!!!!!!!stop thread!");
+
                 break;
             case KEY_ESC:
                 gmt.tm_min = gmt.tm_min + 2;
@@ -630,8 +638,10 @@ int main(void) {
     sei();
 
     //audio stream test
-//    vsPlayerInit();
-//    play_stream();
+    VsPlayerInit();
+	initNtp();
+
+    initAudioStreams();
     LcdSetupDisplay();
 
     /* ###################################
