@@ -222,10 +222,10 @@ void time_loop(){
 
     for (; ;) {
         if(checkAlarm(0)){
-            alarm_loop(0);
+            alarm_afspeel_loop(0);
         }
         if(checkAlarm(1)){
-            alarm_loop(1);
+            alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -294,10 +294,10 @@ void main_loop(){
 
     for (; ;) {
         if(checkAlarm(0)){
-            alarm_loop(0);
+            alarm_afspeel_loop(0);
         }
         if(checkAlarm(1)){
-            alarm_loop(1);
+            alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -343,10 +343,10 @@ void menu_loop(){
 
     for(;;){
         if(checkAlarm(0)){
-            alarm_loop(0);
+            alarm_afspeel_loop(0);
         }
         if(checkAlarm(1)){
-            alarm_loop(1);
+            alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
 
@@ -368,7 +368,7 @@ void menu_loop(){
     }
 }
 
-void alarm_loop(int alarmloop){
+void alarm_afspeel_loop(int alarmloop){
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
     //char *dateStr = malloc(sizeof(char) * 50);
@@ -398,8 +398,6 @@ void alarm_loop(int alarmloop){
             case KEY_ESC:
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
-                //X12RtcSetAlarm(0, &gmt, 0b00011111);
-                //set_alarm(alarm,gmt);
                 LcdClear();
                 menuAction();
                 break;
@@ -415,9 +413,6 @@ int checkAlarm(int alarm){
     int cmp_ret;
 
     X12RtcGetClock(&gmt);
-
-    //get_alarm(alarm);
-//    X12RtcGetAlarm(0,&gmt, 0b00011111);
     time = get_alarm(alarm);
     print_time(&time);
 
