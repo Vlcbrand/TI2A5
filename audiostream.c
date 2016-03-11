@@ -377,9 +377,8 @@ int ConfigureLan(char *devname) {
         for (; ;) {
 
             if(STOP_THREAD){
-                NutThreadKill();
-                NutThreadDestroy();
                 STOP_THREAD = 0;
+                return;
             }
 
             /*
@@ -527,6 +526,10 @@ int ConfigureLan(char *devname) {
         }
         NutTcpCloseSocket(sock);
 
+
+        NutThreadKill();
+        NutThreadDestroy();
+        return;
         puts("Reset me!");
         for (; ;);
 }
