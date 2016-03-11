@@ -46,6 +46,9 @@
 #include "rtc.h"
 #include "showTime.h"
 #include "vs10xx.h"
+#include <dev/board.h>
+#include <stdio.h>
+#include <io.h>
 
 #include <sys/nutconfig.h>
 #include <sys/types.h>
@@ -55,6 +58,9 @@
 #include "main.h"
 
 #include "alarm.h"
+#include "memory.h"
+
+#include "audiostream.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -298,7 +304,7 @@ void time_loop()
 	LcdCursorBlink(BLINK_OFF);
 	tm gmt;
 	X12RtcGetClock(&gmt);
-	
+
     for (; ;) {
         u_char x = KbGetKey();
 		time_show();
@@ -504,6 +510,9 @@ int main(void) {
     /* Enable global interrupts */
     sei();
 
+    //audio stream test
+//    vsPlayerInit();
+//    play_stream();
     LcdSetupDisplay();
 
     /* ###################################
@@ -512,15 +521,8 @@ int main(void) {
     init_menu();
 	LcdClear();
 
-	/*
-    printf("Current time:\n");
-    print_time(&gmt);
-    gmt.tm_sec = gmt.tm_sec + 5;
-    printf("Setting seconds to %d\n", gmt.tm_sec);
-    NutSleep(200);
-    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
-    NutSleep(200);
-*/
+    memory_init();
+
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
