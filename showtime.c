@@ -56,12 +56,20 @@ void showTimeAndDate(char time[], char date[]){
     oldDate = &date;
 }
 
-void showTimeNoSeconds(char time[], char setTime[]){
+void showTimeNoSeconds(char time[], char setTime[], int type){
     int i = 0;
 
     LcdDDRamStartPos(LINE_0, 1);
-    strcpy(setTime, "Tijd instellen");
-    LcdStr(setTime);
+
+    if(type == 0){
+        strcpy(setTime, "Tijd instellen");
+        LcdStr(setTime);
+    }
+
+    if(type == 1){
+        strcpy(setTime, "Alarm gaat af");
+        LcdStr(setTime);
+    }
 
     if(oldTime != NULL){
         //compare time
