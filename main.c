@@ -206,6 +206,12 @@ void alarm_loop(){
     char cursor[5] = "<--";
     NutSleep(500);
     for(;;) {
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
@@ -256,6 +262,12 @@ void set_alarm_loop(int alarmid){
     LcdCursorBlink(BLINK_ON);
     NutSleep(300);
     for(;;) {
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
@@ -487,6 +499,7 @@ void alarm_afspeel_loop(int alarmloop){
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
+    int alarmAan = 1;
 
     for(;;){
         //playTone();
@@ -499,14 +512,23 @@ void alarm_afspeel_loop(int alarmloop){
 
         switch (x){
             case KEY_OK:
-                LcdClear();
-                menuAction();
+                if(alarmAan == 1){
+                    LcdClear();
+                    alarmAan == 0;
+                }
+                return;
+
+
                 break;
             case KEY_ESC:
-                gmt.tm_min = gmt.tm_min + 2;
-                set_alarm(alarmloop, gmt);
-                LcdClear();
-                menuAction();
+                if(alarmAan == 1){
+                    gmt.tm_min = gmt.tm_min + 2;
+                    set_alarm(alarmloop, gmt);
+                    gmt.tm_min = gmt.tm_min - 2;
+                    LcdClear();
+                    alarmAan == 0;
+                }
+                return;
                 break;
         }
 
@@ -599,7 +621,7 @@ int main(void) {
 	LcdClear();
 
     memory_init();
-
+/*
     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
     set_alarm(0, gmt);
@@ -607,7 +629,7 @@ int main(void) {
     gmt.tm_min = gmt.tm_min + 2;
     set_alarm(1,gmt);
     NutSleep(200);
-
+*/
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
