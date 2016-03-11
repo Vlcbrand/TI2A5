@@ -215,6 +215,7 @@ void alarm_loop(){
 
     int pos = 0;
     char cursor[5] = "<--";
+    NutSleep(500);
     for(;;) {
         u_char x = KbGetKey();
         switch (x) {
@@ -233,15 +234,15 @@ void alarm_loop(){
                 return;
 
         }
-        printf("Loop\n");
+//        printf("Loop\n");
         //Show available alarms, 1 and 2
         LcdClear();
-        printf("Loop1\n");
+//        printf("Loop1\n");
         LcdDDRamStartPos(0, 0);
         LcdStr(alarms[0]);
         LcdDDRamStartPos(1, 0);
         LcdStr(alarms[1]);
-        printf("Loop2\n");
+//        printf("Loop2\n");
         LcdDDRamStartPos(pos, 16 - strlen(cursor));
         LcdStr(cursor);
         LcdCursorBlink(BLINK_ON);

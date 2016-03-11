@@ -87,8 +87,8 @@ void init_menu(void)
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
     MenuNode *netwerkNode = Level1Node("Netwerk",  NULL);
 	
-	MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
-	MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);
+//	MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
+//	MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);
 	
 	MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
 	MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
@@ -98,8 +98,8 @@ void init_menu(void)
 	AddL1Node(alarmNode);
 	AddL1Node(netwerkNode);
 	
-	AddChildNode(alarm1Node);
-	AddChildNode(alarm2Node);
+//	AddChildNode(alarm1Node);
+//	AddChildNode(alarm2Node);
 	AddChildNode(ntpNode);
 	AddChildNode(dhcpNode);
 	
