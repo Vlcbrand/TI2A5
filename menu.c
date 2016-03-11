@@ -84,11 +84,13 @@ void init_menu(void)
 {
     MenuNode *taalNode = Level1Node("Taal",  NULL); //de laatste is de functiepointer
     MenuNode *tijdNode = Level1Node("Tijd", &time_loop);
+	MenuNode *tijdzoneNode = Level1Node("Tijdzone", &timezone_loop);
 
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
 	
 	AddL1Node(taalNode);
 	AddL1Node(tijdNode);
+	AddL1Node(tijdzoneNode);
 	AddL1Node(alarmNode);
 	
 	currentMenuItem = head;

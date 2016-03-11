@@ -24,6 +24,10 @@ void save(){
     NutNvMemSave(256, &uconf, sizeof(uconf));
 }
 
+int get_bootcount() {
+    return uconf.count;
+}
+
 int get_timezone() {
     return uconf.timezone;
 

@@ -74,6 +74,7 @@
 /* local routines (prototyping)                                            */
 /*-------------------------------------------------------------------------*/
 static void SysMainBeatInterrupt(void *);
+
 static void SysControlMainBeat(u_char);
 
 /*!
@@ -197,7 +198,46 @@ void print_time(tm *t) {
     printf("sec: %d\n", t->tm_sec);
 }
 
-void alarm_loop(){
+void timezone_loop() {
+    NutSleep(500);
+    char timezoneStr[10] = "Tijdzone";
+    int timezone = get_timezone();
+    char amount[10] = "";
+
+    for (; ;) {
+        u_char x = KbGetKey();
+        switch (x) {
+            case KEY_UP:
+                timezone++;
+                break;
+            case KEY_DOWN:
+                timezone--;
+                break;
+            case KEY_OK:
+                set_timezone(timezone);
+                break;
+            case KEY_ESC:
+                return;
+
+        }
+
+//        printf("timezonestr is %s\n", timezoneStr);
+        LcdClear();
+        LcdDDRamStartPos(0, 4);
+        LcdStr(timezoneStr);
+        sprintf(amount, "GMT  %d", timezone);
+
+        LcdDDRamStartPos(1, 3);
+
+        LcdStr(amount);
+//        printf("Amount is %s\n", amount);
+//        printf("Strlen amount : %d\n", strlen(amount));
+        LcdCursorOff();
+        NutSleep(200);
+    }
+}
+
+void alarm_loop() {
     char *alarms[20];
     alarms[0] = "Alarm 1";
     alarms[1] = "Alarm 2";
@@ -205,7 +245,7 @@ void alarm_loop(){
     int pos = 0;
     char cursor[5] = "<--";
     NutSleep(500);
-    for(;;) {
+    for (; ;) {
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
@@ -240,7 +280,7 @@ void alarm_loop(){
     }
 }
 
-void set_alarm_loop(int alarmid){
+void set_alarm_loop(int alarmid) {
     tm time;
     time = get_alarm(alarmid);
     printf("Alarm id is %d\n", alarmid);
@@ -255,23 +295,23 @@ void set_alarm_loop(int alarmid){
     int cursor = n1;
     LcdCursorBlink(BLINK_ON);
     NutSleep(300);
-    for(;;) {
+    for (; ;) {
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
-                if(cursor == n1){
+                if (cursor == n1) {
                     X12RtcIncrementAlarm(1, 0, alarmid);
                 }
-                else if(cursor == n2) {
+                else if (cursor == n2) {
                     X12RtcIncrementAlarm(0, 1, alarmid);
                 }
 
                 break;
             case KEY_DOWN:
-                if(cursor == n1){
+                if (cursor == n1) {
                     X12RtcIncrementAlarm(-1, 0, alarmid);
                 }
-                else if(cursor == n2) {
+                else if (cursor == n2) {
                     X12RtcIncrementAlarm(0, -1, alarmid);
                 }
                 break;
@@ -298,23 +338,22 @@ void set_alarm_loop(int alarmid){
     }
 }
 
-void time_loop()
-{
-	int cursorpos = 5;
-	LcdCursorBlink(BLINK_OFF);
-	tm gmt;
-	X12RtcGetClock(&gmt);
+void time_loop() {
+    int cursorpos = 5;
+    LcdCursorBlink(BLINK_OFF);
+    tm gmt;
+    X12RtcGetClock(&gmt);
 
     for (; ;) {
-        if(checkAlarm(0)){
+        if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
-        if(checkAlarm(1)){
+        if (checkAlarm(1)) {
             alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
-		time_show();
-		LcdDDRamStartPos(0,cursorpos);
+        time_show();
+        LcdDDRamStartPos(0, cursorpos);
         switch (x) {
             case KEY_DOWN:
                 switch (cursorpos) {
@@ -324,11 +363,11 @@ void time_loop()
                         break;
                     case 8:
                         //min
-                        X12RtcIncrementClock(0,-1, 0);
+                        X12RtcIncrementClock(0, -1, 0);
                         break;
                     case 11:
                         //sec
-						X12RtcIncrementClock(0,0, -1);
+                        X12RtcIncrementClock(0, 0, -1);
                         break;
                 }
                 break;
@@ -340,11 +379,11 @@ void time_loop()
                         break;
                     case 8:
                         //min
-                        X12RtcIncrementClock(0,1, 0);
+                        X12RtcIncrementClock(0, 1, 0);
                         break;
                     case 11:
                         //sec
-						X12RtcIncrementClock(0,0, 1);
+                        X12RtcIncrementClock(0, 0, 1);
                         break;
                 }
                 break;
@@ -355,48 +394,47 @@ void time_loop()
                 break;
             case KEY_LEFT:
                 if (cursorpos > 4) {
-                    cursorpos-= 3;
+                    cursorpos -= 3;
                 }
                 break;
-				case KEY_ALT:
-					LcdClear();
-					showMenuItem();
-					return;
+            case KEY_ALT:
+                LcdClear();
+                showMenuItem();
+                return;
                 break;
-				case KEY_ESC:
-					LcdClear();
-					X12RtcSetClock(&gmt);
-					showMenuItem();
-					return;
-			break;
+            case KEY_ESC:
+                LcdClear();
+                X12RtcSetClock(&gmt);
+                showMenuItem();
+                return;
+                break;
         }
-		NutSleep(300);
-}
+        NutSleep(300);
+    }
 
 }
 
-void time_show()
-{
-		 tm gmt;
-		char* timeStr = malloc(sizeof(char) * 50);
-		char* dateStr = malloc(sizeof(char) * 50);
-        X12RtcGetClock(&gmt);
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        showTimeAndDate(timeStr,dateStr);
-		
-		free(timeStr);
-		free(dateStr);
+void time_show() {
+    tm gmt;
+    char *timeStr = malloc(sizeof(char) * 50);
+    char *dateStr = malloc(sizeof(char) * 50);
+    X12RtcGetClock(&gmt);
+    sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    sprintf(dateStr, "%02d/%02d/%04d", gmt.tm_mday, gmt.tm_mon, gmt.tm_year + 1900);
+    showTimeAndDate(timeStr, dateStr);
+
+    free(timeStr);
+    free(dateStr);
 }
 
-void menu_loop(){
-	
-    for (;;) {
+void menu_loop() {
+
+    for (; ;) {
         u_char x = KbGetKey();
-        if(checkAlarm(0)){
+        if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
-        if(checkAlarm(1)){
+        if (checkAlarm(1)) {
             alarm_afspeel_loop(1);
         }
 
@@ -411,15 +449,15 @@ void menu_loop(){
                 LcdClear();
                 prevMenuItem();
                 showMenuItem();
-				break;
+                break;
             case KEY_OK:
                 LcdClear();
                 menuAction();
-				break;
+                break;
             case KEY_ESC:
                 LcdClear();
-                if( parentMenuItem() == -1 ){ return; }                  
-				parentMenuItem();
+                if (parentMenuItem() == -1) { return; }
+                parentMenuItem();
                 showMenuItem();
                 break;
         }
@@ -427,54 +465,49 @@ void menu_loop(){
     }
 }
 
-void main_loop(){
-		LcdCursorOff();
-		int count = 0;
-		
-	     for (; ;) 
-		 {
-             if(checkAlarm(0)){
-                 alarm_afspeel_loop(0);
-             }
-             if(checkAlarm(1)){
-                 alarm_afspeel_loop(1);
-             }
-			time_show();
-		 u_char x = KbGetKey();
-		 if(x != KEY_UNDEFINED)
-		 {
-			if(count != 0)
-			{
-				count = 0;
-				LcdBackLight(LCD_BACKLIGHT_ON);
-			}
-			
-			switch (x){
-            case KEY_ALT:
-                LcdClear();
-				showMenuItem();
-                menu_loop();
-		}
-			
-		 }
-		 else{
-        
-			if(count < 10)
-			{
-				count++;
-			}
-				else{
-				LcdBackLight(LCD_BACKLIGHT_OFF);
-			}
-		
+void main_loop() {
+    LcdCursorOff();
+    int count = 0;
+
+    for (; ;) {
+        if (checkAlarm(0)) {
+            alarm_afspeel_loop(0);
+        }
+        if (checkAlarm(1)) {
+            alarm_afspeel_loop(1);
+        }
+        time_show();
+        u_char x = KbGetKey();
+        if (x != KEY_UNDEFINED) {
+            if (count != 0) {
+                count = 0;
+                LcdBackLight(LCD_BACKLIGHT_ON);
+            }
+
+            switch (x) {
+                case KEY_ALT:
+                    LcdClear();
+                    showMenuItem();
+                    menu_loop();
+            }
+
+        }
+        else {
+
+            if (count < 10) {
+                count++;
+            }
+            else {
+                LcdBackLight(LCD_BACKLIGHT_OFF);
+            }
+
         }
         NutSleep(500);
     }
 }
 
 
-
-void alarm_afspeel_loop(int alarmloop){
+void alarm_afspeel_loop(int alarmloop) {
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
     //char *dateStr = malloc(sizeof(char) * 50);
@@ -488,7 +521,7 @@ void alarm_afspeel_loop(int alarmloop){
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
 
-    for(;;){
+    for (; ;) {
         //playTone();
 
         printf("TOON SPEELT AF\n");
@@ -497,7 +530,7 @@ void alarm_afspeel_loop(int alarmloop){
         u_char x = KbGetKey();
 
 
-        switch (x){
+        switch (x) {
             case KEY_OK:
                 LcdClear();
                 menuAction();
@@ -513,7 +546,7 @@ void alarm_afspeel_loop(int alarmloop){
     }
 }
 
-int checkAlarm(int alarm){
+int checkAlarm(int alarm) {
     tm time;
     tm gmt;
 
@@ -524,7 +557,7 @@ int checkAlarm(int alarm){
     print_time(&time);
 
     cmp_ret = compare_time_minhour(&time, &gmt);
-    if(cmp_ret == 0){
+    if (cmp_ret == 0) {
         return 1;
     }
     return 0;
@@ -596,18 +629,19 @@ int main(void) {
 		###				Start Menu		###
 		################################### */
     init_menu();
-	LcdClear();
+    LcdClear();
 
     memory_init();
 
-    gmt.tm_min = gmt.tm_min + 1;
-    NutSleep(200);
-    set_alarm(0, gmt);
+//    gmt.tm_min = gmt.tm_min + 1;
+//    NutSleep(200);
+//    set_alarm(0, gmt);
+//
+//    gmt.tm_min = gmt.tm_min + 2;
+//    set_alarm(1,gmt);
+//    NutSleep(200);
 
-    gmt.tm_min = gmt.tm_min + 2;
-    set_alarm(1,gmt);
-    NutSleep(200);
-
+//    timezone_loop();
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
