@@ -375,6 +375,13 @@ int ConfigureLan(char *devname) {
         last = NutGetSeconds();
 
         for (; ;) {
+
+            if(STOP_THREAD){
+                NutThreadKill();
+                NutThreadDestroy();
+                STOP_THREAD = 0;
+            }
+
             /*
              * Query number of byte available in MP3 buffer.
              */
@@ -433,6 +440,8 @@ int ConfigureLan(char *devname) {
             if (got <= 0) {
                 break;
             }
+
+            NutSleep(100);
         }
     }
 
@@ -520,4 +529,17 @@ int ConfigureLan(char *devname) {
 
         puts("Reset me!");
         for (; ;);
+}
+
+void initAudioStreams(){
+    yorick = malloc(sizeof(RADIO_STREAM));
+    yorick->name="yorick";
+    yorick->radio_port="9999";
+    yorick->radio_ip="83.128.250.123";
+    yorick->radio_url="/mpd.mp3";
+}
+
+THREAD(PlayStream, args){
+    RADIO_STREAM *stream = (RADIO_STREAM*) args;
+    play_stream(*stream);
 }
