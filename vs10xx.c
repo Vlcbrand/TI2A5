@@ -806,8 +806,10 @@ int VsSetVolume(u_char left, u_char right)
  */
 int set_volume(int volume)
 {
+	
 	printf(" SET: %d", volume);
-	int realVol = 255 - (volume*18);
+	u_char realVol = 128u - ((u_char)volume*9);
+	printf(" SET: %u", (unsigned)realVol);
 	VsSetVolume(realVol, realVol);
 	save_volume(volume);
 	return(0);
@@ -838,7 +840,6 @@ int volume_down(int curVol)
 
 void showVolume(int volume)
 {
-	unsigned char c;
 	int i = 0;
 	for(i; i <= volume; i++)
 	{
@@ -846,7 +847,7 @@ void showVolume(int volume)
 		LcdStr("Volume");
 		
 		LcdDDRamStartPos(1, i+1);
-		LcdChar("%c",0x16);
+		LcdChar("%c",0x0F);
 	}
 }
 

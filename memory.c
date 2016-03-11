@@ -23,7 +23,7 @@ void reset(){
     uconf.count = 0;
     uconf.timezone= 0;
     uconf.timezone_set = 0;
-	uconf.volume = 8;
+	uconf.volume = 7;
 }
 
 void save(){
