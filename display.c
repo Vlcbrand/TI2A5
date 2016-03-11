@@ -272,7 +272,6 @@ void LcdCursorBlink(int BLINK){
     }
 }
 
-
 /*-----cursor off-----*/
 void LcdCursorOff(){
     LcdWriteByte(WRITE_COMMAND, 0b0000001100);
