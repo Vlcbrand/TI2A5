@@ -46,6 +46,9 @@
 #include "rtc.h"
 #include "showTime.h"
 #include "vs10xx.h"
+#include <dev/board.h>
+#include <stdio.h>
+#include <io.h>
 
 #include <sys/nutconfig.h>
 #include <sys/types.h>
@@ -55,6 +58,7 @@
 #include "main.h"
 
 #include "alarm.h"
+#include "memory.h"
 
 #include "audiostream.h"
 #include "NTP.h"
@@ -71,31 +75,17 @@
 /* local routines (prototyping)                                            */
 /*-------------------------------------------------------------------------*/
 static void SysMainBeatInterrupt(void *);
-
 static void SysControlMainBeat(u_char);
-
-/*-------------------------------------------------------------------------*/
-/* Stack check variables placed in .noinit section                         */
-/*-------------------------------------------------------------------------*/
 
 /*!
  * \addtogroup System
  */
 
 /*@{*/
-
-/*-------------------------------------------------------------------------*/
-/*                          test methods                                   */
-/*-------------------------------------------------------------------------*/
-void testTimeShowing(void);
-
-
 /*-------------------------------------------------------------------------*/
 /*                         start of code                                   */
 /*-------------------------------------------------------------------------*/
 
-
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 /*!
  * \brief ISR MainBeat Timer Interrupt (Timer 2 for Mega128, Timer 0 for Mega256).
  *
@@ -106,7 +96,6 @@ void testTimeShowing(void);
  *
  * \param *p not used (might be used to pass parms from the ISR)
  */
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 static void SysMainBeatInterrupt(void *p) {
 
     /*
@@ -117,7 +106,6 @@ static void SysMainBeatInterrupt(void *p) {
 }
 
 
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 /*!
  * \brief Initialise Digital IO
  *  init inputs to '0', outputs to '1' (DDRxn='0' or '1')
@@ -125,7 +113,6 @@ static void SysMainBeatInterrupt(void *p) {
  *  Pull-ups are enabled when the pin is set to input (DDRxn='0') and then a '1'
  *  is written to the pin (PORTxn='1')
  */
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 void SysInitIO(void) {
     /*
      *  Port B:     VS1011, MMC CS/WP, SPI
@@ -211,85 +198,211 @@ void print_time(tm *t) {
     printf("sec: %d\n", t->tm_sec);
 }
 
-void time_loop(){
-    tm gmt;
-    char *timeStr = malloc(sizeof(char) * 50);
-    char *dateStr = malloc(sizeof(char) * 50);
-    X12RtcGetClock(&gmt);
+void alarm_loop(){
+    char *alarms[20];
+    alarms[0] = "Alarm 1";
+    alarms[1] = "Alarm 2";
 
-
-    int up = 0;
-    int down = 0;
-
-    for (; ;) {
+    int pos = 0;
+    char cursor[5] = "<--";
+    NutSleep(500);
+    for(;;) {
         u_char x = KbGetKey();
-
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        //LcdCursorOff();
-        showTimeAndDate(timeStr,dateStr);
-
-        LcdCursorBlink(BLINK_OFF);
-        //LcdMoveCursorDir(8);
         switch (x) {
-            case KEY_RIGHT:
-                LcdClear();
-                nextMenuItem();
-                showMenuItem();
-                break;
-            case KEY_LEFT:
-                LcdClear();
-                prevMenuItem();
-				showMenuItem();
-                break;
             case KEY_UP:
-                up ++;
-                X12RtcIncrementClock(0, 1, 0);
-                X12RtcGetClock(&gmt);
+                pos = 0;
                 break;
             case KEY_DOWN:
-                down ++;
-                X12RtcIncrementClock(0, -1, 0);
-                X12RtcGetClock(&gmt);
+                pos = 1;
                 break;
-            case KEY_ALT:
-                LcdCursorOff();
-                LcdClear();
-                parentMenuItem();
-                showMenuItem();
-                main_loop();
+            case KEY_OK:
+                set_alarm_loop(pos);
+                NutSleep(500);
+                printf("Setting alarm ended\n");
                 break;
             case KEY_ESC:
-                if(up > down){
-                    int i;
-                    for(i = 0; i < up-down; i++){
-                        X12RtcIncrementClock(0, -1, 0);
-                    }
-                }
-                else{
-                    int ix;
-                    for(ix = 0; ix > up-down; ix--){
-                        X12RtcIncrementClock(0, 1, 0);
-                    }
-                }
-                LcdCursorOff();
-                LcdClear();
-                parentMenuItem();
-                showMenuItem();
-                main_loop();
                 return;
+
         }
-//		LcdStr(getCurrentName());
-        NutSleep(500);
+//        printf("Loop\n");
+        //Show available alarms, 1 and 2
+        LcdClear();
+//        printf("Loop1\n");
+        LcdDDRamStartPos(0, 0);
+        LcdStr(alarms[0]);
+        LcdDDRamStartPos(1, 0);
+        LcdStr(alarms[1]);
+//        printf("Loop2\n");
+        LcdDDRamStartPos(pos, 16 - strlen(cursor));
+        LcdStr(cursor);
+        LcdCursorBlink(BLINK_ON);
+        LcdCursorOff();
+        NutSleep(200);
     }
 }
 
-void main_loop(){
+void set_alarm_loop(int alarmid){
+    tm time;
+    time = get_alarm(alarmid);
+    printf("Alarm id is %d\n", alarmid);
+    printf("%02d:%02d\n", time.tm_hour, time.tm_min);
+    char *timeStr = malloc(sizeof(char) * 50);
+
+    LcdClear();
+    sprintf(timeStr, "%02d:%02d", time.tm_hour, time.tm_min);
+    int startpos = showAlarmTime(timeStr); //get default cursor pos and set cursor to it
+    int n1 = startpos + 1;
+    int n2 = startpos + 4;
+    int cursor = n1;
+    LcdCursorBlink(BLINK_ON);
+    NutSleep(300);
+    for(;;) {
+        u_char x = KbGetKey();
+        switch (x) {
+            case KEY_UP:
+                if(cursor == n1){
+                    X12RtcIncrementAlarm(1, 0, alarmid);
+                }
+                else if(cursor == n2) {
+                    X12RtcIncrementAlarm(0, 1, alarmid);
+                }
+
+                break;
+            case KEY_DOWN:
+                if(cursor == n1){
+                    X12RtcIncrementAlarm(-1, 0, alarmid);
+                }
+                else if(cursor == n2) {
+                    X12RtcIncrementAlarm(0, -1, alarmid);
+                }
+                break;
+            case KEY_RIGHT:
+                cursor = n2;
+                break;
+            case KEY_LEFT:
+                cursor = n1;
+                break;
+            case KEY_OK:
+                //save and return;
+                return;
+            case KEY_ESC:
+                return;
+
+        }
+        time = get_alarm(alarmid);
+
+        LcdClear();
+        sprintf(timeStr, "%02d:%02d", time.tm_hour, time.tm_min);
+        showAlarmTime(timeStr);
+        LcdMoveCursorPos(cursor);
+        NutSleep(100);
+    }
+}
+
+void time_loop()
+{
+	int cursorpos = 5;
+	LcdCursorBlink(BLINK_OFF);
+	tm gmt;
+	X12RtcGetClock(&gmt);
 
     for (; ;) {
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
         u_char x = KbGetKey();
+		time_show();
+		LcdDDRamStartPos(0,cursorpos);
+        switch (x) {
+            case KEY_DOWN:
+                switch (cursorpos) {
+                    case 5:
+                        //hour
+                        X12RtcIncrementClock(-1, 0, 0);
+                        break;
+                    case 8:
+                        //min
+                        X12RtcIncrementClock(0,-1, 0);
+                        break;
+                    case 11:
+                        //sec
+						X12RtcIncrementClock(0,0, -1);
+                        break;
+                }
+                break;
+            case KEY_UP:
+                switch (cursorpos) {
+                    case 5:
+                        //hour
+                        X12RtcIncrementClock(1, 0, 0);
+                        break;
+                    case 8:
+                        //min
+                        X12RtcIncrementClock(0,1, 0);
+                        break;
+                    case 11:
+                        //sec
+						X12RtcIncrementClock(0,0, 1);
+                        break;
+                }
+                break;
+            case KEY_RIGHT:
+                if (cursorpos < 13) {
+                    cursorpos += 3;
+                }
+                break;
+            case KEY_LEFT:
+                if (cursorpos > 4) {
+                    cursorpos-= 3;
+                }
+                break;
+				case KEY_ALT:
+					LcdClear();
+					showMenuItem();
+					return;
+                break;
+				case KEY_ESC:
+					LcdClear();
+					X12RtcSetClock(&gmt);
+					showMenuItem();
+					return;
+			break;
+        }
+		NutSleep(300);
+}
+
+}
+
+void time_show()
+{
+		 tm gmt;
+		char* timeStr = malloc(sizeof(char) * 50);
+		char* dateStr = malloc(sizeof(char) * 50);
+        X12RtcGetClock(&gmt);
+        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
+        showTimeAndDate(timeStr,dateStr);
+		
+		free(timeStr);
+		free(dateStr);
+}
+
+void menu_loop(){
+	
+    for (;;) {
+        u_char x = KbGetKey();
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
 
         switch (x) {
+
             case KEY_RIGHT:
                 LcdClear();
                 nextMenuItem();
@@ -306,65 +419,123 @@ void main_loop(){
 				break;
             case KEY_ESC:
                 LcdClear();
-                if(parentMenuItem() == -1){
-                    menu_loop();
-                }
-                else {
-                    parentMenuItem();
-                    showMenuItem();
-                }
-
+                if( parentMenuItem() == -1 ){ return; }                  
+				parentMenuItem();
+                showMenuItem();
                 break;
         }
         NutSleep(500);
     }
 }
 
-void menu_loop(){
-
-    tm gmt;
-    char *timeStr = malloc(sizeof(char) * 50);
-    char *dateStr = malloc(sizeof(char) * 50);
-
-    tm time;
-    tm currenttime;
-    int *flag;
-    int cmp_ret;
-
-    for(;;){
-        u_char x = KbGetKey();
-
-        X12RtcGetClock(&gmt);
-
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        LcdCursorOff();
-        showTimeAndDate(timeStr,dateStr);
-
-        //ALARM LOGIC
-        X12RtcGetAlarm(0, &time, &flag);
-        NutSleep(100);
-        printf("Alarm time is:\n");
-        print_time(&time);
-        printf("Current time: \n");
-        print_time(&gmt);
-        printf("comparing alarmtime & currenttime? %d\n", compare_time(&time, &gmt));
-        printf("------------------\n");
-        NutSleep(100);
-        cmp_ret = compare_time(&time, &gmt);
-        if(cmp_ret == 0){
-            //Beep goes alarm
-            playTone();
-        }
-
-        switch (x){
+void main_loop(){
+		LcdCursorOff();
+		int count = 0;
+		
+	     for (; ;) 
+		 {
+             if(checkAlarm(0)){
+                 alarm_afspeel_loop(0);
+             }
+             if(checkAlarm(1)){
+                 alarm_afspeel_loop(1);
+             }
+			time_show();
+		 u_char x = KbGetKey();
+		 if(x != KEY_UNDEFINED)
+		 {
+			if(count != 0)
+			{
+				count = 0;
+				LcdBackLight(LCD_BACKLIGHT_ON);
+			}
+			
+			switch (x){
             case KEY_ALT:
                 LcdClear();
 				showMenuItem();
-                main_loop();
+                menu_loop();
+		}
+			
+		 }
+		 else{
+        
+			if(count < 10)
+			{
+				count++;
+			}
+				else{
+				LcdBackLight(LCD_BACKLIGHT_OFF);
+			}
+		
         }
         NutSleep(500);
     }
+}
+
+
+
+void alarm_afspeel_loop(int alarmloop){
+    tm gmt;
+    char *timeStr = malloc(sizeof(char) * 50);
+    //char *dateStr = malloc(sizeof(char) * 50);
+
+    X12RtcGetClock(&gmt);
+    sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
+
+    LcdCursorOff();
+    LcdClear();
+
+    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+
+    NutThreadCreate("play stream", PlayStream, yorick, 512);
+
+    for(;;){
+        //playTone();
+        //test
+
+        printf("TOON SPEELT AF\n");
+        NutSleep(500);
+
+        u_char x = KbGetKey();
+
+
+        switch (x){
+            case KEY_OK:
+                LcdClear();
+                menuAction();
+
+                //stop alarm
+                STOP_THREAD = 1;
+                puts("!!!!!!!!!!!!!!!!!!!!!!stop thread!");
+
+                break;
+            case KEY_ESC:
+                gmt.tm_min = gmt.tm_min + 2;
+                set_alarm(alarmloop, gmt);
+                LcdClear();
+                menuAction();
+                break;
+        }
+
+    }
+}
+
+int checkAlarm(int alarm){
+    tm time;
+    tm gmt;
+
+    int cmp_ret;
+
+    X12RtcGetClock(&gmt);
+    time = get_alarm(alarm);
+    print_time(&time);
+
+    cmp_ret = compare_time_minhour(&time, &gmt);
+    if(cmp_ret == 0){
+        return 1;
+    }
+    return 0;
 }
 
 /*!
@@ -395,22 +566,15 @@ int main(void) {
     WatchDogDisable();
 
     NutDelay(100);
-
     SysInitIO();
-
     SPIinit();
-
     LedInit();
-
     LcdLowLevelInit();
-
     Uart0DriverInit();
     Uart0DriverStart();
     LogInit();
     LogMsg_P(LOG_INFO, PSTR("Hello World"));
-
     CardInit();
-
     X12Init();
     NutSleep(100);
     X12RtcGetClock(&gmt);
@@ -419,17 +583,8 @@ int main(void) {
     X12RtcSetClock(&gmt);
     NutSleep(100);
 
-
-
-    if (At45dbInit() == AT45DB041B) {
-        // ......
-    }
-
-
     RcInit();
-
     KbInit();
-
     SysControlMainBeat(ON);             // enable 4.4 msecs hartbeat interrupt
 
     /*
@@ -437,39 +592,33 @@ int main(void) {
      */
     NutThreadSetPriority(1);
 
-
     /* Enable global interrupts */
     sei();
 
     //audio stream test
     VsPlayerInit();
-	initNTP();
-//    play_stream();
+	initNtp();
 
-//    LcdSetupDisplay();
-//    LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
-//    LcdClear();
-//
-//    //play tone
-////    playTone();
-//
-//    /*
-//    ###################################
-//    ###				Start Menu		###
-//    ###################################*/
-//    init_menu();
-//	LcdClear();
-//
-//    printf("Current time:\n");
-//    print_time(&gmt);
-//    gmt.tm_sec = gmt.tm_sec + 5;
-//    printf("Setting seconds to %d\n", gmt.tm_sec);
-//    NutSleep(200);
-//    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
-//    NutSleep(200);
-//
-//
-//    menu_loop();
+    initAudioStreams();
+    LcdSetupDisplay();
+
+    /* ###################################
+		###				Start Menu		###
+		################################### */
+    init_menu();
+	LcdClear();
+
+    memory_init();
+
+    gmt.tm_min = gmt.tm_min + 1;
+    NutSleep(200);
+    set_alarm(0, gmt);
+
+    gmt.tm_min = gmt.tm_min + 2;
+    set_alarm(1,gmt);
+    NutSleep(200);
+
+    main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
 

@@ -1,5 +1,6 @@
 
 #include <time.h>
+#include "rtc.h"
 
 /*
  * Returns 1 if t1>t2, -1 if t1<t2, 0 if t1==t2
@@ -71,4 +72,57 @@ int compare_time(tm *t1, tm *t2)
     }
     end:
     return retval;
+}
+
+int compare_time_minhour(tm *t1, tm *t2)
+{
+    int retval = 0;
+    printf("Compare time\n");
+
+    if (t1->tm_hour < t2->tm_hour) {
+        retval = -1;
+        goto end;
+    }
+    else if (t1->tm_hour > t2->tm_hour) {
+        retval = 1;
+        goto end;
+    }
+    else {
+        //continue on checking members
+//                printf("hour ==\n");
+        if (t1->tm_min < t2->tm_min) {
+            retval = -1;
+            goto end;
+        }
+        else if (t1->tm_min > t2->tm_min) {
+            retval = 1;
+            goto end;
+        }
+        else {
+            retval = 0;
+            goto end;
+        }
+    }
+    end:
+    return retval;
+}
+
+tm get_alarm(int alarmid){
+    tm time;
+    int* flags;
+    X12RtcGetAlarm(alarmid, &time, &flags);
+    return time;
+}
+/*
+* \param aflgs Each bit enables a specific comparision.
+*              - Bit 0: Seconds
+*              - Bit 1: Minutes
+*              - Bit 2: Hours
+*              - Bit 3: Day of month
+*              - Bit 4: Month
+*              - Bit 7: Day of week (Sunday is zero)
+*/
+void set_alarm(int alarmid, tm time){
+    int flags = 0b00000110; // minutes, hours
+    X12RtcSetAlarm(alarmid, &time, flags);
 }
