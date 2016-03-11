@@ -306,6 +306,12 @@ void time_loop()
 	X12RtcGetClock(&gmt);
 
     for (; ;) {
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
         u_char x = KbGetKey();
 		time_show();
 		LcdDDRamStartPos(0,cursorpos);
@@ -387,8 +393,15 @@ void menu_loop(){
 	
     for (;;) {
         u_char x = KbGetKey();
+        if(checkAlarm(0)){
+            alarm_afspeel_loop(0);
+        }
+        if(checkAlarm(1)){
+            alarm_afspeel_loop(1);
+        }
 
         switch (x) {
+
             case KEY_RIGHT:
                 LcdClear();
                 nextMenuItem();
@@ -452,6 +465,12 @@ void main_loop(){
 		
 	     for (; ;) 
 		 {
+             if(checkAlarm(0)){
+                 alarm_afspeel_loop(0);
+             }
+             if(checkAlarm(1)){
+                 alarm_afspeel_loop(1);
+             }
 			time_show();
 		 u_char x = KbGetKey();
 		 if(x != KEY_UNDEFINED)
@@ -483,6 +502,64 @@ void main_loop(){
         }
         NutSleep(500);
     }
+}
+
+
+
+void alarm_afspeel_loop(int alarmloop){
+    tm gmt;
+    char *timeStr = malloc(sizeof(char) * 50);
+    //char *dateStr = malloc(sizeof(char) * 50);
+
+    X12RtcGetClock(&gmt);
+    sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
+
+    LcdCursorOff();
+    LcdClear();
+
+    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+
+
+    for(;;){
+        //playTone();
+
+        printf("TOON SPEELT AF\n");
+        NutSleep(500);
+
+        u_char x = KbGetKey();
+
+
+        switch (x){
+            case KEY_OK:
+                LcdClear();
+                menuAction();
+                break;
+            case KEY_ESC:
+                gmt.tm_min = gmt.tm_min + 2;
+                set_alarm(alarmloop, gmt);
+                LcdClear();
+                menuAction();
+                break;
+        }
+
+    }
+}
+
+int checkAlarm(int alarm){
+    tm time;
+    tm gmt;
+
+    int cmp_ret;
+
+    X12RtcGetClock(&gmt);
+    time = get_alarm(alarm);
+    print_time(&time);
+
+    cmp_ret = compare_time_minhour(&time, &gmt);
+    if(cmp_ret == 0){
+        return 1;
+    }
+    return 0;
 }
 
 /*!
@@ -554,11 +631,15 @@ int main(void) {
 	LcdClear();
 
     memory_init();
-	
-	/* Set volume to 8/16 */
-	
-	
-	
+
+    gmt.tm_min = gmt.tm_min + 1;
+    NutSleep(200);
+    set_alarm(0, gmt);
+
+    gmt.tm_min = gmt.tm_min + 2;
+    set_alarm(1,gmt);
+    NutSleep(200);
+
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

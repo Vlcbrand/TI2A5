@@ -439,7 +439,7 @@ int ConfigureLan(char *devname) {
 /*
  * Main application entry.
  */
-    int play_stream(void) {
+    int play_stream(RADIO_STREAM rStream) {
         TCPSOCKET *sock;
         FILE *stream;
         u_long baud = DBG_BAUDRATE;
