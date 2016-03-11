@@ -84,12 +84,11 @@ void init_menu(void)
 {
     MenuNode *taalNode = Level1Node("Taal",  NULL); //de laatste is de functiepointer
     MenuNode *tijdNode = Level1Node("Tijd", &time_loop);
-    MenuNode *alarmNode = Level1Node("Alarm", NULL);
+    MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
     MenuNode *netwerkNode = Level1Node("Netwerk",  NULL);
 	
 	MenuNode *alarm1Node = ChildNode("Alarm1", alarmNode, NULL, NULL);
 	MenuNode *alarm2Node = ChildNode("Alarm2", alarmNode, NULL, NULL);
-	MenuNode *alarm3Node = ChildNode("Alarm3", alarmNode, NULL, NULL);
 	
 	MenuNode *ntpNode = ChildNode("NTP", netwerkNode, NULL, NULL);
 	MenuNode *dhcpNode = ChildNode("DHCP", netwerkNode, NULL, NULL);
@@ -101,7 +100,6 @@ void init_menu(void)
 	
 	AddChildNode(alarm1Node);
 	AddChildNode(alarm2Node);
-	AddChildNode(alarm3Node);
 	AddChildNode(ntpNode);
 	AddChildNode(dhcpNode);
 	

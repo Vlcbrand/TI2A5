@@ -208,6 +208,106 @@ void print_time(tm *t) {
     printf("sec: %d\n", t->tm_sec);
 }
 
+void alarm_loop(){
+    char *alarms[20];
+    alarms[0] = "Alarm 1";
+    alarms[1] = "Alarm 2";
+
+    int pos = 0;
+    char cursor[5] = "<--";
+    for(;;) {
+        u_char x = KbGetKey();
+        switch (x) {
+            case KEY_UP:
+                pos = 0;
+                break;
+            case KEY_DOWN:
+                pos = 1;
+                break;
+            case KEY_OK:
+                set_alarm_loop(pos);
+                NutSleep(500);
+                printf("Setting alarm ended\n");
+                break;
+            case KEY_ESC:
+                return;
+
+        }
+        printf("Loop\n");
+        //Show available alarms, 1 and 2
+        LcdClear();
+        printf("Loop1\n");
+        LcdDDRamStartPos(0, 0);
+        LcdStr(alarms[0]);
+        LcdDDRamStartPos(1, 0);
+        LcdStr(alarms[1]);
+        printf("Loop2\n");
+        LcdDDRamStartPos(pos, 16 - strlen(cursor));
+        LcdStr(cursor);
+        LcdCursorBlink(BLINK_ON);
+        LcdCursorOff();
+        NutSleep(200);
+    }
+}
+
+void set_alarm_loop(int alarmid){
+    tm time;
+    time = get_alarm(alarmid);
+    printf("Alarm id is %d\n", alarmid);
+    printf("%02d:%02d\n", time.tm_hour, time.tm_min);
+    char *timeStr = malloc(sizeof(char) * 50);
+
+    LcdClear();
+    sprintf(timeStr, "%02d:%02d", time.tm_hour, time.tm_min);
+    int startpos = showAlarmTime(timeStr); //get default cursor pos and set cursor to it
+    int n1 = startpos + 1;
+    int n2 = startpos + 4;
+    int cursor = n1;
+    LcdCursorBlink(BLINK_ON);
+    NutSleep(300);
+    for(;;) {
+        u_char x = KbGetKey();
+        switch (x) {
+            case KEY_UP:
+                if(cursor == n1){
+                    X12RtcIncrementAlarm(1, 0, alarmid);
+                }
+                else if(cursor == n2) {
+                    X12RtcIncrementAlarm(0, 1, alarmid);
+                }
+
+                break;
+            case KEY_DOWN:
+                if(cursor == n1){
+                    X12RtcIncrementAlarm(-1, 0, alarmid);
+                }
+                else if(cursor == n2) {
+                    X12RtcIncrementAlarm(0, -1, alarmid);
+                }
+                break;
+            case KEY_RIGHT:
+                cursor = n2;
+                break;
+            case KEY_LEFT:
+                cursor = n1;
+                break;
+            case KEY_OK:
+                //save and return;
+                return;
+            case KEY_ESC:
+                return;
+
+        }
+        time = get_alarm(alarmid);
+
+        LcdClear();
+        sprintf(timeStr, "%02d:%02d", time.tm_hour, time.tm_min);
+        showAlarmTime(timeStr);
+        LcdMoveCursorPos(cursor);
+        NutSleep(100);
+    }
+}
+
 void time_loop(){
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
@@ -324,7 +424,6 @@ void menu_loop(){
     char *dateStr = malloc(sizeof(char) * 50);
 
     tm time;
-    tm currenttime;
     int *flag;
     int cmp_ret;
 
@@ -340,13 +439,6 @@ void menu_loop(){
 
         //ALARM LOGIC
         X12RtcGetAlarm(0, &time, &flag);
-        NutSleep(100);
-        printf("Alarm time is:\n");
-        print_time(&time);
-        printf("Current time: \n");
-        print_time(&gmt);
-        printf("comparing alarmtime & currenttime? %d\n", compare_time(&time, &gmt));
-        printf("------------------\n");
         NutSleep(100);
         cmp_ret = compare_time(&time, &gmt);
         if(cmp_ret == 0){
@@ -452,13 +544,13 @@ int main(void) {
     init_menu();
 	LcdClear();
 
-    printf("Current time:\n");
-    print_time(&gmt);
-    gmt.tm_sec = gmt.tm_sec + 5;
-    printf("Setting seconds to %d\n", gmt.tm_sec);
-    NutSleep(200);
-    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
-    NutSleep(200);
+//    printf("Current time:\n");
+//    print_time(&gmt);
+//    gmt.tm_sec = gmt.tm_sec + 5;
+//    printf("Setting seconds to %d\n", gmt.tm_sec);
+//    NutSleep(200);
+//    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
+//    NutSleep(200);
 
 
     menu_loop();

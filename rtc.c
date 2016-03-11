@@ -265,6 +265,45 @@ int X12RtcGetAlarm(int idx, struct _tm *tm, int *aflgs)
     return(rc);
 }
 
+int X12RtcIncrementAlarm(int hours, int minutes, int alarmid) {
+    tm datetime;
+    int *flags;
+    if (X12RtcGetAlarm(alarmid, &datetime, &flags) == 0) {
+        if (hours == 0) {
+
+        }
+        else if (hours > 0) {
+            datetime.tm_hour = datetime.tm_hour + 1;
+            if (datetime.tm_hour > 23) {
+                datetime.tm_hour = 0;
+            }
+        } else {
+            datetime.tm_hour = datetime.tm_hour - 1;
+            if (datetime.tm_hour < 0) {
+                datetime.tm_hour = 23;
+            }
+        }
+        if (minutes == 0) {
+
+        }
+        else if (minutes > 0) {
+            datetime.tm_min = datetime.tm_min + 1;
+            if (datetime.tm_min > 59) {
+                datetime.tm_min = 0;
+            }
+        } else {
+            datetime.tm_min = datetime.tm_min - 1;
+            if (datetime.tm_min < 0) {
+                datetime.tm_min = 59;
+            }
+        }
+        //TODO: not use default min + hour
+        X12RtcSetAlarm(alarmid, &datetime, 0b00000110);
+        return 1;
+    }
+    return 0;
+
+}
 
 int X12RtcIncrementClock(int hours, int minutes, int seconds) {
     tm datetime;

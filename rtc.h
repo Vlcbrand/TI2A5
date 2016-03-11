@@ -158,6 +158,8 @@ extern int X12RtcIncrementDate(int year, int month, int day);
 
 extern int X12RtcIncrementClock(int hours, int minutes, int seconds);
 
+extern int X12RtcIncrementAlarm(int hours, int minutes, int alarmid);
+
 
 /* End of prototypes */
 #endif
