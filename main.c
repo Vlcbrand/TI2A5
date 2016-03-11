@@ -18,6 +18,7 @@
 
 #define LOG_MODULE  LOG_MAIN_MODULE
 
+
 /*--------------------------------------------------------------------------*/
 /*  Include files                                                           */
 /*--------------------------------------------------------------------------*/
@@ -65,7 +66,8 @@
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
 /*-------------------------------------------------------------------------*/
-
+int aan = 0;
+int theSnoozes = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -499,9 +501,17 @@ void alarm_afspeel_loop(int alarmloop){
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    int alarmAan = 1;
+    int *afspelen;
+    afspelen = (int)&alarmAan;
 
-    for(;;){
+
+    int *snoozes;
+    snoozes = (int)&aantalSnoozes;
+
+    int i;
+
+
+    for(;;) {
         //playTone();
 
         printf("TOON SPEELT AF\n");
@@ -510,43 +520,65 @@ void alarm_afspeel_loop(int alarmloop){
         u_char x = KbGetKey();
 
 
-        switch (x){
+        switch (x) {
             case KEY_OK:
-                if(alarmAan == 1){
-                    LcdClear();
-                    alarmAan == 0;
+                if (aan == 1) {
+
+                    printf("doei snooze\n");
+                    //sprintf("snoooooooooozes: ",snoozes);
+                    //for (i = 0; i < theSnoozes; i++) {
+                        for(i = 0; i < snoozes; i++){
+                        gmt.tm_min = gmt.tm_min - 2;
+                    }
+                    set_alarm(alarmloop, gmt);
+                    alarmAan = 0;
+                    afspelen = 0;
+                    aan = 0;
                 }
+
+                alarmAan = 0;
+                afspelen = 0;
+                aan = 0;
+
+                LcdClear();
                 return;
-
-
                 break;
             case KEY_ESC:
-                if(alarmAan == 1){
-                    gmt.tm_min = gmt.tm_min + 2;
-                    set_alarm(alarmloop, gmt);
-                    gmt.tm_min = gmt.tm_min - 2;
-                    LcdClear();
-                    alarmAan == 0;
-                }
+                //&aantalSnoozes ++;
+                //snoozes ++;
+                theSnoozes++;
+                //sprintf("snoozes: ",&aantalSnoozes);
+                printf("aantal snoozes bitch\n");
+                gmt.tm_min = gmt.tm_min + 2;
+                set_alarm(alarmloop, gmt);
+                //gmt.tm_min = gmt.tm_min - 2;
+                aan = 0;
+
+                afspelen = 0;
+                alarmAan = 0;
+                LcdClear();
                 return;
                 break;
         }
-
     }
 }
 
 int checkAlarm(int alarm){
     tm time;
     tm gmt;
-
     int cmp_ret;
+    int *afspelen;
+    afspelen = (int)&alarmAan;
 
     X12RtcGetClock(&gmt);
     time = get_alarm(alarm);
-    print_time(&time);
+    //print_time(&time);
 
     cmp_ret = compare_time_minhour(&time, &gmt);
     if(cmp_ret == 0){
+        aan = 1;
+        afspelen = 1;
+        alarmAan = 1;
         return 1;
     }
     return 0;
@@ -564,7 +596,6 @@ int checkAlarm(int alarm){
  */
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
-    int i;
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
      *
@@ -621,11 +652,11 @@ int main(void) {
 	LcdClear();
 
     memory_init();
-/*
+
     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
     set_alarm(0, gmt);
-
+/*
     gmt.tm_min = gmt.tm_min + 2;
     set_alarm(1,gmt);
     NutSleep(200);

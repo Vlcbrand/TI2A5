@@ -2,6 +2,9 @@
 #ifndef _main_h
 #define _main_h
 
+int alarmAan;
+int aantalSnoozes;
+
 void time_loop();
 void alarm_loop();
 void main_loop(void);
