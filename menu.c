@@ -250,6 +250,7 @@ int menuAction()
 	if(currentMenuItem->child != NULL)
 	{
 			childMenuItem();
+			showMenuItem();
 	}
 	else
 	{

@@ -192,7 +192,6 @@ void print_time(tm *t) {
 }
 
 
-
 void time_loop()
 {
 	int cursorpos = 5;
@@ -256,7 +255,6 @@ void time_loop()
 					X12RtcSetClock(&gmt);
 					return;
 			break;
-				
         }
 		NutSleep(300);
 }
@@ -296,7 +294,6 @@ void menu_loop(){
             case KEY_OK:
                 LcdClear();
                 menuAction();
-                showMenuItem();
 				break;
             case KEY_ESC:
                 LcdClear();
