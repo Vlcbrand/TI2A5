@@ -414,6 +414,38 @@ void menu_loop(){
     }
 }
 
+void volume_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+                nextMenuItem();
+                showMenuItem();
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                prevMenuItem();
+                showMenuItem();
+				break;
+            case KEY_OK:
+                LcdClear();
+                menuAction();
+				break;
+            case KEY_ESC:
+                LcdClear();
+                if( parentMenuItem() == -1 ){ return; }                  
+				parentMenuItem();
+                showMenuItem();
+                break;
+        }
+        NutSleep(500);
+    }
+	
+}
+
 void main_loop(){
 		LcdCursorOff();
 		int count = 0;
@@ -522,7 +554,11 @@ int main(void) {
 	LcdClear();
 
     memory_init();
-
+	
+	/* Set volume to 8/16 */
+	
+	
+	
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

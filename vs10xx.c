@@ -797,6 +797,12 @@ int VsSetVolume(u_char left, u_char right)
     return(0);
 }
 
+// Volume 255 - volume / 17
+int set_volume(int volume);
+{
+	int realVol = 255 - (volume*17);
+	VsSetVolume(realVol, realVol);	
+}
 
 /*!
  * \brief Get volume.
