@@ -6,5 +6,6 @@
 #define MULTI_OS_BUILD_SHOWTIME_H
 
 void showTimeAndDate(char time[], char date[]);
+void showTimeNoSeconds(char time[], char setTime[], int type);
 
 #endif //MULTI_OS_BUILD_SHOWTIME_H
