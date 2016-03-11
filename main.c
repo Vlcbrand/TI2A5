@@ -46,6 +46,9 @@
 #include "rtc.h"
 #include "showTime.h"
 #include "vs10xx.h"
+#include <dev/board.h>
+#include <stdio.h>
+#include <io.h>
 
 #include <sys/nutconfig.h>
 #include <sys/types.h>
@@ -55,6 +58,9 @@
 #include "main.h"
 
 #include "alarm.h"
+#include "memory.h"
+
+#include "audiostream.h"
 
 #include "audiostream.h"
 
@@ -246,6 +252,38 @@ void time_loop(){
                 X12RtcIncrementClock(0, 1, 0);
                 X12RtcGetClock(&gmt);
                 break;
+<<<<<<< Updated upstream
+=======
+            case KEY_OK:
+                //save and return;
+                return;
+            case KEY_ESC:
+                return;
+
+        }
+        time = get_alarm(alarmid);
+
+        LcdClear();
+        sprintf(timeStr, "%02d:%02d", time.tm_hour, time.tm_min);
+        showAlarmTime(timeStr);
+        LcdMoveCursorPos(cursor);
+        NutSleep(100);
+    }
+}
+
+
+void time_loop()
+{
+	int cursorpos = 5;
+	LcdCursorBlink(BLINK_OFF);
+	tm gmt;
+	X12RtcGetClock(&gmt);
+    for (; ;) {
+        u_char x = KbGetKey();
+		time_show();
+		LcdDDRamStartPos(0,cursorpos);
+        switch (x) {
+>>>>>>> Stashed changes
             case KEY_DOWN:
                 down ++;
                 X12RtcIncrementClock(0, -1, 0);
@@ -443,31 +481,31 @@ int main(void) {
     //audio stream test
     vsPlayerInit();
     play_stream();
+    LcdSetupDisplay();
 
-//    LcdSetupDisplay();
-//    LcdBackLight(LCD_BACKLIGHT_ON); //anders zie je niks.
-//    LcdClear();
+    /* ###################################
+		###				Start Menu		###
+		################################### */
+    init_menu();
+	LcdClear();
+
+    main_loop();
+
+//    struct _USER_CONFIG uconf;
 //
-//    //play tone
-////    playTone();
+//    NutNvMemLoad(256, &uconf, sizeof(uconf));
 //
-//    /*
-//    ###################################
-//    ###				Start Menu		###
-//    ###################################*/
-//    init_menu();
-//	LcdClear();
+//    if (uconf.len != sizeof(uconf)) {
+//        puts("Size mismatch: There is no valid configuration present. A new configuration will be created.");
+//        uconf.count = 0;
+//    } else {
+//        printf("According to the user configuration this board was already rebooted %d times.\n", uconf.count);
+//    }
 //
-//    printf("Current time:\n");
-//    print_time(&gmt);
-//    gmt.tm_sec = gmt.tm_sec + 5;
-//    printf("Setting seconds to %d\n", gmt.tm_sec);
-//    NutSleep(200);
-//    printf("Return val: %d\n", X12RtcSetAlarm(0, &gmt, 0b00011111));
-//    NutSleep(200);
+//    uconf.len = sizeof(uconf);
+//    uconf.count++;
 //
-//
-//    menu_loop();
+//    NutNvMemSave(256, &uconf, sizeof(uconf));
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
 
