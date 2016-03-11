@@ -8,7 +8,7 @@
 int compare_time(tm *t1, tm *t2)
 {
     int retval = 0;
-    printf("Compare time\n");
+//    printf("Compare time\n");
     if(t1->tm_mon < t2->tm_mon){
         retval = -1;
         goto end;
@@ -77,7 +77,7 @@ int compare_time(tm *t1, tm *t2)
 int compare_time_minhour(tm *t1, tm *t2)
 {
     int retval = 0;
-    printf("Compare time\n");
+//    printf("Compare time\n");
 
     if (t1->tm_hour < t2->tm_hour) {
         retval = -1;

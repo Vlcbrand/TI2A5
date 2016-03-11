@@ -209,13 +209,20 @@ void timezone_loop() {
         switch (x) {
             case KEY_UP:
                 timezone++;
+                if(timezone>12) {
+                    timezone = 12;
+                }
                 break;
             case KEY_DOWN:
                 timezone--;
+                if(timezone<-12) {
+                    timezone = -12;
+                }
                 break;
             case KEY_OK:
                 set_timezone(timezone);
-                break;
+                printf("Bye\n");
+                return;
             case KEY_ESC:
                 return;
 
@@ -453,6 +460,8 @@ void menu_loop() {
             case KEY_OK:
                 LcdClear();
                 menuAction();
+                LcdClear();
+                showMenuItem();
                 break;
             case KEY_ESC:
                 LcdClear();
@@ -554,7 +563,7 @@ int checkAlarm(int alarm) {
 
     X12RtcGetClock(&gmt);
     time = get_alarm(alarm);
-    print_time(&time);
+//    print_time(&time);
 
     cmp_ret = compare_time_minhour(&time, &gmt);
     if (cmp_ret == 0) {
@@ -642,6 +651,13 @@ int main(void) {
 //    NutSleep(200);
 
 //    timezone_loop();
+    if (get_bootcount() == 0) {
+        timezone_loop();
+    }
+
+    while(get_timezone_set()!= 1) {
+        timezone_loop();
+    }
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

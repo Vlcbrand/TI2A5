@@ -8,8 +8,8 @@ void memory_init(){
 
     if (uconf.len != sizeof(uconf)) {
         puts("Size mismatch: There is no valid configuration present. A new configuration will be created.");
-        uconf.count = 0;
-        uconf.timezone= 0;
+        reset();
+
     } else {
         printf("According to the user configuration this board was already rebooted %d times.\n", uconf.count);
     }
@@ -18,6 +18,12 @@ void memory_init(){
     uconf.count++;
 
     save();
+}
+
+void reset(){
+    uconf.count = 0;
+    uconf.timezone= 0;
+    uconf.timezone_set = 0;
 }
 
 void save(){
@@ -33,8 +39,18 @@ int get_timezone() {
 
 }
 
+int get_timezone_set() {
+    return uconf.timezone_set;
+}
+
 void set_timezone(int timezone){
     uconf.timezone = timezone;
+    uconf.timezone_set = 1;
     save();
 }
 
+void set_timezone_set(int val) {
+    uconf.timezone_set = val;
+    save();
+
+}
