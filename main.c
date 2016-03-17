@@ -68,6 +68,7 @@
 /*-------------------------------------------------------------------------*/
 int aan = 0;
 int theSnoozes = 0;
+int aantalSnoozes = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -476,6 +477,39 @@ void menu_loop() {
     }
 }
 
+
+void volume_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				volume_up(get_volume());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                volume_down(get_volume());
+				break;
+            case KEY_OK:
+                LcdClear();
+				showMenuItem();
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showVolume(get_volume());
+		printf("%d\n", get_volume());
+		
+        NutSleep(500);
+    }
+	
+}
 void main_loop() {
     LcdCursorOff();
     int count = 0;
@@ -565,7 +599,6 @@ void alarm_afspeel_loop(int alarmloop) {
 
                 LcdClear();
                 return;
-                break;
             case KEY_ESC:
                 theSnoozes++;
                 printf("aantal snoozes bitch\n");
@@ -573,7 +606,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 set_alarm(alarmloop, gmt);
                 aan = 0;
                 LcdClear();
-                return;
+                menuAction();
                 break;
         }
 
@@ -669,6 +702,9 @@ int main(void) {
 
     memory_init();
 
+//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+//	 NutSleep(700);
+	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
 //    set_alarm(0, gmt);
@@ -681,6 +717,8 @@ int main(void) {
     if (get_bootcount() == 0) {
         timezone_loop();
     }
+
+	set_volume(get_volume());
 
     while(get_timezone_set()!= 1) {
         timezone_loop();

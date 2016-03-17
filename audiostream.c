@@ -149,7 +149,7 @@ int ConfigureLan(char *devname) {
      */
     puts("configure devname");
     printf("Configure %s...", devname);
-    if (NutDhcpIfConfig(devname, 0, 60000))
+    if (NutDhcpIfConfig(devname, NULL, 60000))
         {
             u_char mac[6] = MY_MAC;
             puts("Failed to get IP from dhcp");

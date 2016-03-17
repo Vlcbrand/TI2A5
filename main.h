@@ -8,5 +8,6 @@ void alarm_loop();
 void main_loop(void);
 void menu_loop(void);
 void time_show(void);
+void volume_loop(void);
 
 #endif

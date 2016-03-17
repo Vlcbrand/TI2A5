@@ -3,9 +3,14 @@ struct _USER_CONFIG {
     unsigned int count;         /* Number of reboots. */
     unsigned int timezone_set;
     int timezone;
+	int volume;
 };
 
 void set_timezone(int timezone);
+
+
+void save_volume(int);
+int get_volume(void);
 
 void set_timezone_set(int val);
 
@@ -16,4 +21,3 @@ int get_timezone();
 int get_bootcount();
 
 void memory_init();
-
