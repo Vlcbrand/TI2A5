@@ -18,7 +18,6 @@ RADIO_STREAM *radio_3fm;
 
 void initAudioStreams();
 
-
 int play_stream(RADIO_STREAM rStream);
 
 THREAD(PlayStream, args);

@@ -247,6 +247,59 @@ void timezone_loop() {
     }
 }
 
+/*
+ * select the stream
+ */
+void select_stream_loop(int alarm_id){
+    int pos = 0;
+
+    if(alarm_id == 0){
+        pos = get_alarm1_stream_id();
+    }else{
+        pos = get_alarm2_stream_id();
+    }
+
+
+    char cursor[4] = "<--";
+
+    //clear screen
+    LcdClear();
+
+    while(1){
+        u_char x = KbGetKey();
+        switch (x){
+            case KEY_UP:
+                pos = 0;
+                break;
+            case KEY_DOWN:
+                pos = 1;
+                break;
+            case KEY_OK:
+                //save
+                if(alarm_id == 0){
+                    set_alarm1_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1
+                }else{
+                    set_alarm2_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1
+                }
+                //return
+                return;
+            case KEY_ESC:
+                return;
+        }
+        LcdClear();
+
+        LcdDDRamStartPos(LINE_0, 0);
+        LcdStr(yorick->name);
+        LcdDDRamStartPos(LINE_1, 0);
+        LcdStr(radio_3fm->name);
+
+        LcdDDRamStartPos(pos, 16 - strlen(cursor));
+        LcdStr(cursor);
+
+        NutSleep(200);
+    }
+}
+
 void alarm_loop() {
     char *alarms[20];
     alarms[0] = "Alarm 1";
@@ -268,10 +321,13 @@ void alarm_loop() {
                 set_alarm_loop(pos);
                 NutSleep(500);
                 printf("Setting alarm ended\n");
-                break;
+
+                //select the stream
+                select_stream_loop(pos);
+
+                return;
             case KEY_ESC:
                 return;
-
         }
 //        printf("Loop\n");
         //Show available alarms, 1 and 2
@@ -289,6 +345,7 @@ void alarm_loop() {
         NutSleep(200);
     }
 }
+
 
 void set_alarm_loop(int alarmid) {
     tm time;

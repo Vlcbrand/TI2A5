@@ -54,6 +54,23 @@ void set_timezone(int timezone){
     save();
 }
 
+int get_alarm1_stream_id(){
+    return uconf.alarm1_stream_id;
+}
+
+int get_alarm2_stream_id(){
+    return uconf.alarm2_stream_id;
+}
+
+void set_alarm1_stream_id(int id){
+    uconf.alarm1_stream_id = id;
+}
+
+void set_alarm2_stream_id(int id){
+    uconf.alarm2_stream_id = id;
+}
+
+
 void save_volume(int volume)
 {	
 	uconf.volume = volume;
