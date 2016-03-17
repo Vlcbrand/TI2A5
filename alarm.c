@@ -126,3 +126,14 @@ void set_alarm(int alarmid, tm time){
     int flags = 0b00000110; // minutes, hours
     X12RtcSetAlarm(alarmid, &time, flags);
 }
+
+
+//kijkt of alarm 0 of alarm 1 af moet gaan
+void checkAfgaanAlarm(){
+    if (checkAlarm(0)) {
+        alarm_afspeel_loop(0);
+    }
+    if (checkAlarm(1)) {
+        alarm_afspeel_loop(1);
+    }
+}

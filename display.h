@@ -74,6 +74,9 @@ extern void LcdCursorOff(void);
 extern void LcdDDRamStartPos(int line, int pos);
 
 
+void LcdBacklightKeystroke(void);
+
+
 #endif /* _Display_H */
 /*  ����  End Of File  �������� �������������������������������������������� */
 

@@ -69,7 +69,6 @@
 int aan = 0;
 int theSnoozes = 0;
 int aantalSnoozes = 0;
-int secondenBacklight = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -209,7 +208,7 @@ void timezone_loop() {
     char amount[10] = "";
 
     for (; ;) {
-
+        checkAfgaanAlarm();
         u_char x = KbGetKey();
         LcdBacklightKeystroke();
         switch (x) {
@@ -362,13 +361,7 @@ void time_loop() {
     X12RtcGetClock(&gmt);
 
     for (; ;) {
-
-        if (checkAlarm(0)) {
-            alarm_afspeel_loop(0);
-        }
-        if (checkAlarm(1)) {
-            alarm_afspeel_loop(1);
-        }
+        checkAfgaanAlarm();
         u_char x = KbGetKey();
         LcdBacklightKeystroke();
         time_show();
@@ -452,12 +445,7 @@ void menu_loop() {
 
         u_char x = KbGetKey();
         LcdBacklightKeystroke();
-        if (checkAlarm(0)) {
-            alarm_afspeel_loop(0);
-        }
-        if (checkAlarm(1)) {
-            alarm_afspeel_loop(1);
-        }
+        checkAfgaanAlarm();
 
         switch (x) {
 
@@ -492,7 +480,7 @@ void menu_loop() {
 void volume_loop()
 {
 	 for (;;) {
-
+         checkAfgaanAlarm();
         u_char x = KbGetKey();
          LcdBacklightKeystroke();
         switch (x) {
@@ -527,13 +515,7 @@ void main_loop() {
     int count = 0;
 
     for (; ;) {
-
-        if (checkAlarm(0)) {
-            alarm_afspeel_loop(0);
-        }
-        if (checkAlarm(1)) {
-            alarm_afspeel_loop(1);
-        }
+        checkAfgaanAlarm();
         time_show();
         u_char x = KbGetKey();
         LcdBacklightKeystroke();
@@ -548,7 +530,7 @@ void main_loop() {
     }
 }
 
-
+//speelt het gewenste alarm af.
 void alarm_afspeel_loop(int alarmloop) {
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
@@ -590,6 +572,7 @@ void alarm_afspeel_loop(int alarmloop) {
                         gmt.tm_min = gmt.tm_min - 2;
                         theSnoozes = 0;
                     }
+                    gmt.tm_min = gmt.tm_min - 1;
                     set_alarm(alarmloop, gmt);
                     aan = 0;
                 }
@@ -614,6 +597,8 @@ void alarm_afspeel_loop(int alarmloop) {
     }
 }
 
+
+//kijkt welk alarm aan moet gaan of niet.
 int checkAlarm(int alarm) {
     tm time;
     tm gmt;
@@ -630,26 +615,6 @@ int checkAlarm(int alarm) {
         return 1;
     }
     return 0;
-}
-
-//checkt of de backlight aan moet door ingeduwde key
-void LcdBacklightKeystroke(){
-    u_char x = KbGetKey();
-    if (x != KEY_UNDEFINED) {
-        if (secondenBacklight != 0) {
-            secondenBacklight = 0;
-            LcdBackLight(LCD_BACKLIGHT_ON);
-        }
-    }
-    else {
-
-        if (secondenBacklight < 10) {
-            secondenBacklight++;
-        }
-        else {
-            LcdBackLight(LCD_BACKLIGHT_OFF);
-        }
-    }
 }
 
 /*!
@@ -726,9 +691,9 @@ int main(void) {
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
 	
-//    gmt.tm_min = gmt.tm_min + 1;
-//    NutSleep(200);
-//    set_alarm(0, gmt);
+    gmt.tm_min = gmt.tm_min + 1;
+    NutSleep(200);
+    set_alarm(0, gmt);
 //
 //    gmt.tm_min = gmt.tm_min + 2;
 //    set_alarm(1,gmt);
