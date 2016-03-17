@@ -66,7 +66,8 @@
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
 /*-------------------------------------------------------------------------*/
-
+int aan = 0;
+int theSnoozes = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -532,6 +533,11 @@ void alarm_afspeel_loop(int alarmloop) {
 
     NutThreadCreate("play stream", PlayStream, yorick, 512);
 
+    int *snoozes;
+    snoozes = (int)&aantalSnoozes;
+
+    int i;
+
     for (; ;) {
         //playTone();
         //test
@@ -544,19 +550,29 @@ void alarm_afspeel_loop(int alarmloop) {
 
         switch (x) {
             case KEY_OK:
+                if (aan == 1) {
+
+                    printf("doei snooze\n");
+                    for(i = 0; i < snoozes; i++){
+                        gmt.tm_min = gmt.tm_min - 2;
+                    }
+                    set_alarm(alarmloop, gmt);
+                    aan = 0;
+                }
+
+                aan = 0;
+
                 LcdClear();
-                menuAction();
-
-                //stop alarm
-                STOP_THREAD = 1;
-                puts("!!!!!!!!!!!!!!!!!!!!!!stop thread!");
-
+                return;
                 break;
             case KEY_ESC:
+                theSnoozes++;
+                printf("aantal snoozes bitch\n");
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
+                aan = 0;
                 LcdClear();
-                menuAction();
+                return;
                 break;
         }
 
@@ -575,6 +591,7 @@ int checkAlarm(int alarm) {
 
     cmp_ret = compare_time_minhour(&time, &gmt);
     if (cmp_ret == 0) {
+        aan = 1;
         return 1;
     }
     return 0;
