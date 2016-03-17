@@ -26,6 +26,7 @@
 #include "portio.h"
 #include "display.h"
 #include "log.h"
+#include "keyboard.h"
 
 /*-------------------------------------------------------------------------*/
 /* local defines                                                           */
@@ -33,7 +34,7 @@
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
-
+int secondenBacklight = 0;
 
 /*-------------------------------------------------------------------------*/
 /* local routines (prototyping)                                            */
@@ -288,6 +289,25 @@ void LcdDDRamStartPos(int line, int pos){
         case LINE_1:
             LcdWriteByte(WRITE_COMMAND, 0b0010000000 + pos + 0x40);
             break;
+    }
+}
+
+
+void LcdBacklightKeystroke(){
+    u_char x = KbGetKey();
+    if (x != KEY_UNDEFINED) {
+        if (secondenBacklight != 0) {
+            secondenBacklight = 0;
+            LcdBackLight(LCD_BACKLIGHT_ON);
+        }
+    }
+    else {
+        if (secondenBacklight < 10) {
+            secondenBacklight++;
+        }
+        else {
+            LcdBackLight(LCD_BACKLIGHT_OFF);
+        }
     }
 }
 

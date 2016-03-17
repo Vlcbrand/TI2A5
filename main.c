@@ -69,6 +69,7 @@
 int aan = 0;
 int theSnoozes = 0;
 int aantalSnoozes = 0;
+
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -208,7 +209,12 @@ void timezone_loop() {
     char amount[10] = "";
 
     for (; ;) {
-
+        if (checkAlarm(0)) {
+            alarm_afspeel_loop(0);
+        }
+        if (checkAlarm(1)) {
+            alarm_afspeel_loop(1);
+        }
         u_char x = KbGetKey();
         LcdBacklightKeystroke();
         switch (x) {
@@ -361,7 +367,6 @@ void time_loop() {
     X12RtcGetClock(&gmt);
 
     for (; ;) {
-
         if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
@@ -491,7 +496,12 @@ void menu_loop() {
 void volume_loop()
 {
 	 for (;;) {
-
+         if (checkAlarm(0)) {
+             alarm_afspeel_loop(0);
+         }
+         if (checkAlarm(1)) {
+             alarm_afspeel_loop(1);
+         }
         u_char x = KbGetKey();
          LcdBacklightKeystroke();
         switch (x) {
@@ -578,6 +588,7 @@ void alarm_afspeel_loop(int alarmloop) {
         NutSleep(500);
 
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
 
 
         switch (x) {
@@ -597,6 +608,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 LcdBackLight(LCD_BACKLIGHT_OFF);
                 LcdClear();
                 menuAction();
+                return;
                 break;
             case KEY_ESC:
                 theSnoozes++;
@@ -607,6 +619,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 LcdBackLight(LCD_BACKLIGHT_OFF);
                 LcdClear();
                 menuAction();
+                return;
                 break;
         }
 
@@ -631,25 +644,7 @@ int checkAlarm(int alarm) {
     return 0;
 }
 
-//checkt of de backlight aan moet door ingeduwde key
-void LcdBacklightKeystroke(){
-    u_char x = KbGetKey();
-    if (x != KEY_UNDEFINED) {
-        if (secondenBacklight != 0) {
-            secondenBacklight = 0;
-            LcdBackLight(LCD_BACKLIGHT_ON);
-        }
-    }
-    else {
 
-        if (secondenBacklight < 10) {
-            secondenBacklight++;
-        }
-        else {
-            LcdBackLight(LCD_BACKLIGHT_OFF);
-        }
-    }
-}
 
 /*!
  * \brief Main entry of the SIR firmware
@@ -743,6 +738,7 @@ int main(void) {
     while(get_timezone_set()!= 1) {
         timezone_loop();
     }
+    printf("EL START\n");
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
