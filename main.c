@@ -69,6 +69,7 @@
 int aan = 0;
 int theSnoozes = 0;
 int aantalSnoozes = 0;
+int secondenBacklight = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -208,7 +209,9 @@ void timezone_loop() {
     char amount[10] = "";
 
     for (; ;) {
+
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
         switch (x) {
             case KEY_UP:
                 timezone++;
@@ -256,7 +259,9 @@ void alarm_loop() {
     char cursor[5] = "<--";
     NutSleep(500);
     for (; ;) {
+
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
         switch (x) {
             case KEY_UP:
                 pos = 0;
@@ -306,7 +311,9 @@ void set_alarm_loop(int alarmid) {
     LcdCursorBlink(BLINK_ON);
     NutSleep(300);
     for (; ;) {
+
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
         switch (x) {
             case KEY_UP:
                 if (cursor == n1) {
@@ -355,6 +362,7 @@ void time_loop() {
     X12RtcGetClock(&gmt);
 
     for (; ;) {
+
         if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
@@ -362,6 +370,7 @@ void time_loop() {
             alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
         time_show();
         LcdDDRamStartPos(0, cursorpos);
         switch (x) {
@@ -440,7 +449,9 @@ void time_show() {
 void menu_loop() {
 
     for (; ;) {
+
         u_char x = KbGetKey();
+        LcdBacklightKeystroke();
         if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
@@ -481,8 +492,9 @@ void menu_loop() {
 void volume_loop()
 {
 	 for (;;) {
-        u_char x = KbGetKey();
 
+        u_char x = KbGetKey();
+         LcdBacklightKeystroke();
         switch (x) {
             case KEY_RIGHT:
                 LcdClear();
@@ -515,6 +527,7 @@ void main_loop() {
     int count = 0;
 
     for (; ;) {
+
         if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
@@ -523,29 +536,13 @@ void main_loop() {
         }
         time_show();
         u_char x = KbGetKey();
-        if (x != KEY_UNDEFINED) {
-            if (count != 0) {
-                count = 0;
-                LcdBackLight(LCD_BACKLIGHT_ON);
-            }
-
-            switch (x) {
-                case KEY_ALT:
-                    LcdClear();
-                    showMenuItem();
-                    menu_loop();
-            }
-
-        }
-        else {
-
-            if (count < 10) {
-                count++;
-            }
-            else {
-                LcdBackLight(LCD_BACKLIGHT_OFF);
-            }
-
+        LcdBacklightKeystroke();
+        switch (x) {
+            case KEY_ALT:
+                LcdClear();
+                showMenuItem();
+                menu_loop();
+                break;
         }
         NutSleep(500);
     }
@@ -569,6 +566,8 @@ void alarm_afspeel_loop(int alarmloop) {
 
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
+
+    LcdBackLight(LCD_BACKLIGHT_ON);
 
     int i;
 
@@ -596,15 +595,17 @@ void alarm_afspeel_loop(int alarmloop) {
                 }
 
                 aan = 0;
-
+                LcdBackLight(LCD_BACKLIGHT_OFF);
                 LcdClear();
-                return;
+                menuAction();
+                break;
             case KEY_ESC:
                 theSnoozes++;
                 printf("aantal snoozes bitch\n");
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
                 aan = 0;
+                LcdBackLight(LCD_BACKLIGHT_OFF);
                 LcdClear();
                 menuAction();
                 break;
@@ -629,6 +630,26 @@ int checkAlarm(int alarm) {
         return 1;
     }
     return 0;
+}
+
+//checkt of de backlight aan moet door ingeduwde key
+void LcdBacklightKeystroke(){
+    u_char x = KbGetKey();
+    if (x != KEY_UNDEFINED) {
+        if (secondenBacklight != 0) {
+            secondenBacklight = 0;
+            LcdBackLight(LCD_BACKLIGHT_ON);
+        }
+    }
+    else {
+
+        if (secondenBacklight < 10) {
+            secondenBacklight++;
+        }
+        else {
+            LcdBackLight(LCD_BACKLIGHT_OFF);
+        }
+    }
 }
 
 /*!
