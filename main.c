@@ -555,6 +555,7 @@ void alarm_afspeel_loop(int alarmloop) {
                     printf("doei snooze\n");
                     for(i = 0; i < snoozes; i++){
                         gmt.tm_min = gmt.tm_min - 2;
+                        theSnoozes = 0;
                     }
                     set_alarm(alarmloop, gmt);
                     aan = 0;
