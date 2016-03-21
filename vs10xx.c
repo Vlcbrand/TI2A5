@@ -797,6 +797,10 @@ int VsSetVolume(u_char left, u_char right)
     return(0);
 }
 
+
+/*
+* VS_BASS_REG = 0x0000. 0x00FF voor bass, 0xff00 voor treble, 0xffff voor beide (de maximalen dan)
+*/
 int VsSetBass(u_char left, u_char right)
 {
     u_char ief;
