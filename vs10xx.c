@@ -803,7 +803,7 @@ int VsSetBass(u_char left, u_char right)
 
     ief = VsPlayerInterrupts(0);
 
-    VsRegWrite(SB_AMPLITUDE, (((u_short) left) << 8) | (u_short) right);
+    VsRegWrite(VS_BASS_REG, (((u_short) left) << 8) | (u_short) right);
 
     VsPlayerInterrupts(ief);
 
