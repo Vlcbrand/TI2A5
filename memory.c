@@ -44,6 +44,11 @@ int get_volume(void)
 	return uconf.volume;
 }
 
+int get_bass()
+{
+	return uconf.bass;
+}
+
 int get_timezone_set() {
     return uconf.timezone_set;
 }
@@ -57,6 +62,12 @@ void set_timezone(int timezone){
 void save_volume(int volume)
 {	
 	uconf.volume = volume;
+	save();
+}
+
+void save_bass(int bass)
+{	
+	uconf.bass = bass;
 	save();
 }
 

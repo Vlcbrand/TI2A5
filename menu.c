@@ -89,6 +89,7 @@ void init_menu(void)
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
 	
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
+	MenuNode *bassNode = ChildNode("Bass", audioNode, NULL, &bass_loop);
 	
 	AddL1Node(taalNode);
 	AddL1Node(tijdNode);
@@ -97,6 +98,7 @@ void init_menu(void)
 	AddL1Node(audioNode);
 	
 	AddChildNode(volumeNode);
+	AddChildNode(bassNode);
 	
 	
 	currentMenuItem = head;

@@ -797,6 +797,19 @@ int VsSetVolume(u_char left, u_char right)
     return(0);
 }
 
+int VsSetBass(u_char left, u_char right)
+{
+    u_char ief;
+
+    ief = VsPlayerInterrupts(0);
+
+    VsRegWrite(SB_AMPLITUDE, (((u_short) left) << 8) | (u_short) right);
+
+    VsPlayerInterrupts(ief);
+
+    return(0);
+}
+
 /*!
  * \brief Set volume calculate real volume.
  *
@@ -804,6 +817,17 @@ int VsSetVolume(u_char left, u_char right)
  *
  * \return 0 on success, -1 otherwise.
  */
+int set_bass(int bass)
+{
+	
+	printf(" SET: %d", bass);
+	u_char realBass = 0u + ((u_char)bass);
+	printf(" SET: %u", (unsigned)realBass);
+	VsSetBass(realBass, realBass);
+	save_bass(bass);
+	return(0);
+}
+
 int set_volume(int volume)
 {
 	
@@ -815,6 +839,40 @@ int set_volume(int volume)
 	return(0);
 }
 
+int bass_up(int curBass)
+{
+	int tempBass = curBass;
+	if(tempBass < 15)
+	{
+		tempBass += 1;
+		set_bass(tempBass);
+	}
+	return(0);
+}
+
+int bass_down(int curBass)
+{
+	int tempBass = curBass;
+	if(tempBass != 0)
+	{
+		tempBass -= 1;
+		set_bass(tempBass);
+	}
+	return(0);
+}
+
+void showBass(int bass)
+{
+	int i = 0;
+			LcdDDRamStartPos(0,3);
+		LcdStr("Bass");
+		
+	for(i; i <= bass; i++)
+	{		
+		LcdDDRamStartPos(1, i+1);
+		LcdStr((char)0xFF);
+	}
+}
 
 int volume_up(int curVol)
 {

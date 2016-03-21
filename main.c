@@ -510,6 +510,40 @@ void volume_loop()
     }
 	
 }
+
+void bass_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				bass_up(get_bass());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                bass_down(get_bass());
+				break;
+            case KEY_OK:
+                LcdClear();
+				showMenuItem();
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showBass(get_bass());
+		printf("%d\n", get_bass());
+		
+        NutSleep(500);
+    }
+	
+}
+
 void main_loop() {
     LcdCursorOff();
     int count = 0;
@@ -719,6 +753,7 @@ int main(void) {
     }
 
 	set_volume(get_volume());
+	set_bass(get_bass());
 
     while(get_timezone_set()!= 1) {
         timezone_loop();

@@ -160,5 +160,10 @@ extern u_short VsRegInfo(u_char reg);
 extern void VsRegWrite(u_char reg, u_short data);
 extern u_short VsStreamValid(void);
 
+extern int VsSetBass(u_char, u_char);
+int set_bass(int);
+int bass_up(int);
+int bass_down(int);
+void showBass(int);
 
 /*@}*/

@@ -4,6 +4,7 @@ struct _USER_CONFIG {
     unsigned int timezone_set;
     int timezone;
 	int volume;
+	int bass;
 };
 
 void set_timezone(int timezone);
@@ -21,3 +22,8 @@ int get_timezone();
 int get_bootcount();
 
 void memory_init();
+
+void save_bass(int);
+
+int get_bass(void);
+
