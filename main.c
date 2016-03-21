@@ -268,7 +268,7 @@ void alarm_loop() {
                 set_alarm_loop(pos);
                 NutSleep(500);
                 printf("Setting alarm ended\n");
-                break;
+                return;
             case KEY_ESC:
                 return;
 
@@ -702,8 +702,8 @@ int main(void) {
 
     memory_init();
 
-//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
-//	 NutSleep(700);
+	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+	 NutSleep(700);
 	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
