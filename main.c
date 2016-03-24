@@ -613,6 +613,34 @@ void alarm_afspeel_loop(int alarmloop) {
     }
 }
 
+void factory_reset_loop(){
+    LcdCursorOff();
+    int count = 0;
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    NutSleep(500);
+    for (; ;) {
+        u_char x = KbGetKey();
+        LcdClear();
+        LcdDDRamStartPos(0, 0);
+        LcdStr("Wilt u resetten?");
+        LcdDDRamStartPos(1,0);
+        LcdStr("OK=ja, ESC=nee");
+        if (x != KEY_UNDEFINED) {
+
+            switch (x) {
+                case KEY_OK:
+                    //Reset this shit
+                    factory_reset();
+                    return;
+                case KEY_ESC:
+                    return;
+            }
+
+        }
+        NutSleep(500);
+    }
+}
+
 int checkAlarm(int alarm) {
     tm time;
     tm gmt;

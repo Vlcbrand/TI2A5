@@ -8,6 +8,8 @@ struct _USER_CONFIG {
 
 void set_timezone(int timezone);
 
+void factory_reset();
+
 
 void save_volume(int);
 int get_volume(void);
