@@ -4,7 +4,7 @@ struct _USER_CONFIG uconf;
 
 void memory_init(){
 
-    NutNvMemLoad(256, &uconf, sizeof(uconf));
+    NutNvMemLoad(1024, &uconf, sizeof(uconf));
 
     if (uconf.len != sizeof(uconf)) {
         puts("Size mismatch: There is no valid configuration present. A new configuration will be created.");
@@ -27,7 +27,12 @@ void reset(){
 }
 
 void save(){
-    NutNvMemSave(256, &uconf, sizeof(uconf));
+    NutNvMemSave(1024, &uconf, sizeof(uconf));
+}
+
+void factory_reset() {
+    reset();
+    save();
 }
 
 int get_bootcount() {
