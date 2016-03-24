@@ -73,7 +73,7 @@ int aantalSnoozes = 0;
 int nr1 = 0;
 int nr2 = 0;
 int operand = 0; 
-int result = 0;
+int result = -1;
 int userInput = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
@@ -114,10 +114,7 @@ static void SysMainBeatInterrupt(void *p) {
     CardCheckCard();
 }
 
-static char oplist[3]
-{
-	'+','-','*'
-}
+static char oplist[3] = {'+','-','*'};
 /*!
  * \brief Initialise Digital IO
  *  init inputs to '0', outputs to '1' (DDRxn='0' or '1')
@@ -561,9 +558,8 @@ void main_loop() {
 
 void generate_Sum()
 {
-	operand = rand() % 3;
-	while (result != NULL && result > 0)
-	{
+	//operand = rand() % 3;
+	//printf("\n %d \n",operand);
 		switch(operand)
 		{
 			case 0:
@@ -573,7 +569,9 @@ void generate_Sum()
 				break;
 			case 1:
 				nr1 = rand() % 100;
+				printf("\n %d", nr1);
 				nr2 = rand() % 100;
+				printf("\n %d", nr2);
 				result = nr1 - nr2;
 			break;
 			case 2:
@@ -581,7 +579,6 @@ void generate_Sum()
 				nr2 = rand() % 10;
 				result = nr1 * nr2;
 			break;
-		}
 	}
 }
 
@@ -600,7 +597,9 @@ void alarm_afspeel_loop(int alarmloop)
 	LcdDDRamStartPos(0,1);
 	LcdStr("Alarm");
 	LcdDDRamStartPos(0,7);
-	LcdChar("%d",alarmloop);
+	char str[2];
+	sprintf(str, "%d", alarm_loop);
+	LcdStr(alarmloop);
 	LcdDDRamStartPos(0,9);
 	LcdStr("gaat af!");
 	
@@ -609,17 +608,19 @@ void alarm_afspeel_loop(int alarmloop)
 	10 + 10 = 100
   ----------------
 	*/
-	printf("Som: %d %c %d = %d\n", nr1,operand,nr2,result);
-	LcdDDRamStartPos(1,2);
-	LcdStr(nr1 + " " + oplist[operand] + " " + nr2 + " = ");
-	
-    NutThreadCreate("play stream", PlayStream, yorick, 512);
+	// NutThreadCreate("play stream", PlayStream, yorick, 512);
 
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
-
+	printf("\n Som: %d %c %d = %d\n", nr1,oplist[operand],nr2,result);
     for (; ;) {
         u_char x = KbGetKey();
+			LcdDDRamStartPos(1,2);
+			char *tempSum = malloc(sizeof(char) * 50);
+			char *tempResult = malloc(sizeof(char) * 50);
+			sprintf(tempSum, "%d %c %d = ", nr1, oplist[operand], nr2);
+			LcdStr(tempSum);
+			int i = 0;
         switch (x) {
             case KEY_OK:
                 if (aan == 1) 
@@ -627,12 +628,14 @@ void alarm_afspeel_loop(int alarmloop)
 					if(result == userInput)
 					{
 						printf("doei snooze\n");
-						for(int i = 0; i < snoozes; i++){
+						for(i = 0; i < snoozes; i++){
 							gmt.tm_min = gmt.tm_min - 2;
 							theSnoozes = 0;
 						}
 						set_alarm(alarmloop, gmt);
 						aan = 0;
+						LcdClear();
+						return;
 					}
 					else
 					{
@@ -640,8 +643,6 @@ void alarm_afspeel_loop(int alarmloop)
 						userInput = 0;
 					}
                 }
-                LcdClear();
-                return;
             case KEY_ESC:
                 theSnoozes++;
                 printf("aantal snoozes bitch\n");
@@ -658,11 +659,28 @@ void alarm_afspeel_loop(int alarmloop)
 			case KEY_DOWN:
 				if(userInput > 0)
 					userInput--;
+				else
+					userInput = 999;
+                break;
+			case KEY_RIGHT:
+				if(userInput < 999)
+					userInput = userInput + 10;
+				else
+					userInput = 0;
+                break;
+			case KEY_LEFT:
+				if(userInput > 0)
+					userInput = userInput - 10;
+				else
+					userInput = 999;
                 break;
         }
-
+		printf("\n %d ",userInput);
+		free(tempSum);
 		LcdDDRamStartPos(1,12);
-		LcdChar("%d",userInput);
+		sprintf(tempResult,"%d", userInput);
+		LcdStr(tempResult);
+		free(tempResult);
 		
 		playTone();
         NutSleep(500);
@@ -748,7 +766,8 @@ int main(void) {
     //audio stream test
     VsPlayerInit();
 
-    initAudioStreams();
+	
+    //initAudioStreams();
     LcdSetupDisplay();
 
     /* ###################################
@@ -759,8 +778,8 @@ int main(void) {
 
     memory_init();
 
-	 NutThreadCreate("play stream", PlayStream, yorick, 512);
-	 NutSleep(700);
+//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+	// NutSleep(700);
 	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
