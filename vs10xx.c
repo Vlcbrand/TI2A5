@@ -841,13 +841,13 @@ int volume_down(int curVol)
 void showVolume(int volume)
 {
 	int i = 0;
-	for(i; i <= volume; i++)
-	{
-		LcdDDRamStartPos(0,5);
+			LcdDDRamStartPos(0,5);
 		LcdStr("Volume");
 		
+	for(i; i <= volume; i++)
+	{		
 		LcdDDRamStartPos(1, i+1);
-		LcdChar("%c",0x0F);
+		LcdStr((char)0xFF);
 	}
 }
 
