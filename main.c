@@ -328,6 +328,7 @@ void alarm_loop() {
                 return;
             case KEY_ESC:
                 return;
+
         }
 //        printf("Loop\n");
         //Show available alarms, 1 and 2
@@ -759,8 +760,8 @@ int main(void) {
 
     memory_init();
 
-//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
-//	 NutSleep(700);
+	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+	 NutSleep(700);
 	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
