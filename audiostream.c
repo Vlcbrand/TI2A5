@@ -543,9 +543,16 @@ void initAudioStreams(){
 
     radio_3fm = malloc(sizeof(RADIO_STREAM));
     radio_3fm->name="3fm";
-    radio_3fm->radio_port="9999";
-    radio_3fm->radio_ip="83.128.250.123";
-    radio_3fm->radio_url="/mpd.mp3";
+    radio_3fm->radio_port="80";
+    radio_3fm->radio_ip="145.58.52.152";
+    radio_3fm->radio_url="/3fm-test-alt-mp3";
+
+    funx_reggae = malloc(sizeof(RADIO_STREAM));
+    funx_reggae->name="funx reggae";
+    funx_reggae->radio_port="80";
+    funx_reggae->radio_ip="145.58.52.152";
+    funx_reggae->radio_url="/funx-latinfb-bb-mp3";
+
 }
 
 THREAD(PlayStream, args){

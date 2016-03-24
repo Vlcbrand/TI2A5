@@ -259,27 +259,39 @@ void select_stream_loop(int alarm_id){
         pos = get_alarm2_stream_id();
     }
 
+    if(pos != 0 && pos != 1 && pos != 2){
+        pos = 0;
+    }
 
     char cursor[4] = "<--";
 
     //clear screen
     LcdClear();
 
+
     while(1){
         u_char x = KbGetKey();
         switch (x){
             case KEY_UP:
-                pos = 0;
+                if(pos == 2){
+                    pos = 1;
+                }else{
+                    pos = 0;
+                }
                 break;
             case KEY_DOWN:
-                pos = 1;
+                if(pos == 1){
+                    pos = 2;
+                }else{
+                    pos = 1;
+                }
                 break;
             case KEY_OK:
                 //save
                 if(alarm_id == 0){
-                    set_alarm1_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1
+                    set_alarm1_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1, pos 2 -> stream 2
                 }else{
-                    set_alarm2_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1
+                    set_alarm2_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1, pos 2 -> stream 2
                 }
                 //return
                 return;
@@ -288,14 +300,40 @@ void select_stream_loop(int alarm_id){
         }
         LcdClear();
 
-        LcdDDRamStartPos(LINE_0, 0);
-        LcdStr(yorick->name);
-        LcdDDRamStartPos(LINE_1, 0);
-        LcdStr(radio_3fm->name);
 
-        LcdDDRamStartPos(pos, 16 - strlen(cursor));
-        LcdStr(cursor);
+        //show streams
+        switch (pos){
+            case 0:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(yorick->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(radio_3fm->name);
 
+                //cursor
+                LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+            case 1:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(yorick->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(radio_3fm->name);
+
+                //cursor
+                LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+            case 2:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(radio_3fm->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(funx_reggae->name);
+
+                //cursor
+                LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+        }
         NutSleep(200);
     }
 }
