@@ -69,6 +69,12 @@
 int aan = 0;
 int theSnoozes = 0;
 int aantalSnoozes = 0;
+	
+int nr1 = 0;
+int nr2 = 0;
+int operand = 0; 
+int result = -1;
+int userInput = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -108,7 +114,7 @@ static void SysMainBeatInterrupt(void *p) {
     CardCheckCard();
 }
 
-
+static char oplist[3] = {'+','-','*'};
 /*!
  * \brief Initialise Digital IO
  *  init inputs to '0', outputs to '1' (DDRxn='0' or '1')
@@ -573,7 +579,6 @@ void menu_loop() {
     }
 }
 
-
 void volume_loop()
 {
 	 for (;;) {
@@ -647,54 +652,93 @@ void main_loop() {
     }
 }
 
+void generate_Sum()
+{
+	//operand = rand() % 3;
+	//printf("\n %d \n",operand);
+		switch(operand)
+		{
+			case 0:
+				nr1 = rand() % 100;
+				nr2 = rand() % 100;
+				result = nr1 + nr2;
+				break;
+			case 1:
+				nr1 = rand() % 100;
+				printf("\n %d", nr1);
+				nr2 = rand() % 100;
+				printf("\n %d", nr2);
+				result = nr1 - nr2;
+			break;
+			case 2:
+				nr1 = rand() % 10;
+				nr2 = rand() % 10;
+				result = nr1 * nr2;
+			break;
+	}
+}
 
-void alarm_afspeel_loop(int alarmloop) {
-    tm gmt;
+void alarm_afspeel_loop(int alarmloop) 
+{
+    tm gmt;    
+	X12RtcGetClock(&gmt);
     char *timeStr = malloc(sizeof(char) * 50);
-    //char *dateStr = malloc(sizeof(char) * 50);
-
-    X12RtcGetClock(&gmt);
     sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
 
     LcdCursorOff();
     LcdClear();
 
-    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+    //showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    NutThreadCreate("play stream", PlayStream, yorick, 512);
+	LcdDDRamStartPos(0,1);
+	LcdStr("Alarm");
+	LcdDDRamStartPos(0,7);
+	char str[2];
+	sprintf(str, "%d", alarm_loop);
+	LcdStr(alarmloop);
+	LcdDDRamStartPos(0,9);
+	LcdStr("gaat af!");
+	
+	generate_Sum();
+	/*
+	10 + 10 = 100
+  ----------------
+	*/
+	// NutThreadCreate("play stream", PlayStream, yorick, 512);
 
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
-
-    int i;
-
+	printf("\n Som: %d %c %d = %d\n", nr1,oplist[operand],nr2,result);
     for (; ;) {
-        //playTone();
-        //test
-
-        printf("TOON SPEELT AF\n");
-        NutSleep(500);
-
         u_char x = KbGetKey();
-
-
+			LcdDDRamStartPos(1,2);
+			char *tempSum = malloc(sizeof(char) * 50);
+			char *tempResult = malloc(sizeof(char) * 50);
+			sprintf(tempSum, "%d %c %d = ", nr1, oplist[operand], nr2);
+			LcdStr(tempSum);
+			int i = 0;
         switch (x) {
             case KEY_OK:
-                if (aan == 1) {
-
-                    printf("doei snooze\n");
-                    for(i = 0; i < snoozes; i++){
-                        gmt.tm_min = gmt.tm_min - 2;
-                        theSnoozes = 0;
-                    }
-                    set_alarm(alarmloop, gmt);
-                    aan = 0;
+                if (aan == 1) 
+				{
+					if(result == userInput)
+					{
+						printf("doei snooze\n");
+						for(i = 0; i < snoozes; i++){
+							gmt.tm_min = gmt.tm_min - 2;
+							theSnoozes = 0;
+						}
+						set_alarm(alarmloop, gmt);
+						aan = 0;
+						LcdClear();
+						return;
+					}
+					else
+					{
+						generate_Sum();
+						userInput = 0;
+					}
                 }
-
-                aan = 0;
-
-                LcdClear();
-                return;
             case KEY_ESC:
                 theSnoozes++;
                 printf("aantal snoozes bitch\n");
@@ -704,7 +748,38 @@ void alarm_afspeel_loop(int alarmloop) {
                 LcdClear();
                 menuAction();
                 break;
+            case KEY_UP:
+				if(userInput < 999)
+					userInput++;
+                break;
+			case KEY_DOWN:
+				if(userInput > 0)
+					userInput--;
+				else
+					userInput = 999;
+                break;
+			case KEY_RIGHT:
+				if(userInput < 999)
+					userInput = userInput + 10;
+				else
+					userInput = 0;
+                break;
+			case KEY_LEFT:
+				if(userInput > 0)
+					userInput = userInput - 10;
+				else
+					userInput = 999;
+                break;
         }
+		printf("\n %d ",userInput);
+		free(tempSum);
+		LcdDDRamStartPos(1,12);
+		sprintf(tempResult,"%d", userInput);
+		LcdStr(tempResult);
+		free(tempResult);
+		
+		playTone();
+        NutSleep(500);
 
     }
 }
@@ -815,7 +890,8 @@ int main(void) {
     //audio stream test
     VsPlayerInit();
 
-    initAudioStreams();
+	
+    //initAudioStreams();
     LcdSetupDisplay();
 
     /* ###################################
@@ -826,8 +902,8 @@ int main(void) {
 
     memory_init();
 
-	 NutThreadCreate("play stream", PlayStream, yorick, 512);
-	 NutSleep(700);
+//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+	// NutSleep(700);
 	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
