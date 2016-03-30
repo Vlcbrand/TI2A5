@@ -11,5 +11,6 @@ void main_loop(void);
 void menu_loop(void);
 void time_show(void);
 void volume_loop(void);
+void weather_loop(void);
 
 #endif

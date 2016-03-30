@@ -88,8 +88,8 @@ void init_menu(void)
 	MenuNode *tijdzoneNode = Level1Node("Tijdzone", &timezone_loop);
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
 	MenuNode *resetNode = Level1Node("Reset", &factory_reset_loop);
+	MenuNode *weatherNode = Level1Node("Weer", &weather_loop);
 
-	
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
 	
 	AddL1Node(taalNode);
@@ -97,8 +97,9 @@ void init_menu(void)
 	AddL1Node(tijdzoneNode);
 	AddL1Node(alarmNode);
 	AddL1Node(audioNode);
-    AddL1Node(resetNode);
-	
+	AddL1Node(resetNode);
+	AddL1Node(weatherNode);
+
 	AddChildNode(volumeNode);
 	
 	

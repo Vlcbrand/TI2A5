@@ -63,6 +63,8 @@
 #include "audiostream.h"
 #include "NTP.h"
 
+#include "weather.h"
+
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
 /*-------------------------------------------------------------------------*/
@@ -825,6 +827,34 @@ void alarm_afspeel_loop(int alarmloop) {
     }
 }
 
+void weather_loop(){
+    LcdCursorOff();
+    int count = 0;
+    LcdBackLight(LCD_BACKLIGHT_ON);
+
+    LcdDDRamStartPos(LINE_0, 0);
+    char text[17] = "Temperatuur:";
+    LcdStr(text);
+    get_weather_temp();
+
+    NutSleep(500);
+    for (; ;) {
+        u_char x = KbGetKey();
+        if (x != KEY_UNDEFINED) {
+            switch (x) {
+                case KEY_OK:
+                    //return
+                    return;
+                case KEY_ESC:
+                    //return
+                    return;
+            }
+
+        }
+        NutSleep(500);
+    }
+}
+
 void factory_reset_loop(){
     LcdCursorOff();
     int count = 0;
@@ -852,6 +882,7 @@ void factory_reset_loop(){
         NutSleep(500);
     }
 }
+
 
 int checkAlarm(int alarm) {
     tm time;
@@ -945,11 +976,11 @@ int main(void) {
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
 
-    gmt.tm_min = gmt.tm_min + 1;
+//    gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
-    set_alarm(0, gmt);
-
-    set_alarm1_stream_id(2);
+//    set_alarm(0, gmt);
+//
+//    set_alarm1_stream_id(2);
 
 //
 //    gmt.tm_min = gmt.tm_min + 2;

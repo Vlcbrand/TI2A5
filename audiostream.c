@@ -336,7 +336,7 @@ int ConfigureLan(char *devname) {
         return 0;
     }
 
-/*
+    /*
  * \brief Play MP3 stream.
  *
  * \param stream Socket stream to read MP3 data from.
