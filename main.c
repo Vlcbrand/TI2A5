@@ -69,10 +69,10 @@
 int aan = 0;
 int theSnoozes = 0;
 int aantalSnoozes = 0;
-	
+
 int nr1 = 0;
 int nr2 = 0;
-int operand = 0; 
+int operand = 0;
 int result = -1;
 int userInput = 0;
 /*-------------------------------------------------------------------------*/
@@ -701,14 +701,39 @@ void alarm_afspeel_loop(int alarmloop) {
 	LcdStr(alarmloop);
 	LcdDDRamStartPos(0,9);
 	LcdStr("gaat af!");
-	
+
 	generate_Sum();
 	/*
 	10 + 10 = 100
   ----------------
 	*/
-	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 
+    //play stream
+    if(alarmloop == 0){
+        switch (get_alarm1_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }else{
+        switch (get_alarm2_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
 
@@ -730,7 +755,7 @@ void alarm_afspeel_loop(int alarmloop) {
 			int i = 0;
         switch (x) {
             case KEY_OK:
-                if (aan == 1) 
+                if (aan == 1)
 				{
 					if(result == userInput)
 					{
@@ -793,7 +818,7 @@ void alarm_afspeel_loop(int alarmloop) {
 		sprintf(tempResult,"%d", userInput);
 		LcdStr(tempResult);
 		free(tempResult);
-		
+
 //		playTone();
         NutSleep(500);
 
@@ -919,7 +944,7 @@ int main(void) {
 
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
-	
+
     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
     set_alarm(0, gmt);
