@@ -6,9 +6,13 @@ struct _USER_CONFIG {
 	int volume;
 	int bass;
 	int treble;
+    int alarm1_stream_id;
+    int alarm2_stream_id;
 };
 
 void set_timezone(int timezone);
+
+void factory_reset();
 
 
 void save_volume(int);
@@ -21,6 +25,12 @@ int get_timezone_set();
 int get_timezone();
 
 int get_bootcount();
+
+int get_alarm1_stream_id();
+int get_alarm2_stream_id();
+
+void set_alarm1_stream_id(int id);
+void set_alarm2_stream_id(int id);
 
 void memory_init();
 
