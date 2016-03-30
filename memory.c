@@ -24,6 +24,8 @@ void reset(){
     uconf.timezone= 0;
     uconf.timezone_set = 0;
 	uconf.volume = 7;
+    uconf.alarm1_stream_id = 0;
+    uconf.alarm2_stream_id = 0;
 }
 
 void save(){

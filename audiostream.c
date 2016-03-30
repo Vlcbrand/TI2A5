@@ -453,7 +453,7 @@ int ConfigureLan(char *devname) {
         TCPSOCKET *sock;
 
         u_long baud = DBG_BAUDRATE;
-        u_long radio_ip = inet_addr(RADIO_IPADDR);
+//        u_long radio_ip = inet_addr(RADIO_IPADDR);
         u_short tcpbufsiz = TCPIP_BUFSIZ;
         u_long rx_to = TCPIP_READTIMEOUT;
         u_short mss = TCPIP_MSS;

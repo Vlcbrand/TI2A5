@@ -948,6 +948,9 @@ int main(void) {
     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
     set_alarm(0, gmt);
+
+    set_alarm1_stream_id(2);
+
 //
 //    gmt.tm_min = gmt.tm_min + 2;
 //    set_alarm(1,gmt);
