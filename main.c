@@ -661,7 +661,33 @@ void alarm_afspeel_loop(int alarmloop) {
 
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    NutThreadCreate("play stream", PlayStream, yorick, 512);
+
+    //play stream
+    if(alarmloop == 0){
+        switch (get_alarm1_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }else{
+        switch (get_alarm2_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }
 
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
@@ -826,9 +852,10 @@ int main(void) {
 
     memory_init();
 
-	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 	 NutSleep(700);
-	
+
+
+
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
 //    set_alarm(0, gmt);

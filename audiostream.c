@@ -92,18 +92,18 @@
 /*!
  * \brief IP address of the radio station.
  */
-#define RADIO_IPADDR "145.58.53.152"
+//#define RADIO_IPADDR "145.58.53.152"
 //#define RADIO_IPADDR "64.236.34.196"
 
 /*!
  * \brief Port number of the radio station.
  */
-#define RADIO_PORT 80
+//#define RADIO_PORT 80
 
 /*!
  * \brief URL of the radio station.
  */
-#define RADIO_URL "/3fm-bb-mp3"
+//#define RADIO_URL "/3fm-bb-mp3"
 //#define RADIO_URL "/stream/1020"
 
 /*!
@@ -218,7 +218,7 @@ int ConfigureLan(char *devname) {
  * \return Stream pointer of the established connection on success.
  *         Otherwise 0 is returned.
  */
-    FILE *ConnectStation(TCPSOCKET *sock, u_long ip, u_short port, u_long *metaint) {
+    FILE *ConnectStation(TCPSOCKET *sock, u_long ip, u_short port, u_long *metaint, RADIO_STREAM rStream) {
         int rc;
         FILE *stream;
         u_char *line;
@@ -227,8 +227,9 @@ int ConfigureLan(char *devname) {
         /*
          * Connect the TCP server.
          */
-        printf("Connecting %s:%u...", inet_ntoa(ip), port);
-        if ((rc = NutTcpConnect(sock, ip, port))) {
+//        printf("radio ip: %d", rStream.ip)
+        printf("Connecting %s:%d...", rStream.radio_ip, rStream.radio_port);
+        if ((rc = NutTcpConnect(sock, inet_addr(rStream.radio_ip), rStream.radio_port))) {
             printf("Error: Connect failed with %d\n", NutTcpError(sock));
             return 0;
         }
@@ -242,9 +243,9 @@ int ConfigureLan(char *devname) {
         /*
          * Send the HTTP request.
          */
-        printf("GET %s HTTP/1.0\n\n", RADIO_URL);
-        fprintf(stream, "GET %s HTTP/1.0\r\n", RADIO_URL);
-        fprintf(stream, "Host: %s\r\n", inet_ntoa(ip));
+        printf("GET %s HTTP/1.0\n\n", rStream.radio_url);
+        fprintf(stream, "GET %s HTTP/1.0\r\n", rStream.radio_url);
+        fprintf(stream, "Host: %s\r\n", rStream.radio_ip);
         fprintf(stream, "User-Agent: Ethernut\r\n");
         fprintf(stream, "Accept: */*\r\n");
         fprintf(stream, "Icy-MetaData: 1\r\n");
@@ -451,7 +452,7 @@ int ConfigureLan(char *devname) {
         TCPSOCKET *sock;
         FILE *stream;
         u_long baud = DBG_BAUDRATE;
-        u_long radio_ip = inet_addr(RADIO_IPADDR);
+        u_long radio_ip = inet_addr(rStream.radio_ip);
         u_short tcpbufsiz = TCPIP_BUFSIZ;
         u_long rx_to = TCPIP_READTIMEOUT;
         u_short mss = TCPIP_MSS;
@@ -513,8 +514,8 @@ int ConfigureLan(char *devname) {
         /*
          * Connect the radio station.
          */
-        radio_ip = inet_addr(RADIO_IPADDR);
-        stream = ConnectStation(sock, radio_ip, RADIO_PORT, &metaint);
+        radio_ip = inet_addr(rStream.radio_ip);
+        stream = ConnectStation(sock, rStream.radio_ip, rStream.radio_port, &metaint, rStream);
 
         /*
          * Play the stream.
@@ -537,19 +538,19 @@ int ConfigureLan(char *devname) {
 void initAudioStreams(){
     yorick = malloc(sizeof(RADIO_STREAM));
     yorick->name="yorick";
-    yorick->radio_port="9999";
+    yorick->radio_port=9999;
     yorick->radio_ip="83.128.250.123";
     yorick->radio_url="/mpd.mp3";
 
     radio_3fm = malloc(sizeof(RADIO_STREAM));
-    radio_3fm->name="3fm";
-    radio_3fm->radio_port="80";
+    radio_3fm->name="funx dance";
+    radio_3fm->radio_port=80;
     radio_3fm->radio_ip="145.58.52.152";
-    radio_3fm->radio_url="/3fm-test-alt-mp3";
+    radio_3fm->radio_url="/funx-dancefb-bb-mp3";
 
     funx_reggae = malloc(sizeof(RADIO_STREAM));
     funx_reggae->name="funx reggae";
-    funx_reggae->radio_port="80";
+    funx_reggae->radio_port=80;
     funx_reggae->radio_ip="145.58.52.152";
     funx_reggae->radio_url="/funx-latinfb-bb-mp3";
 
