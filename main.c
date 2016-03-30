@@ -543,6 +543,38 @@ void bass_loop()
     }
 	
 }
+void treble_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				treble_up(get_treble());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                treble_down(get_treble());
+				break;
+            case KEY_OK:
+                LcdClear();
+				showMenuItem();
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showTreble(get_treble());
+		printf("%d\n", get_treble());
+		
+        NutSleep(500);
+    }
+	
+}
 
 void main_loop() {
     LcdCursorOff();
@@ -678,6 +710,10 @@ int checkAlarm(int alarm) {
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
     int i;
+	int t;
+	int k;
+	t = get_bass();
+	k = get_treble();
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
      *
@@ -753,8 +789,20 @@ int main(void) {
     }
 
 	set_volume(get_volume());
-	set_bass(get_bass());
-
+	
+	if(t < 7){
+		set_bass(t);
+	} else{
+		save_bass(7);
+		set_bass(get_bass());
+	}
+	if(k < 7){
+		set_treble(k);
+	} else{
+		save_treble(7);
+		set_treble(get_treble());
+	}		
+	
     while(get_timezone_set()!= 1) {
         timezone_loop();
     }

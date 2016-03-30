@@ -49,6 +49,11 @@ int get_bass()
 	return uconf.bass;
 }
 
+int get_treble()
+{
+	return uconf.treble;
+}
+
 int get_timezone_set() {
     return uconf.timezone_set;
 }
@@ -68,6 +73,12 @@ void save_volume(int volume)
 void save_bass(int basst)
 {	
 	uconf.bass = basst;
+	save();
+}
+
+void save_treble(int treblet)
+{	
+	uconf.treble = treblet;
 	save();
 }
 

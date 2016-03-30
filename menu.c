@@ -90,6 +90,7 @@ void init_menu(void)
 	
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
 	MenuNode *bassNode = ChildNode("Bass", audioNode, NULL, &bass_loop);
+	MenuNode *trebleNode = ChildNode("Treble", audioNode, NULL, &treble_loop);
 	
 	AddL1Node(taalNode);
 	AddL1Node(tijdNode);
@@ -99,7 +100,7 @@ void init_menu(void)
 	
 	AddChildNode(volumeNode);
 	AddChildNode(bassNode);
-	
+	AddChildNode(trebleNode);
 	
 	currentMenuItem = head;
 	printf("\nMenu Initialized");

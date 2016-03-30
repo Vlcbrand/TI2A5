@@ -814,6 +814,15 @@ int VsSetBass(u_char treble, u_char bass)
     return(0);
 }
 
+u_short VsfixByte(u_char left, u_char right)
+{
+	u_short temp;
+	
+	temp = ((u_short)left  << 4) | (u_short) right;
+	
+    return(temp);
+}
+
 /*!
  * \brief Set volume calculate real volume.
  *
@@ -825,10 +834,21 @@ int set_bass(int bass)
 {
 	
 	printf(" SET: %d", bass);
-	u_char realBass = 0u + ((u_char)bass);
+	u_char realBass = VsfixByte(bass, 0x6);
 	printf(" SET: %u", (unsigned)realBass);
-	VsSetBass(realBass, realBass);
+	VsSetBass(VsfixByte(get_treble(), 0x6), realBass);
 	save_bass(bass);
+	return(0);
+}
+
+int set_treble(int treble)
+{
+	
+	printf(" SET: %d", treble);
+	u_char realTreble = VsfixByte(treble, 0x6);
+	printf(" SET: %u", (unsigned)realTreble);
+	VsSetBass(realTreble, VsfixByte(get_bass(), 0x6));
+	save_treble(treble);
 	return(0);
 }
 
@@ -846,7 +866,7 @@ int set_volume(int volume)
 int bass_up(int curBass)
 {
 	int tempBass = curBass;
-	if(tempBass < 15)
+	if(tempBass < 7)
 	{
 		tempBass += 1;
 		set_bass(tempBass);
@@ -876,7 +896,41 @@ void showBass(int bass)
 		LcdDDRamStartPos(1, i+1);
 		LcdStr((char)0xFF);
 	}
-//	LcdStr("test");
+}
+
+int treble_up(int curTreble)
+{
+	int tempTreble = curTreble;
+	if(tempTreble < 7)
+	{
+		tempTreble += 1;
+		set_treble(tempTreble);
+	}
+	return(0);
+}
+
+int treble_down(int curTreble)
+{
+	int tempTreble = curTreble;
+	if(tempTreble != 0)
+	{
+		tempTreble -= 1;
+		set_treble(tempTreble);
+	}
+	return(0);
+}
+
+void showTreble(int treble)
+{
+	int i = 0;
+			LcdDDRamStartPos(0,5);
+		LcdStr("Treble");
+		
+	for(i; i <= treble; i++)
+	{		
+		LcdDDRamStartPos(1, i+1);
+		LcdStr((char)0xFF);
+	}
 }
 
 int volume_up(int curVol)

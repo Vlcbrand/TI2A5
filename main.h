@@ -10,5 +10,6 @@ void menu_loop(void);
 void time_show(void);
 void volume_loop(void);
 void bass_loop(void);
+void treble_loop(void);
 
 #endif

@@ -5,6 +5,7 @@ struct _USER_CONFIG {
     int timezone;
 	int volume;
 	int bass;
+	int treble;
 };
 
 void set_timezone(int timezone);
@@ -26,4 +27,8 @@ void memory_init();
 void save_bass(int);
 
 int get_bass(void);
+
+void save_treble(int);
+
+int get_treble(void);
 
