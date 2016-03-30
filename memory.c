@@ -65,9 +65,9 @@ void save_volume(int volume)
 	save();
 }
 
-void save_bass(int bass)
+void save_bass(int basst)
 {	
-	uconf.bass = bass;
+	uconf.bass = basst;
 	save();
 }
 

@@ -801,13 +801,13 @@ int VsSetVolume(u_char left, u_char right)
 /*
 * VS_BASS_REG = 0x0000. 0x00FF voor bass, 0xff00 voor treble, 0xffff voor beide (de maximalen dan)
 */
-int VsSetBass(u_char left, u_char right)
+int VsSetBass(u_char treble, u_char bass)
 {
     u_char ief;
 
     ief = VsPlayerInterrupts(0);
 
-    VsRegWrite(VS_BASS_REG, (((u_short) left) << 8) | (u_short) right);
+    VsRegWrite(VS_BASS_REG, (((u_short) treble) << 8) | (u_short) bass); //0x00f0
 
     VsPlayerInterrupts(ief);
 
@@ -876,6 +876,7 @@ void showBass(int bass)
 		LcdDDRamStartPos(1, i+1);
 		LcdStr((char)0xFF);
 	}
+//	LcdStr("test");
 }
 
 int volume_up(int curVol)

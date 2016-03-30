@@ -1,0 +1,19 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="4">
+            <File firstVisibleLine="536" xOffset="0" scrollWidth="1971" startPos="15485" endPos="15485" selMode="0" lang="C" encoding="-1" filename="C:\TI2A5\main.c" backupFilePath="" originalFileLastModifTimestamp="1458583301">
+                <Mark line="513" />
+            </File>
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="207" startPos="203" endPos="203" selMode="0" lang="C++" encoding="-1" filename="C:\TI2A5\main.h" backupFilePath="" originalFileLastModifTimestamp="1458583301" />
+            <File firstVisibleLine="71" xOffset="0" scrollWidth="765" startPos="2253" endPos="2253" selMode="0" lang="C" encoding="-1" filename="C:\TI2A5\menu.c" backupFilePath="" originalFileLastModifTimestamp="1458583301" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="C:\TI2A5\menu.h" backupFilePath="" originalFileLastModifTimestamp="1457610456" />
+            <File firstVisibleLine="777" xOffset="0" scrollWidth="882" startPos="23763" endPos="23763" selMode="0" lang="C" encoding="-1" filename="C:\TI2A5\vs10xx.c" backupFilePath="" originalFileLastModifTimestamp="1458586696">
+                <Mark line="880" />
+            </File>
+            <File firstVisibleLine="61" xOffset="0" scrollWidth="891" startPos="3324" endPos="3335" selMode="0" lang="C++" encoding="-1" filename="C:\TI2A5\vs10xx.h" backupFilePath="" originalFileLastModifTimestamp="1458582884" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="567" startPos="221" endPos="221" selMode="0" lang="C++" encoding="-1" filename="C:\TI2A5\memory.h" backupFilePath="" originalFileLastModifTimestamp="1458583348" />
+            <File firstVisibleLine="25" xOffset="0" scrollWidth="999" startPos="858" endPos="858" selMode="0" lang="C" encoding="-1" filename="C:\TI2A5\memory.c" backupFilePath="" originalFileLastModifTimestamp="1458582993" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>
