@@ -828,6 +828,9 @@ int main(void) {
 
 	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 	 NutSleep(700);
+
+//    send_message();
+
 	
 //    gmt.tm_min = gmt.tm_min + 1;
 //    NutSleep(200);
