@@ -89,6 +89,9 @@ static void SysMainBeatInterrupt(void *);
 
 static void SysControlMainBeat(u_char);
 
+//plays
+int plays;
+
 /*!
  * \addtogroup System
  */
@@ -1115,6 +1118,9 @@ int main(void) {
     RcInit();
     KbInit();
     SysControlMainBeat(ON);             // enable 4.4 msecs hartbeat interrupt
+
+    //init plays
+    plays = 0;
 
     /*
      * Increase our priority so we can feed the watchdog.

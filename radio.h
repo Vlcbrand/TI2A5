@@ -6,7 +6,7 @@
 #define MULTI_OS_BUILD_RADIO_H
 #include <stdio.h>
 
-extern int plays =0;
+extern int plays;
 int idxx;
 char play[3];
 
