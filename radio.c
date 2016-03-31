@@ -11,29 +11,31 @@
 #include "keyboard.h"
 #include "audiostream.h"
 #include <sys/thread.h>
+#include "uart0driver.h"
 
 
 
-void showRadio(int radio){
 
-    strcpy(play,"off");
-
-    if(plays){
-        //LcdDDRamStartPos();
-        //LcdStr("radio playing");
-        strcpy(play,"on");
-    }
-    else
-    {        strcpy(play,"off");
-    }
-
-    if(radio == 0){
-        LcdDDRamStartPos(LINE_1,5);
-        LcdStr(yorick->name);
-    }
-
-
-};
+//void showRadio(int radio){
+//
+//    strcpy(play,"off");
+//
+//    if (plays){
+//        //LcdDDRamStartPos();
+//        //LcdStr("radio playing");
+//        strcpy(play,"on");
+//    }
+//    else
+//    {        strcpy(play,"off");
+//    }
+//
+//    if(radio == 0){
+//        LcdDDRamStartPos(LINE_1,5);
+//        LcdStr(yorick->name);
+//    }
+//
+//
+//};
 
 int radioindexnmbr(u_char key){
 
@@ -53,17 +55,37 @@ int radioindexnmbr(u_char key){
     return idxx;
 }
 
-void switchRadio(){
-    switch(idxx){
+void switchRadio(int pos, int cursor){
+    switch (pos){
         case 0:
-            //NutThreadCreate("play stream", PlayStream, yorick, 512);
-            //LcdDDRamStartPos(LINE_1,0);
-            //LcdStr(yorick->name);
-            break;
+            LcdDDRamStartPos(LINE_0, 0);
+            LcdStr(yorick->name);
+            LcdDDRamStartPos(LINE_1, 0);
+            LcdStr(radio_3fm->name);
+
+            //cursor
+            LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
+            LcdStr(cursor);
+            return;
         case 1:
-            //NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
-            //LcdDDRamStartPos(LINE_1,0);
-            //LcdStr(radio_3fm->name);
-            break;
+            LcdDDRamStartPos(LINE_0, 0);
+            LcdStr(yorick->name);
+            LcdDDRamStartPos(LINE_1, 0);
+            LcdStr(radio_3fm->name);
+
+            //cursor
+            LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+            LcdStr(cursor);
+            return;
+        case 2:
+            LcdDDRamStartPos(LINE_0, 0);
+            LcdStr(radio_3fm->name);
+            LcdDDRamStartPos(LINE_1, 0);
+            LcdStr(funx_reggae->name);
+
+            //cursor
+            LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+            LcdStr(cursor);
+            return;
     }
 }

@@ -800,7 +800,6 @@ void alarm_afspeel_loop(int alarmloop) {
                 NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
                 break;
         }
-        plays =1;
     }
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
@@ -975,9 +974,6 @@ void radio_loop(){
     int pos = 0;
     char cursor[4] = "<--";
 
-    if(pos != 0 && pos != 1 && pos != 2){
-        pos = 0;
-    }
 
     for(;;) {
         u_char x = KbGetKey();
@@ -996,7 +992,14 @@ void radio_loop(){
                     pos = 1;
                 }
                 break;
+            case KEY_OK:
+                switch (pos){
+                    case 0:
+                        NutThreadCreate("play stream", PlayStream, yorick, 512);
+                        break;
 
+                }
+                break;
             case KEY_ESC:
                 LcdClear();
                 showMenuItem();
@@ -1004,38 +1007,11 @@ void radio_loop(){
         }
         LcdClear();
 
-        switch (pos){
-                    case 0:
-                        LcdDDRamStartPos(LINE_0, 0);
-                        LcdStr(yorick->name);
-                        LcdDDRamStartPos(LINE_1, 0);
-                        LcdStr(radio_3fm->name);
+        switchRadio(pos, cursor);
 
-                        //cursor
-                        LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
-                        LcdStr(cursor);
-                        break;
-                    case 1:
-                        LcdDDRamStartPos(LINE_0, 0);
-                        LcdStr(yorick->name);
-                        LcdDDRamStartPos(LINE_1, 0);
-                        LcdStr(radio_3fm->name);
+        NutSleep(200);
 
-                        //cursor
-                        LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
-                        LcdStr(cursor);
-                        break;
-                    case 2:
-                        LcdDDRamStartPos(LINE_0, 0);
-                        LcdStr(radio_3fm->name);
-                        LcdDDRamStartPos(LINE_1, 0);
-                        LcdStr(funx_reggae->name);
 
-                        //cursor
-                        LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
-                        LcdStr(cursor);
-                        break;
-                }
 
 //            case KEY_UP:
 //                radioindexnmbr(x);
