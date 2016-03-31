@@ -609,7 +609,7 @@ int ConfigureLan(char *devname) {
          */
         radio_ip = inet_addr(rStream.radio_ip);
         stream = ConnectStation(sock, rStream.radio_ip, rStream.radio_port, &metaint, rStream);
-
+		send_message(rStream.radio_ip, rStream.radio_port, &metaint);
         /*
          * Play the stream.
          */

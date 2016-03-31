@@ -1049,9 +1049,9 @@ int main(void) {
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
 
-//    gmt.tm_min = gmt.tm_min + 1;
+    gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
-//    set_alarm(0, gmt);
+    set_alarm(0, gmt);
 //
 //    set_alarm1_stream_id(2);
 
@@ -1083,6 +1083,7 @@ int main(void) {
     while(get_timezone_set()!= 1) {
         timezone_loop();
     }
+	initNtp();
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
