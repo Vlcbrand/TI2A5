@@ -18,7 +18,7 @@ void showRadio(int radio){
 
     strcpy(play,"off");
 
-    if(playing){
+    if(plays){
         //LcdDDRamStartPos();
         //LcdStr("radio playing");
         strcpy(play,"on");
