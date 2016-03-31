@@ -4,7 +4,7 @@ struct _USER_CONFIG uconf;
 
 void memory_init(){
 
-    NutNvMemLoad(256, &uconf, sizeof(uconf));
+    NutNvMemLoad(1024, &uconf, sizeof(uconf));
 
     if (uconf.len != sizeof(uconf)) {
         puts("Size mismatch: There is no valid configuration present. A new configuration will be created.");
@@ -24,10 +24,17 @@ void reset(){
     uconf.timezone= 0;
     uconf.timezone_set = 0;
 	uconf.volume = 7;
+    uconf.alarm1_stream_id = 0;
+    uconf.alarm2_stream_id = 0;
 }
 
 void save(){
-    NutNvMemSave(256, &uconf, sizeof(uconf));
+    NutNvMemSave(1024, &uconf, sizeof(uconf));
+}
+
+void factory_reset() {
+    reset();
+    save();
 }
 
 int get_bootcount() {
@@ -42,6 +49,16 @@ int get_timezone() {
 int get_volume(void)
 {
 	return uconf.volume;
+}
+
+int get_bass()
+{
+	return uconf.bass;
+}
+
+int get_treble()
+{
+	return uconf.treble;
 }
 
 int get_timezone_set() {
@@ -74,6 +91,18 @@ void set_alarm2_stream_id(int id){
 void save_volume(int volume)
 {	
 	uconf.volume = volume;
+	save();
+}
+
+void save_bass(int basst)
+{	
+	uconf.bass = basst;
+	save();
+}
+
+void save_treble(int treblet)
+{	
+	uconf.treble = treblet;
 	save();
 }
 
