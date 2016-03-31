@@ -835,6 +835,7 @@ void alarm_afspeel_loop(int alarmloop) {
 						}
 						set_alarm(alarmloop, gmt);
 						aan = 0;
+                        STOP_THREAD = 1;
 						LcdClear();
 						return;
 					}
@@ -857,6 +858,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 aan = 0;
                 LcdClear();
                 menuAction();
+                STOP_THREAD = 1;
                 break;
             case KEY_UP:
 				if(userInput < 999)
