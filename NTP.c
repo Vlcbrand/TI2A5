@@ -38,7 +38,7 @@ int initNtp(void)
  
     NutRegisterDevice(&DEV_ETHER, ETH0_BASE, ETH0_IRQ);
     if (NutDhcpIfConfig(DEV_ETHER_NAME, 0, 60000)) {
-        puts("Error: Cannot configure network.");
+        puts("Error: Cannot configure network for NTP.");
     }
  
     puts("NTP example\n");
@@ -57,8 +57,10 @@ int initNtp(void)
 		ntp_datetime = localtime(&ntp_time);
 		printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
 		ntp_datetime->tm_hour = ntp_datetime->tm_hour + get_timezone();
-		printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
+		ntp_datetime->tm_mon = ntp_datetime->tm_mon + 1;
+		printf("NTP time is: %02d:%02d:%02d %d %d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec, ntp_datetime->tm_mon, ntp_datetime->tm_mday);
 		X12RtcSetClock(ntp_datetime);
+		
 		return 0;;
 	} else {
 		puts("Failed to retrieve time. Aborting...");

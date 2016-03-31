@@ -883,7 +883,7 @@ void alarm_afspeel_loop(int alarmloop) {
 					userInput = 999;
                 break;
         }
-		printf("\n %d ",userInput);
+		//printf("\n %d ",userInput);
 		free(tempSum);
 		LcdDDRamStartPos(1,12);
 		sprintf(tempResult,"%d", userInput);
@@ -1083,7 +1083,7 @@ int main(void) {
     while(get_timezone_set()!= 1) {
         timezone_loop();
     }
-	initNtp();
+	//initNtp();
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
