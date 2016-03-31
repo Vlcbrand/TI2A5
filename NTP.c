@@ -55,6 +55,7 @@ int initNtp(void)
 	if (NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
 		puts("Done.\n");
 		ntp_datetime = localtime(&ntp_time);
+		ntp_datetime->tm_hour + get_timezone();
 		printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
 		X12RtcSetClock(ntp_datetime);
 		return 0;;
