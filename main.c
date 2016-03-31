@@ -511,7 +511,7 @@ void time_loop() {
                     cursorpos -= 3;
                 }
                 break;
-            case KEY_ALT:
+            case KEY_OK:
                 LcdClear();
                 showMenuItem();
                 return;
