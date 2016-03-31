@@ -3,6 +3,7 @@
 #include "menu.h"
 #include "main.h"
 #include "display.h"
+#include "radio.h"
 
 #define NEWLINE "\n"
 #define TRUE 1
@@ -87,18 +88,21 @@ void init_menu(void)
     MenuNode *audioNode = Level1Node("Audio", NULL);
 	MenuNode *tijdzoneNode = Level1Node("Tijdzone", &timezone_loop);
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
-	
+	MenuNode *radioNode = Level1Node("Radio", &radio_loop);
+
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
-	
+
+
 	AddL1Node(taalNode);
 	AddL1Node(tijdNode);
 	AddL1Node(tijdzoneNode);
 	AddL1Node(alarmNode);
 	AddL1Node(audioNode);
+	AddL1Node(radioNode);
 	
 	AddChildNode(volumeNode);
-	
-	
+	//AddChildNode(radioNode);
+
 	currentMenuItem = head;
 	printf("\nMenu Initialized");
 }

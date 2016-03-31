@@ -623,6 +623,7 @@ void alarm_afspeel_loop(int alarmloop) {
     showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
     NutThreadCreate("play stream", PlayStream, yorick, 512);
+    playing = 1;
 
     int *snoozes;
     snoozes = (int)&aantalSnoozes;
@@ -653,7 +654,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 }
 
                 aan = 0;
-
+                STOP_THREAD =1;
                 LcdClear();
                 return;
             case KEY_ESC:
@@ -664,6 +665,7 @@ void alarm_afspeel_loop(int alarmloop) {
                 aan = 0;
                 LcdClear();
                 menuAction();
+                STOP_THREAD =1;
                 break;
         }
 
@@ -687,6 +689,42 @@ int checkAlarm(int alarm) {
     }
     return 0;
 }
+
+void radio_loop(){
+
+    for(;;) {
+        u_char x = KbGetKey();
+        LcdStr("hallo");
+        switch (x) {
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+                return;
+            case KEY_UP:
+                radioindexnmbr(x);
+                u_char y = KbGetKey();
+                printf(idxx);
+
+                if (y == KEY_OK) {
+                    if(idxx = 0){
+                        NutThreadCreate("play stream", PlayStream, yorick, 512);
+                        LcdDDRamStartPos(LINE_1,0);
+                        LcdStr(yorick->name);
+                    }
+                    if(idxx =1){
+                        NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                        LcdDDRamStartPos(LINE_1,0);
+                        LcdStr(radio_3fm->name);
+                    }
+                    printf("radio playing\n");
+                    }
+                if (y == KEY_ESC) {
+                    STOP_THREAD = 1;
+                }
+        }
+    }
+}
+
 
 /*!
  * \brief Main entry of the SIR firmware
