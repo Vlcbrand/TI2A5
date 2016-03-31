@@ -211,6 +211,7 @@ void print_time(tm *t) {
 
 void timezone_loop() {
     NutSleep(500);
+	LcdBackLight(LCD_BACKLIGHT_ON);
     char timezoneStr[10] = "Tijdzone";
     int timezone = get_timezone();
     char amount[10] = "";
