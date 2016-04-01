@@ -1020,7 +1020,7 @@ void radio_loop() {
 
             case KEY_ESC:
                 if(playing){
-                    STOP_THREAD = 1;
+                    STOP_THREAD =1;
                     playing =0;
                     break;
                 }else {
