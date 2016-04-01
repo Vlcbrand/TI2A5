@@ -8,6 +8,7 @@
 
 int idxx;
 char play[3];
+int playing;
 
 
 

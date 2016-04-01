@@ -971,18 +971,27 @@ int checkAlarm(int alarm) {
     }
     return 0;
 }
-int playing = 0;
 
 void radio_loop() {
 
+    playing = 0;
     NutSleep(800);
     int pos = 0;
-    char cursor[4] = "<--";
+    char cursor[4];
 
 
     for (; ;) {
+
+        if(!playing){
+            strcpy(cursor, "<--");
+        }
+        else{
+            strcpy(cursor, "<on");
+        }
+
         u_char x = KbGetKey();
         switch (x) {
+
             case KEY_UP:
                 if (pos == 2) {
                     pos = 1;
@@ -1017,22 +1026,17 @@ void radio_loop() {
                     }
                 }
                 break;
-
+            case KEY_POWER:
+                STOP_THREAD =1;
+                playing =0;
+                break;
             case KEY_ESC:
-                if(playing){
-                    STOP_THREAD =1;
-                    playing =0;
-                    break;
-                }else {
                     LcdClear();
                     showMenuItem();
                     return;
-                }
         }
         LcdClear();
-
         switchRadio(pos, cursor);
-
         NutSleep(200);
 
     }
@@ -1069,7 +1073,7 @@ int main(void) {
      *  First disable the watchdog
      */
     WatchDogDisable();
-
+    LcdBackLight(LCD_BACKLIGHT_ON);
     NutDelay(100);
     SysInitIO();
     SPIinit();

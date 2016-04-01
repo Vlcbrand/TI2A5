@@ -14,49 +14,10 @@
 #include "uart0driver.h"
 
 
-
-
-//void showRadio(int radio){
-//
-//    strcpy(play,"off");
-//
-//    if (plays){
-//        //LcdDDRamStartPos();
-//        //LcdStr("radio playing");
-//        strcpy(play,"on");
-//    }
-//    else
-//    {        strcpy(play,"off");
-//    }
-//
-//    if(radio == 0){
-//        LcdDDRamStartPos(LINE_1,5);
-//        LcdStr(yorick->name);
-//    }
-//
-//
-//};
-
-int radioindexnmbr(u_char key){
-
-    switch (key){
-        case KEY_UP:
-            idxx++;
-            break;
-        case KEY_DOWN:
-            idxx--;
-            break;
-    }
-
-    if(idxx ==2){
-        idxx =0;
-    }
-
-    return idxx;
-}
-
 void switchRadio(int pos, int cursor){
+
     switch (pos){
+
         case 0:
             LcdDDRamStartPos(LINE_0, 0);
             LcdStr(yorick->name);
@@ -66,6 +27,7 @@ void switchRadio(int pos, int cursor){
             //cursor
             LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
             LcdStr(cursor);
+
             return;
         case 1:
             LcdDDRamStartPos(LINE_0, 0);
