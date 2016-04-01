@@ -968,14 +968,16 @@ int checkAlarm(int alarm) {
     }
     return 0;
 }
+int playing = 0;
 
-void radio_loop(){
+void radio_loop() {
 
+    NutSleep(800);
     int pos = 0;
     char cursor[4] = "<--";
 
 
-    for(;;) {
+    for (; ;) {
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
@@ -993,17 +995,36 @@ void radio_loop(){
                 }
                 break;
             case KEY_OK:
-                switch (pos){
-                    case 0:
-                        NutThreadCreate("play stream", PlayStream, yorick, 512);
-                        break;
-
+                printf("hoi");
+                if(!playing){
+                    switch (pos) {
+                        case 0:
+                            NutThreadCreate("play stream", PlayStream, yorick, 512);
+                            playing =1;
+                            printf("asdffasdf");
+                            break;
+                        case 1:
+                            playing =1;
+                            NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                            break;
+                        case 2:
+                            playing =1;
+                            NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                            break;
+                    }
                 }
                 break;
+
             case KEY_ESC:
-                LcdClear();
-                showMenuItem();
-                return;
+                if(playing){
+                    STOP_THREAD = 1;
+                    playing =0;
+                    break;
+                }else {
+                    LcdClear();
+                    showMenuItem();
+                    return;
+                }
         }
         LcdClear();
 
@@ -1011,32 +1032,8 @@ void radio_loop(){
 
         NutSleep(200);
 
-
-
-//            case KEY_UP:
-//                radioindexnmbr(x);
-//                u_char y = KbGetKey();
-//                printf(idxx);
-//
-//                if (y == KEY_OK) {
-//                    if(idxx = 0){
-//                        NutThreadCreate("play stream", PlayStream, yorick, 512);
-//                        LcdDDRamStartPos(LINE_1,0);
-//                        LcdStr(yorick->name);
-//                    }
-//                    if(idxx =1){
-//                        NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
-//                        LcdDDRamStartPos(LINE_1,0);
-//                        LcdStr(radio_3fm->name);
-//                    }
-//                    printf("radio playing\n");
-//                    }
-//                if (y == KEY_ESC) {
-//                    STOP_THREAD = 1;
-//                }
-        }
     }
-
+}
 
 
 /*!
@@ -1117,9 +1114,9 @@ int main(void) {
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
 
-    gmt.tm_min = gmt.tm_min + 1;
+     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
-    set_alarm(0, gmt);
+    //set_alarm(0, gmt);
 //
 //    set_alarm1_stream_id(2);
 
