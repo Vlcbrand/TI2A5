@@ -90,7 +90,6 @@ void init_menu(void)
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
 	MenuNode *resetNode = Level1Node("Reset", &factory_reset_loop);
 	MenuNode *weatherNode = Level1Node("Weer", &weather_loop);
-
 	MenuNode *radioNode = Level1Node("Radio", &radio_loop);
 
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
@@ -104,7 +103,6 @@ void init_menu(void)
 	AddL1Node(audioNode);
 	AddL1Node(resetNode);
 	AddL1Node(weatherNode);
-
 	AddL1Node(radioNode);
 
 	AddChildNode(volumeNode);

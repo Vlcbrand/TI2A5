@@ -6,14 +6,10 @@
 #define MULTI_OS_BUILD_RADIO_H
 #include <stdio.h>
 
-int idxx;
-char play[3];
-int playing;
 
 
+int playing; // boolean for checking if radio is on
 
-void showRadio();
-int radioindexnmbr(u_char key);
 void switchRadio();
 
 

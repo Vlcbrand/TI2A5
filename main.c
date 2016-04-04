@@ -974,23 +974,27 @@ int checkAlarm(int alarm) {
 
 void radio_loop() {
 
+    //radio is not on
     playing = 0;
+    // made so you don't instantly turn on a radio
     NutSleep(800);
+
     int pos = 0;
     char cursor[4];
-
 
     for (; ;) {
 
         if(!playing){
+            //is displayed if no radio is playing
             strcpy(cursor, "<--");
         }
         else{
+            //is displayed if a radio is turned on
             strcpy(cursor, "<on");
         }
 
         u_char x = KbGetKey();
-        switch (x) {
+        switch (x) { //
 
             case KEY_UP:
                 if (pos == 2) {
@@ -1006,14 +1010,14 @@ void radio_loop() {
                     pos = 1;
                 }
                 break;
+
             case KEY_OK:
-                printf("hoi");
                 if(!playing){
                     switch (pos) {
+                        // if OK is pressed it will turn on the radio that is displayed on the screen.
                         case 0:
                             NutThreadCreate("play stream", PlayStream, yorick, 512);
                             playing =1;
-                            printf("asdffasdf");
                             break;
                         case 1:
                             playing =1;
@@ -1027,15 +1031,20 @@ void radio_loop() {
                 }
                 break;
             case KEY_POWER:
+                // closes & kills thread
                 STOP_THREAD =1;
+                // radio is not playing anymore
                 playing =0;
                 break;
             case KEY_ESC:
-                    LcdClear();
-                    showMenuItem();
-                    return;
+                LcdClear();
+                // go back to main menu
+                showMenuItem();
+                return;
         }
+
         LcdClear();
+        //displays radios ons screen with cursor
         switchRadio(pos, cursor);
         NutSleep(200);
 
