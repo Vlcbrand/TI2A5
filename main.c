@@ -475,6 +475,7 @@ void time_loop() {
     NutSleep(150);
     int cursorpos = 5;
     LcdCursorBlink(BLINK_OFF);
+    LcdClear();
     tm gmt;
     X12RtcGetClock(&gmt);
 
@@ -604,6 +605,7 @@ void menu_loop() {
 
 void volume_loop()
 {
+    NutSleep(100);
 	 for (;;) {
         u_char x = KbGetKey();
 
@@ -703,6 +705,7 @@ void treble_loop()
 void main_loop() {
     LcdCursorOff();
     int count = 0;
+    LcdClear();
 
     for (; ;) {
         if (checkAlarm(0)) {
@@ -921,6 +924,7 @@ void alarm_afspeel_loop(int alarmloop) {
 }
 
 void weather_loop(){
+    NutSleep(100);
     LcdCursorOff();
     int count = 0;
     LcdBackLight(LCD_BACKLIGHT_ON);
@@ -949,6 +953,7 @@ void weather_loop(){
 }
 
 void factory_reset_loop(){
+    NutSleep(100);
     LcdCursorOff();
     int count = 0;
     LcdBackLight(LCD_BACKLIGHT_ON);
@@ -1186,7 +1191,7 @@ int main(void) {
         timezone_loop();
 //        initNtp();
     }
-
+    set_first_volume();
 	set_volume(get_volume());
 
 	if(t < 7){

@@ -19,6 +19,10 @@ void memory_init(){
     save();
 }
 
+void set_first_volume(void){
+    uconf.volume = 7;
+}
+
 void reset(){
     uconf.count = 0;
     uconf.timezone= 0;

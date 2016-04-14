@@ -9,7 +9,7 @@ struct _USER_CONFIG {
     int alarm1_stream_id;
     int alarm2_stream_id;
 };
-
+void set_first_volume(void);
 void set_timezone(int timezone);
 void factory_reset(void);
 void save_volume(int);
