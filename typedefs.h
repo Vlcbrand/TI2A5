@@ -40,11 +40,11 @@ typedef enum _TERRORCODE
     CHANNEL_RETRIEVING,                 /* Retrieving channels */
     STREAMER_CONNECTING,                /* Connecting to stream */
     STREAMER_BUFFERING,                 /* Buffering audio */
-    STREAMER_PLAYING,                   /* Playing audio from a stream */
+    STREAMER_playing,                   /* playing audio from a stream */
     STREAMER_FALLBACK,                  /* trying card now, inet failed*/
     UPDATE_CONNECTING,                  /* connecting to update server */
     CARD_BUFFERING,                     /* Buffering audio */
-    CARD_PLAYING,                       /* Playing audio from a card */
+    CARD_playing,                       /* playing audio from a card */
 
     USER_ABORT,                         /* User abort */
 

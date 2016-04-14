@@ -14,5 +14,6 @@ void volume_loop(void);
 void bass_loop(void);
 void treble_loop(void);
 void weather_loop(void);
+void radio_loop();
 
 #endif

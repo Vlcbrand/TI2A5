@@ -54,16 +54,30 @@
 #include <sys/types.h>
 #include <sys/thread.h>
 
+
+
 #include "menu.h"
 #include "main.h"
 
 #include "alarm.h"
 #include "memory.h"
+#include "radio.h"
 
 #include "audiostream.h"
 #include "NTP.h"
 
 #include "weather.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <io.h>
+
+#ifdef ETHERNUT2
+#include <dev/lanc111.h>
+#else
+#include <dev/nicrtl.h>
+#endif
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -87,6 +101,9 @@ int userInput = 0;
 static void SysMainBeatInterrupt(void *);
 
 static void SysControlMainBeat(u_char);
+
+//plays
+int plays;
 
 /*!
  * \addtogroup System
@@ -277,7 +294,6 @@ void select_stream_loop(int alarm_id){
     //clear screen
     LcdClear();
 
-
     while(1){
         u_char x = KbGetKey();
         switch (x){
@@ -375,7 +391,6 @@ void alarm_loop() {
                 return;
             case KEY_ESC:
                 return;
-
         }
 //        printf("Loop\n");
         //Show available alarms, 1 and 2
@@ -643,10 +658,10 @@ void bass_loop()
         }
 		showBass(get_bass());
 		printf("%d\n", get_bass());
-		
+
         NutSleep(500);
     }
-	
+
 }
 void treble_loop()
 {
@@ -675,10 +690,10 @@ void treble_loop()
         }
 		showTreble(get_treble());
 		printf("%d\n", get_treble());
-		
+
         NutSleep(500);
     }
-	
+
 }
 
 void main_loop() {
@@ -721,8 +736,6 @@ void main_loop() {
         NutSleep(500);
     }
 }
-
-
 void generate_Sum()
 {
     //operand = rand() % 3;
@@ -760,7 +773,7 @@ void alarm_afspeel_loop(int alarmloop) {
     LcdCursorOff();
     LcdClear();
 
-    //showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
 	LcdDDRamStartPos(0,1);
 	LcdStr("Alarm");
@@ -971,6 +984,86 @@ int checkAlarm(int alarm) {
     return 0;
 }
 
+void radio_loop() {
+
+    //radio is not on
+    playing = 0;
+    // made so you don't instantly turn on a radio
+    NutSleep(800);
+
+    int pos = 0;
+    char cursor[4];
+
+    for (; ;) {
+
+        if(!playing){
+            //is displayed if no radio is playing
+            strcpy(cursor, "<--");
+        }
+        else{
+            //is displayed if a radio is turned on
+            strcpy(cursor, "<on");
+        }
+
+        u_char x = KbGetKey();
+        switch (x) { //
+
+            case KEY_UP:
+                if (pos == 2) {
+                    pos = 1;
+                } else {
+                    pos = 0;
+                }
+                break;
+            case KEY_DOWN:
+                if (pos == 1) {
+                    pos = 2;
+                } else {
+                    pos = 1;
+                }
+                break;
+
+            case KEY_OK:
+                if(!playing){
+                    switch (pos) {
+                        // if OK is pressed it will turn on the radio that is displayed on the screen.
+                        case 0:
+                            NutThreadCreate("play stream", PlayStream, yorick, 512);
+                            playing =1;
+                            break;
+                        case 1:
+                            playing =1;
+                            NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                            break;
+                        case 2:
+                            playing =1;
+                            NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                            break;
+                    }
+                }
+                break;
+            case KEY_POWER:
+                // closes & kills thread
+                STOP_THREAD =1;
+                // radio is not playing anymore
+                playing =0;
+                break;
+            case KEY_ESC:
+                LcdClear();
+                // go back to main menu
+                showMenuItem();
+                return;
+        }
+
+        LcdClear();
+        //displays radios ons screen with cursor
+        switchRadio(pos, cursor);
+        NutSleep(200);
+
+    }
+}
+
+
 /*!
  * \brief Main entry of the SIR firmware
  *
@@ -1024,6 +1117,9 @@ int main(void) {
     KbInit();
     SysControlMainBeat(ON);             // enable 4.4 msecs hartbeat interrupt
 
+    //init plays
+    plays = 0;
+
     /*
      * Increase our priority so we can feed the watchdog.
      */
@@ -1046,15 +1142,25 @@ int main(void) {
 
     memory_init();
 
+    if (NutRegisterDevice(&DEV_ETHER, 0x8300, 5)) {
+        puts("Error: No LAN device");
+        for (; ;);
+    }
+
+    puts("configure LAN");
+    /*
+     * Configure LAN.
+     */
+    if (ConfigureLan("eth0")) {
+        for (; ;);
+    }
+
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
-
-    gmt.tm_min = gmt.tm_min + 1;
-    NutSleep(200);
-    set_alarm(0, gmt);
-//
-//    set_alarm1_stream_id(2);
-
+	
+//    gmt.tm_min = gmt.tm_min + 1;
+//    NutSleep(200);
+//    set_alarm(0, gmt);
 //
 //    gmt.tm_min = gmt.tm_min + 2;
 //    set_alarm(1,gmt);
@@ -1066,7 +1172,7 @@ int main(void) {
     }
 
 	set_volume(get_volume());
-	
+
 	if(t < 7){
 		set_bass(t);
 	} else{
@@ -1078,8 +1184,8 @@ int main(void) {
 	} else{
 		save_treble(7);
 		set_treble(get_treble());
-	}		
-	
+	}
+
     while(get_timezone_set()!= 1) {
         timezone_loop();
     }
