@@ -54,6 +54,8 @@
 #include <sys/types.h>
 #include <sys/thread.h>
 
+
+
 #include "menu.h"
 #include "main.h"
 
@@ -65,6 +67,17 @@
 #include "NTP.h"
 
 #include "weather.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <io.h>
+
+#ifdef ETHERNUT2
+#include <dev/lanc111.h>
+#else
+#include <dev/nicrtl.h>
+#endif
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -749,7 +762,6 @@ void generate_Sum()
     }
 }
 
-
 void alarm_afspeel_loop(int alarmloop) {
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
@@ -761,7 +773,7 @@ void alarm_afspeel_loop(int alarmloop) {
     LcdCursorOff();
     LcdClear();
 
-    //showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
 	LcdDDRamStartPos(0,1);
 	LcdStr("Alarm");
@@ -1082,7 +1094,7 @@ int main(void) {
      *  First disable the watchdog
      */
     WatchDogDisable();
-    LcdBackLight(LCD_BACKLIGHT_ON);
+
     NutDelay(100);
     SysInitIO();
     SPIinit();
@@ -1130,15 +1142,25 @@ int main(void) {
 
     memory_init();
 
+    if (NutRegisterDevice(&DEV_ETHER, 0x8300, 5)) {
+        puts("Error: No LAN device");
+        for (; ;);
+    }
+
+    puts("configure LAN");
+    /*
+     * Configure LAN.
+     */
+    if (ConfigureLan("eth0")) {
+        for (; ;);
+    }
+
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
-
-     gmt.tm_min = gmt.tm_min + 1;
-    NutSleep(200);
-    //set_alarm(0, gmt);
-//
-//    set_alarm1_stream_id(2);
-
+	
+//    gmt.tm_min = gmt.tm_min + 1;
+//    NutSleep(200);
+//    set_alarm(0, gmt);
 //
 //    gmt.tm_min = gmt.tm_min + 2;
 //    set_alarm(1,gmt);

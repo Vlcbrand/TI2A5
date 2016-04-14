@@ -108,7 +108,7 @@ void init_menu(void)
 	AddChildNode(volumeNode);
 	AddChildNode(bassNode);
 	AddChildNode(trebleNode);
-	
+
 	//AddChildNode(radioNode);
 
 	currentMenuItem = head;
