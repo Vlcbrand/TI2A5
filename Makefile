@@ -14,7 +14,7 @@ AVR_INC = c:/winavr/avr/include
 
 
 # Compiler, assembler & linker (flags)
-CC		= 	avr-gcc
+CC		= 	@avr-gcc
 CFLAGS	= 	-mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 \
 			-D__HARVARD_ARCH__ -DNUTOS_VERSION=433 \
 			-Wa,-ahlms=$(SRC_DIR)/$*lst

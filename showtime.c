@@ -6,6 +6,7 @@
 #include "display.h"
 #include <stddef.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 char *oldTime;

@@ -60,7 +60,7 @@ extern void LcdBackLight(u_char);
 extern void LcdInit(void);
 extern void LcdLowLevelInit(void);
 extern void LcdSetupDisplay(void);
-extern void LcdMoveCursor(int dir);
+extern void LcdMoveCursor(int);
 
 extern void LcdMoveCursorHome(void);
 

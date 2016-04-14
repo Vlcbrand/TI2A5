@@ -26,8 +26,8 @@ void switchRadio(int pos, int cursor){
             LcdStr(radio_3fm->name);
 
             //set the cursor to the stream that is preselected
-            LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
-            LcdStr(cursor);
+            LcdDDRamStartPos(LINE_0, 16 - strlen((char *)cursor));
+            LcdStr((char *)cursor);
             return;
         case 1:
             //displays the radio per line
@@ -37,8 +37,8 @@ void switchRadio(int pos, int cursor){
             LcdStr(radio_3fm->name);
 
             //set the cursor to the stream that is preselected
-            LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
-            LcdStr(cursor);
+            LcdDDRamStartPos(LINE_1, 16 - strlen((char *)cursor));
+            LcdStr((char *)cursor);
             return;
         case 2:
             //displays the radio per line
@@ -48,8 +48,8 @@ void switchRadio(int pos, int cursor){
             LcdStr(funx_reggae->name);
 
             //set the cursor to the stream that is preselected
-            LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
-            LcdStr(cursor);
+            LcdDDRamStartPos(LINE_1, 16 - strlen((char *)cursor));
+            LcdStr((char *)cursor);
             return;
     }
 }

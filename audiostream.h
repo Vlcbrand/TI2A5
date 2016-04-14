@@ -17,7 +17,7 @@ RADIO_STREAM *yorick;
 RADIO_STREAM *radio_3fm;
 RADIO_STREAM *funx_reggae;
 
-void initAudioStreams();
+void initAudioStreams(void);
 
 int play_stream(RADIO_STREAM rStream);
 

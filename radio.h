@@ -10,7 +10,7 @@
 
 int playing; // boolean for checking if radio is on
 
-void switchRadio();
+void switchRadio(int, int);
 
 
 
