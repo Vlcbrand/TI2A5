@@ -32,24 +32,24 @@ int initNtp(void)
     uint32_t timeserver = 0;
  
     NutRegisterDevice(&DEV_DEBUG, ETH0_BASE, ETH0_IRQ);
- 
+
     freopen(DEV_DEBUG_NAME, "w", stdout);
     _ioctl(_fileno(stdout), UART_SETSPEED, &baud);
  
-    NutRegisterDevice(&DEV_ETHER, ETH0_BASE, ETH0_IRQ);
-    if (NutDhcpIfConfig(DEV_ETHER_NAME, 0, 60000)) {
-        puts("Error: Cannot configure network for NTP.");
-    }
+//    NutRegisterDevice(&DEV_ETHER, ETH0_BASE, ETH0_IRQ);
+//    if (NutDhcpIfConfig(DEV_ETHER_NAME, 0, 60000)) {
+//        puts("Error: Cannot configure network for NTP.");
+//    }
  
     puts("NTP example\n");
  
     /* Timezone for Germany is GMT-1, so we need to subtract 1 hour = 60*60 seconds */
-    _timezone = get_timezone() * 60 * 60;
+    _timezone = 60 * 60;
  
     /* Retrieve time from the "pool.ntp.org" server. This is a free NTP server. */
     puts("Retrieving time from pool.ntp.org...");
  
-    timeserver = inet_addr("193.79.237.14");
+    timeserver = inet_addr("212.45.45.45");
  
     
 	if (NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
