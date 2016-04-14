@@ -464,7 +464,7 @@ int ConfigureLan(char *devname) {
          */
         if ((sock = NutTcpCreateSocket()) == 0) {
             puts("Error: Can't create socket");
-            for (; ;);
+            //for (; ;);
         }
 
         puts("set socket options");
@@ -567,18 +567,7 @@ int ConfigureLan(char *devname) {
         /*
          * Register LAN device.
          */
-        if (NutRegisterDevice(&DEV_ETHER, 0x8300, 5)) {
-            puts("Error: No LAN device");
-            for (; ;);
-        }
 
-        puts("configure LAN");
-        /*
-         * Configure LAN.
-         */
-        if (ConfigureLan("eth0")) {
-            for (; ;);
-        }
 
         puts("create a TCP socket");
 
@@ -587,7 +576,8 @@ int ConfigureLan(char *devname) {
          */
         if ((sock = NutTcpCreateSocket()) == 0) {
             puts("Error: Can't create socket");
-            for (; ;);
+            //for (; ;);
+            return 1;
         }
 
         puts("set socket options");
