@@ -91,6 +91,9 @@ int nr2 = 0;
 int operand = 0;
 int result = -1;
 int userInput = 0;
+
+streamdone = 0;
+
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -250,7 +253,9 @@ void timezone_loop() {
                 break;
             case KEY_OK:
                 set_timezone(timezone);
+                initNtp();
                 printf("Bye\n");
+                LcdClear();
                 return;
             case KEY_ESC:
                 return;
@@ -791,38 +796,43 @@ void alarm_afspeel_loop(int alarmloop) {
 	*/
 
     //play stream
-    if(alarmloop == 0){
-        switch (get_alarm1_stream_id()){
-            case 0:
-                NutThreadCreate("play stream", PlayStream, yorick, 512);
-                break;
-            case 1:
-                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
-                break;
-            case 2:
-                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
-                break;
+
+        if(alarmloop == 0){
+                switch (get_alarm1_stream_id()) {
+
+                    case 0:
+                        NutThreadCreate("play stream", PlayStream, yorick, 512);
+                        break;
+                    case 1:
+                        NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                        break;
+                    case 2:
+                        NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                        break;
+                }
+
+        }else{
+            switch (get_alarm2_stream_id()){
+                case 0:
+                    NutThreadCreate("play stream", PlayStream, yorick, 512);
+                    break;
+                case 1:
+                    NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                    break;
+                case 2:
+                    NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                    break;
+            }
         }
-    }else{
-        switch (get_alarm2_stream_id()){
-            case 0:
-                NutThreadCreate("play stream", PlayStream, yorick, 512);
-                break;
-            case 1:
-                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
-                break;
-            case 2:
-                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
-                break;
-        }
-    }
+
     int *snoozes;
-    snoozes = (int)&aantalSnoozes;
+    snoozes = aantalSnoozes;
 
     int i;
 
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    send_message();
     for (; ;) {
-        //playTone();
         //test
 
 //        printf("TOON SPEELT AF\n");
@@ -836,6 +846,7 @@ void alarm_afspeel_loop(int alarmloop) {
 			LcdStr(tempSum);
 			int i = 0;
         switch (x) {
+
             case KEY_OK:
                 if (aan == 1)
 				{
@@ -846,11 +857,11 @@ void alarm_afspeel_loop(int alarmloop) {
 							gmt.tm_min = gmt.tm_min - 2;
 							theSnoozes = 0;
 						}
+                        LcdClear();
 						set_alarm(alarmloop, gmt);
 						aan = 0;
                         STOP_THREAD = 1;
-						LcdClear();
-						return;
+                        return;
 					}
 					else
 					{
@@ -865,14 +876,15 @@ void alarm_afspeel_loop(int alarmloop) {
                 return;
             case KEY_ESC:
                 theSnoozes++;
-                printf("aantal snoozes bitch\n");
-                gmt.tm_min = gmt.tm_min + 2;
+                printf("aantal snoozes\n");
+                X12RtcGetClock(&gmt);
+                gmt.tm_min= gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
-                aan = 0;
                 LcdClear();
-                menuAction();
+                aan = 0;
                 STOP_THREAD = 1;
-                break;
+                menuAction();
+                return;
             case KEY_UP:
 				if(userInput < 999)
 					userInput++;
@@ -1107,10 +1119,10 @@ int main(void) {
     CardInit();
     X12Init();
     NutSleep(100);
-    X12RtcGetClock(&gmt);
+    X12RtcGetClock(&gmt); //laten staan voor test alarm
     NutSleep(100);
-    gmt.tm_year = 116; //default to 2016
-    X12RtcSetClock(&gmt);
+    //gmt.tm_year = 116; //default to 2016
+    //X12RtcSetClock(&gmt);
     NutSleep(100);
 
     RcInit();
@@ -1142,6 +1154,10 @@ int main(void) {
 
     memory_init();
 
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    LcdClear();
+    LcdStr("IP ophalen..");
+
     if (NutRegisterDevice(&DEV_ETHER, 0x8300, 5)) {
         puts("Error: No LAN device");
         for (; ;);
@@ -1155,12 +1171,12 @@ int main(void) {
         for (; ;);
     }
 
+    LcdClear();
+
+
+
 //	 NutThreadCreate("play stream", PlayStream, yorick, 512);
 //	 NutSleep(700);
-	
-//    gmt.tm_min = gmt.tm_min + 1;
-//    NutSleep(200);
-//    set_alarm(0, gmt);
 //
 //    gmt.tm_min = gmt.tm_min + 2;
 //    set_alarm(1,gmt);
@@ -1169,6 +1185,7 @@ int main(void) {
 //    timezone_loop();
     if (get_bootcount() == 0) {
         timezone_loop();
+//        initNtp();
     }
 
 	set_volume(get_volume());
@@ -1188,8 +1205,15 @@ int main(void) {
 
     while(get_timezone_set()!= 1) {
         timezone_loop();
+//        initNtp();
     }
-	//initNtp();
+	initNtp();
+
+//    //TEST
+//    gmt.tm_min = gmt.tm_min + 1;
+//    NutSleep(200);
+//    set_alarm(0, gmt);
+
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }
