@@ -31,6 +31,8 @@
 
 #include <pro/dhcp.h>
 
+#include "main.h"
+
 /*
  * Determine the compiler.
  */
@@ -445,7 +447,7 @@ int ConfigureLan(char *devname) {
         }
     }
 
-    int send_message(u_long ip, u_short port, u_long *metaint){
+    int send_message(){
         int rc;
         FILE *stream;
         u_char *line;
@@ -599,7 +601,7 @@ int ConfigureLan(char *devname) {
          */
         radio_ip = inet_addr(rStream.radio_ip);
         stream = ConnectStation(sock, rStream.radio_ip, rStream.radio_port, &metaint, rStream);
-		send_message(rStream.radio_ip, rStream.radio_port, &metaint);
+
         /*
          * Play the stream.
          */
@@ -609,13 +611,11 @@ int ConfigureLan(char *devname) {
             fclose(stream);
         }
         NutTcpCloseSocket(sock);
-
-
+        streamdone = 1;
+        NutThreadExit();
         NutThreadKill();
         NutThreadDestroy();
         return;
-        puts("Reset me!");
-        for (; ;);
 }
 
 void initAudioStreams(){
