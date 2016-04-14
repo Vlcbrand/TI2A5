@@ -16,7 +16,7 @@ int showAlarmTime(char *time){
     int startpos =5;
     if(oldTime != NULL){
         //compare time
-        for(i=0;i<strlen(time); ++i){
+        for(i = 0; i<strlen(time); ++i){
 //            printf("old time char: [%c] new time char: [%c]\n", oldTime[i], time[i]);
             if(oldTime[i] != time[i]){
                 //different character
@@ -28,11 +28,11 @@ int showAlarmTime(char *time){
     }else{
         LcdDDRamStartPos(LINE_0, startpos);
         LcdStr(time);
-        oldTime = (char *) malloc(sizeof(strlen(time)*stlren(time[0])));
+        oldTime = (char *) malloc(sizeof(strlen(time)));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
-    oldTime = &time;
+    oldTime = time;
     //Return the position of the start pos
     return startpos;
 }
@@ -54,11 +54,11 @@ void showTimeAndDate(char time[], char date[]){
     }else{
         LcdDDRamStartPos(LINE_0, 4);
         LcdStr(time);
-        oldTime =(char *) malloc(sizeof(strlen(time)*stlren(time[0])));
+        oldTime = (char *) malloc(sizeof(strlen(time)));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
-    oldTime = &time;
+    oldTime = time;
 
 
     //reset i
@@ -76,11 +76,11 @@ void showTimeAndDate(char time[], char date[]){
     }else{
         LcdDDRamStartPos(LINE_1, 3);
         LcdStr(date);
-        oldDate = malloc(sizeof(strlen(date)*stlren(date[0])));
+        oldDate = (char *) malloc(sizeof(strlen(date)));
     }
 
     //set the oldDate to the new date, so it can be compared the next time this method is called.
-    oldDate = &date;
+    oldDate = date;
 }
 
 void showTimeNoSeconds(char time[], char setTime[], int type){
@@ -112,11 +112,10 @@ void showTimeNoSeconds(char time[], char setTime[], int type){
     }else{
         LcdDDRamStartPos(LINE_1, 6);
         LcdStr(time);
-       
-	   oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
+        oldTime = (char *) malloc(sizeof(strlen(time)));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
-    oldTime = &time;
+    oldTime = time;
     LcdDDRamStartPos(LINE_1, 10);
 }

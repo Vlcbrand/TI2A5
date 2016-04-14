@@ -49,6 +49,7 @@
 #include <sys/event.h>
 #include <sys/timer.h>
 #include <sys/heap.h>
+#include "display.h"
 
 #include <dev/irqreg.h>
 
@@ -84,7 +85,6 @@
 
 #define VsDeselectVs()  SPIdeselect()
 #define VsSelectVs()    SPIselect(SPI_DEV_VS10XX)
-#include "display.h"
 
 
 /*-------------------------------------------------------------------------*/
@@ -92,6 +92,7 @@
 /*-------------------------------------------------------------------------*/
 static volatile u_char vs_status = VS_STATUS_STOPPED;
 static u_short g_vs_type;
+static char blok[2] = {0xFF, 0};
 
 /*-------------------------------------------------------------------------*/
 /* local routines (prototyping)                                            */
@@ -510,7 +511,6 @@ int VsPlayerKick(void)
 //        LogMsg_P(LOG_DEBUG,PSTR("Kick: CLOCKF = [0x%02X]"),VsRegRead(VS_CLOCKF_REG));
 //        LogMsg_P(LOG_DEBUG,PSTR("Kick: CLOCKF = [0x%02X]"),VsRegRead(VS_CLOCKF_REG));
 
-        //VsLoadProgramCode();
         vs_status = VS_STATUS_RUNNING;
         VsPlayerFeed(NULL);
         VsPlayerInterrupts(1);
@@ -831,7 +831,7 @@ int set_bass(int bass)
 {
 	
 	printf(" SET: %d", bass);
-	u_char realBass = VsfixByte(bass, 0x6);
+	u_char realBass = VsfixByte(bass, 0x3);
 	printf(" SET: %u", (unsigned)realBass);
 	VsSetBass(VsfixByte(get_treble(), 0x6), realBass);
 	save_bass(bass);
@@ -844,7 +844,7 @@ int set_treble(int treble)
 	printf(" SET: %d", treble);
 	u_char realTreble = VsfixByte(treble, 0x6);
 	printf(" SET: %u", (unsigned)realTreble);
-	VsSetBass(realTreble, VsfixByte(get_bass(), 0x6));
+	VsSetBass(realTreble, VsfixByte(get_bass(), 0x3));
 	save_treble(treble);
 	return(0);
 }
@@ -889,10 +889,10 @@ void showBass(int bass)
 	LcdDDRamStartPos(0,3);
 	LcdStr("Bass");
 		
-	for(i; i <= bass; i++)
+	for(i = 0; i <= bass; i++)
 	{		
 		LcdDDRamStartPos(1, i+1);
-		LcdStr((char)0xFF);
+		LcdStr(blok);
 	}
 }
 
@@ -921,14 +921,13 @@ int treble_down(int curTreble)
 void showTreble(int treble)
 {
 	int i = 0;
-	
 	LcdDDRamStartPos(0,5);
 	LcdStr("Treble");
 		
-	for(i; i <= treble; i++)
+	for(i = 0; i <= treble; i++)
 	{		
 		LcdDDRamStartPos(1, i+1);
-		LcdStr((char)0xFF);
+		LcdStr(blok);
 	}
 }
 
@@ -957,13 +956,13 @@ int volume_down(int curVol)
 void showVolume(int volume)
 {
 	int i = 0;
-			LcdDDRamStartPos(0,5);
-		LcdStr("Volume");
+	LcdDDRamStartPos(0,5);
+	LcdStr("Volume");
 		
-	for(i=0; i <= volume; i++)
+	for(i = 0; i <= volume; i++)
 	{		
 		LcdDDRamStartPos(1, i+1);
-		LcdStr((char)0xFF);
+		LcdStr(blok);
 	}
 }
 

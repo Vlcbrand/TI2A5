@@ -5,6 +5,6 @@
 #ifndef MULTI_OS_BUILD_THREADS_H
 #define MULTI_OS_BUILD_THREADS_H
 
-void playTone();
+void playTone(void);
 
 #endif //MULTI_OS_BUILD_THREADS_H

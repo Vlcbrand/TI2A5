@@ -39,28 +39,31 @@
 #include "main.h"
 
 #include "alarm.h"
+#include "threads.h"
 
 
 /*-----functions-----*/
 THREAD(tone, arg){
-VsPlayerInit();
-VsSetVolume(1, 1);
-VsBeepStart(2500);
+	for(;;)
+	{
+		VsPlayerInit();
+		VsSetVolume(1, 1);
+		VsBeepStart((u_char)2500);
 
-NutSleep(1000);
-VsBeepStop();
-NutThreadExit();
-NutThreadKill();
-NutThreadDestroy();
+		NutSleep(1000);
+		VsBeepStop();
+		NutThreadExit();
+		NutThreadKill();
+		NutThreadDestroy();
+	}
 }
 
-void playTone(void){
+void playTone(){
     VsPlayerInit();
     VsSetVolume(1, 1);
-    VsBeepStart(2500);
+    VsBeepStart((u_char)2500);
 
     NutSleep(1000);
     VsBeepStop();
- }
- //@/
- 
+//    return 1;
+}

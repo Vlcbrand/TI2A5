@@ -273,7 +273,7 @@ int ConfigureLan2(char *devname) {
 //    return 0;
 //}
 
-char get_weather_temp(void){
+char get_weather_temp(){
     TCPSOCKET *sock;
     FILE *stream;
     u_long baud = DBG_BAUDRATE;
@@ -313,8 +313,8 @@ char get_weather_temp(void){
     //ip - http://api.openweathermap.org/data/2.5/weather?id=2758401&appid=35ecaf59475b958644a56e07b6ac0700
     int rc;
 //    FILE *stream;
-    u_char *line;
-    u_char *cp;
+    char *line;
+    char *cp;
 //    TCPSOCKET *sock;
 //
 //    u_long baud = DBG_BAUDRATE;
@@ -403,8 +403,8 @@ char get_weather_temp(void){
             temp_val[1] = line[8];
             temp_val[2] = line[9];
             temp_val[3] = line[10];
-            temp_val[4] = '\0';
-            printf("super test:%s\n", temp_val);
+            temp_val[4] = 0;
+//            printf("super test:%s\0\n", temp_val);
             LcdDDRamStartPos(LINE_0, 12);
             LcdStr(temp_val);
             free(line);
@@ -418,5 +418,5 @@ char get_weather_temp(void){
     putchar('\n');
 
     free(line);
-    return (int)99;
+    return (int) 20.0;
 }
