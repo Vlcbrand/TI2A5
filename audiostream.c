@@ -611,7 +611,6 @@ int ConfigureLan(char *devname) {
             fclose(stream);
         }
         NutTcpCloseSocket(sock);
-        streamdone = 1;
         NutThreadExit();
         NutThreadKill();
         NutThreadDestroy();

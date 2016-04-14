@@ -92,8 +92,6 @@ int operand = 0;
 int result = -1;
 int userInput = 0;
 
-streamdone = 0;
-
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -474,6 +472,7 @@ void set_alarm_loop(int alarmid) {
 }
 
 void time_loop() {
+    NutSleep(150);
     int cursorpos = 5;
     LcdCursorBlink(BLINK_OFF);
     tm gmt;
