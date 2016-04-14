@@ -5,6 +5,6 @@
 #ifndef MULTI_OS_BUILD_WEATHER_H
 #define MULTI_OS_BUILD_WEATHER_H
 
-char get_weather_temp();
+char get_weather_temp(void);
 
 #endif //MULTI_OS_BUILD_WEATHER_H

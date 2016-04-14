@@ -91,10 +91,6 @@
 /*-------------------------------------------------------------------------*/
 static volatile u_char vs_status = VS_STATUS_STOPPED;
 static u_short g_vs_type;
-static u_char VsPlayMode;
-
-
-static void VsLoadProgramCode(void);
 
 /*-------------------------------------------------------------------------*/
 /* local routines (prototyping)                                            */
@@ -888,8 +884,9 @@ int bass_down(int curBass)
 void showBass(int bass)
 {
 	int i = 0;
-			LcdDDRamStartPos(0,3);
-		LcdStr("Bass");
+	
+	LcdDDRamStartPos(0,3);
+	LcdStr("Bass");
 		
 	for(i; i <= bass; i++)
 	{		
@@ -923,8 +920,9 @@ int treble_down(int curTreble)
 void showTreble(int treble)
 {
 	int i = 0;
-			LcdDDRamStartPos(0,5);
-		LcdStr("Treble");
+	
+	LcdDDRamStartPos(0,5);
+	LcdStr("Treble");
 		
 	for(i; i <= treble; i++)
 	{		
@@ -1116,20 +1114,5 @@ int VsBeepStop()
     VsPlayerInterrupts(ief);
 
     return(0);
-}
-
-static void VsLoadProgramCode(void)
-{
-    int i;
-
-    for (i=0;i<CODE_SIZE;i++)
-    {
-        VsRegWrite(PRG_RDB(&atab[i]), PRG_RDW(&dtab[i]));
-        // kick watchdog on a regular base
-        if(i%500==0)
-        {
-            WatchDogRestart();
-        }
-    }
 }
 /*@}*/

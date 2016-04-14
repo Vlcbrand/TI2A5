@@ -54,12 +54,13 @@ NutThreadKill();
 NutThreadDestroy();
 }
 
-void playTone(){
+void playTone(void){
     VsPlayerInit();
     VsSetVolume(1, 1);
     VsBeepStart(2500);
 
     NutSleep(1000);
     VsBeepStop();
-    return 1;
-}
+ }
+ //@/
+ 

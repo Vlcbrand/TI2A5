@@ -273,15 +273,13 @@ int ConfigureLan2(char *devname) {
 //    return 0;
 //}
 
-char get_weather_temp(){
+char get_weather_temp(void){
     TCPSOCKET *sock;
     FILE *stream;
     u_long baud = DBG_BAUDRATE;
-    u_long radio_ip = inet_addr("82.95.218.137");
     u_short tcpbufsiz = TCPIP_BUFSIZ;
     u_long rx_to = TCPIP_READTIMEOUT;
     u_short mss = TCPIP_MSS;
-    u_long metaint;
 
     /*
      * Register UART device and assign stdout to it.
@@ -410,7 +408,7 @@ char get_weather_temp(){
             LcdDDRamStartPos(LINE_0, 12);
             LcdStr(temp_val);
             free(line);
-            return temp_val;
+            return (int)temp_val;
         }
 
         printf("%s\n", line);
@@ -420,5 +418,5 @@ char get_weather_temp(){
     putchar('\n');
 
     free(line);
-    return "20.0";
+    return (int)99;
 }
