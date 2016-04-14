@@ -11,28 +11,21 @@ struct _USER_CONFIG {
 };
 
 void set_timezone(int timezone);
-
-void factory_reset();
-
-
+void factory_reset(void);
 void save_volume(int);
 int get_volume(void);
-
 void set_timezone_set(int val);
+int get_timezone_set(void);
+int get_timezone(void);
+int get_bootcount(void);
 
-int get_timezone_set();
-
-int get_timezone();
-
-int get_bootcount();
-
-int get_alarm1_stream_id();
-int get_alarm2_stream_id();
+int get_alarm1_stream_id(void);
+int get_alarm2_stream_id(void);
 
 void set_alarm1_stream_id(int id);
 void set_alarm2_stream_id(int id);
 
-void memory_init();
+void memory_init(void);
 
 void save_bass(int);
 
