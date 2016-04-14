@@ -84,6 +84,7 @@
 
 #define VsDeselectVs()  SPIdeselect()
 #define VsSelectVs()    SPIselect(SPI_DEV_VS10XX)
+#include "display.h"
 
 
 /*-------------------------------------------------------------------------*/
@@ -959,7 +960,7 @@ void showVolume(int volume)
 			LcdDDRamStartPos(0,5);
 		LcdStr("Volume");
 		
-	for(i; i <= volume; i++)
+	for(i=0; i <= volume; i++)
 	{		
 		LcdDDRamStartPos(1, i+1);
 		LcdStr((char)0xFF);

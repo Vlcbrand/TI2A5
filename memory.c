@@ -2,7 +2,7 @@
 
 struct _USER_CONFIG uconf;
 
-void memory_init(){
+void memory_init(void){
 
     NutNvMemLoad(1024, &uconf, sizeof(uconf));
 
@@ -15,11 +15,10 @@ void memory_init(){
 
     uconf.len = sizeof(uconf);
     uconf.count++;
-
     save();
 }
 
-void reset(){
+void reset(void){
     uconf.count = 0;
     uconf.timezone= 0;
     uconf.timezone_set = 0;
@@ -28,17 +27,22 @@ void reset(){
     uconf.alarm2_stream_id = 0;
 }
 
-void save(){
+void save(void){
     NutNvMemSave(1024, &uconf, sizeof(uconf));
 }
 
-void factory_reset() {
+void factory_reset(void) {
     reset();
     save();
 }
 
-int get_bootcount() {
+int get_bootcount(void) {
     return uconf.count;
+}
+
+void set_FirstVolume(void)
+{
+		uconf.volume = 7;
 }
 
 int get_timezone() {
@@ -51,12 +55,12 @@ int get_volume(void)
 	return uconf.volume;
 }
 
-int get_bass()
+int get_bass(void)
 {
 	return uconf.bass;
 }
 
-int get_treble()
+int get_treble(void)
 {
 	return uconf.treble;
 }
@@ -71,11 +75,11 @@ void set_timezone(int timezone){
     save();
 }
 
-int get_alarm1_stream_id(){
+int get_alarm1_stream_id(void){
     return uconf.alarm1_stream_id;
 }
 
-int get_alarm2_stream_id(){
+int get_alarm2_stream_id(void){
     return uconf.alarm2_stream_id;
 }
 

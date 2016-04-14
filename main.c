@@ -767,6 +767,7 @@ void alarm_afspeel_loop(int alarmloop) {
     char *timeStr = malloc(sizeof(char) * 50);
     //char *dateStr = malloc(sizeof(char) * 50);
 
+	 LcdBackLight(LCD_BACKLIGHT_ON);
     X12RtcGetClock(&gmt);
     sprintf(timeStr, "%02d:%02d", gmt.tm_hour, gmt.tm_min);
 
@@ -905,7 +906,7 @@ void alarm_afspeel_loop(int alarmloop) {
 
 //		playTone();
         NutSleep(500);
-
+		LcdBackLight(LCD_BACKLIGHT_OFF);
     }
 }
 
@@ -1170,7 +1171,8 @@ int main(void) {
     if (get_bootcount() == 0) {
         timezone_loop();
     }
-
+	
+	set_FirstVolume();
 	set_volume(get_volume());
 
 	if(t < 7){

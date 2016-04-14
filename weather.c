@@ -404,7 +404,7 @@ char get_weather_temp(void){
             temp_val[2] = line[9];
             temp_val[3] = line[10];
             temp_val[4] = '\0';
-            printf("super test:%s\0\n", temp_val);
+            printf("super test:%s\n", temp_val);
             LcdDDRamStartPos(LINE_0, 12);
             LcdStr(temp_val);
             free(line);

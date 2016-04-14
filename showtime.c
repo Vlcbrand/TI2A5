@@ -5,6 +5,7 @@
 #include "showTime.h"
 #include "display.h"
 #include <stddef.h>
+#include <string.h>
 
 
 char *oldTime;
@@ -15,7 +16,7 @@ int showAlarmTime(char *time){
     int startpos =5;
     if(oldTime != NULL){
         //compare time
-        for(;i<strlen(time); ++i){
+        for(i=0;i<strlen(time); ++i){
 //            printf("old time char: [%c] new time char: [%c]\n", oldTime[i], time[i]);
             if(oldTime[i] != time[i]){
                 //different character
@@ -27,7 +28,7 @@ int showAlarmTime(char *time){
     }else{
         LcdDDRamStartPos(LINE_0, startpos);
         LcdStr(time);
-        oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
+        oldTime = (char *) malloc(sizeof(strlen(time)*stlren(time[0])));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
@@ -53,7 +54,7 @@ void showTimeAndDate(char time[], char date[]){
     }else{
         LcdDDRamStartPos(LINE_0, 4);
         LcdStr(time);
-        oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
+        oldTime =(char *) malloc(sizeof(strlen(time)*stlren(time[0])));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
@@ -111,7 +112,8 @@ void showTimeNoSeconds(char time[], char setTime[], int type){
     }else{
         LcdDDRamStartPos(LINE_1, 6);
         LcdStr(time);
-        oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
+       
+	   oldTime = malloc(sizeof(strlen(time)*stlren(time[0])));
     }
 
     //set the oldTime to the new time, so it can be compared the next time this method is called.
