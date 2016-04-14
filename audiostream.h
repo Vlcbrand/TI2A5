@@ -20,6 +20,7 @@ RADIO_STREAM *funx_reggae;
 void initAudioStreams(void);
 
 int play_stream(RADIO_STREAM rStream);
+int streamdone;
 
 THREAD(PlayStream, args);
 

@@ -159,7 +159,7 @@ void LcdMoveCursor(int dir)
 
 void LcdStr(char *str) {
     int strIndex = 0;
-    while (str[strIndex] != '\0') {
+    while (str[strIndex] != 0) {
         LcdChar(str[strIndex]);
         strIndex++;
     }
