@@ -1,0 +1,228 @@
+Uploading to the server..
+avr-gcc -c source/alarm.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/alarm.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/alarm.o 
+source/alarm.c: In function 'get_alarm': 
+source/alarm.c:113: warning: passing argument 3 of 'X12RtcGetAlarm' from incompatible pointer type 
+source/alarm.c:128:2: warning: no newline at end of file 
+avr-gcc -c source/audiostream.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/audiostream.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/audiostream.o 
+In file included from source/audiostream.c:5: 
+source/audiostream.h:20: warning: function declaration isn't a prototype 
+source/audiostream.h:24: warning: data definition has no type or storage class 
+source/audiostream.h:24: warning: type defaults to 'int' in declaration of 'THREAD' 
+source/audiostream.h:24: warning: parameter names (without types) in function declaration 
+source/audiostream.c: In function 'ConnectStation': 
+source/audiostream.c:260: warning: pointer targets in passing argument 1 of 'fgets' differ in signedness 
+source/audiostream.c:266: warning: pointer targets in passing argument 1 of 'strchr' differ in signedness 
+source/audiostream.c:266: warning: pointer targets in assignment differ in signedness 
+source/audiostream.c:279: warning: pointer targets in passing argument 1 of 'strncmp' differ in signedness 
+source/audiostream.c:280: warning: pointer targets in passing argument 1 of 'atol' differ in signedness 
+source/audiostream.c: In function 'PlayMp3Stream': 
+source/audiostream.c:389: warning: pointer targets in assignment differ in signedness 
+source/audiostream.c:416: warning: pointer targets in assignment differ in signedness 
+source/audiostream.c: In function 'send_message': 
+source/audiostream.c:514: warning: pointer targets in passing argument 1 of 'fgets' differ in signedness 
+source/audiostream.c:520: warning: pointer targets in passing argument 1 of 'strchr' differ in signedness 
+source/audiostream.c:520: warning: pointer targets in assignment differ in signedness 
+source/audiostream.c:455: warning: unused variable 'baud' 
+source/audiostream.c: In function 'play_stream': 
+source/audiostream.c:611: warning: passing argument 2 of 'ConnectStation' makes integer from pointer without a cast 
+source/audiostream.c:626: warning: 'return' with no value, in function returning non-void 
+source/audiostream.c: At top level: 
+source/audiostream.c:631: warning: function declaration isn't a prototype 
+source/audiostream.c:655:2: warning: no newline at end of file 
+source/audiostream.c: In function 'PlayStream': 
+source/audiostream.c:655: warning: 'noreturn' function does return 
+avr-gcc -c source/display.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/display.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/display.o 
+avr-gcc -c source/fat.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/fat.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/fat.o 
+avr-gcc -c source/flash.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/flash.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/flash.o 
+avr-gcc -c source/keyboard.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/keyboard.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/keyboard.o 
+source/keyboard.c:206: warning: 'KbKeyIsRepeating' defined but not used 
+avr-gcc -c source/led.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/led.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/led.o 
+avr-gcc -c source/log.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/log.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/log.o 
+avr-gcc -c source/main.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/main.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/main.o 
+In file included from source/main.c:58: 
+source/main.h:5: warning: function declaration isn't a prototype 
+source/main.h:7: warning: function declaration isn't a prototype 
+source/main.h:8: warning: function declaration isn't a prototype 
+source/main.h:9: warning: function declaration isn't a prototype 
+In file included from source/main.c:61: 
+source/memory.h:13: warning: function declaration isn't a prototype 
+source/memory.h:21: warning: function declaration isn't a prototype 
+source/memory.h:23: warning: function declaration isn't a prototype 
+source/memory.h:25: warning: function declaration isn't a prototype 
+source/memory.h:27: warning: function declaration isn't a prototype 
+source/memory.h:28: warning: function declaration isn't a prototype 
+source/memory.h:33: warning: function declaration isn't a prototype 
+In file included from source/main.c:63: 
+source/audiostream.h:20: warning: function declaration isn't a prototype 
+In file included from source/main.c:66: 
+source/weather.h:8: warning: function declaration isn't a prototype 
+source/main.c:212: warning: function declaration isn't a prototype 
+source/main.c:349: warning: function declaration isn't a prototype 
+source/main.c: In function 'alarm_loop': 
+source/main.c:367: warning: implicit declaration of function 'set_alarm_loop' 
+source/main.c: At top level: 
+source/main.c:397: warning: conflicting types for 'set_alarm_loop' 
+source/main.c:367: warning: previous implicit declaration of 'set_alarm_loop' was here 
+source/main.c:455: warning: function declaration isn't a prototype 
+source/main.c: In function 'time_loop': 
+source/main.c:462: warning: implicit declaration of function 'checkAlarm' 
+source/main.c:463: warning: implicit declaration of function 'alarm_afspeel_loop' 
+source/main.c: In function 'volume_loop': 
+source/main.c:593: warning: implicit declaration of function 'volume_up' 
+source/main.c:597: warning: implicit declaration of function 'volume_down' 
+source/main.c:610: warning: implicit declaration of function 'showVolume' 
+source/main.c: At top level: 
+source/main.c:660: warning: function declaration isn't a prototype 
+source/main.c:685: warning: conflicting types for 'alarm_afspeel_loop' 
+source/main.c:463: warning: previous implicit declaration of 'alarm_afspeel_loop' was here 
+source/main.c: In function 'alarm_afspeel_loop': 
+source/main.c:702: warning: format '%d' expects type 'int', but argument 3 has type 'void (*)()' 
+source/main.c:703: warning: passing argument 1 of 'LcdStr' makes pointer from integer without a cast 
+source/main.c:740: warning: assignment makes pointer from integer without a cast 
+source/main.c:765: warning: comparison between pointer and integer 
+source/main.c:742: warning: unused variable 'i' 
+source/main.c: In function 'weather_loop': 
+source/main.c:832: warning: unused variable 'count' 
+source/main.c: At top level: 
+source/main.c:858: warning: function declaration isn't a prototype 
+source/main.c: In function 'factory_reset_loop': 
+source/main.c:860: warning: unused variable 'count' 
+source/main.c: In function 'NutAppMain': 
+source/main.c:995: warning: implicit declaration of function 'set_volume' 
+source/main.c:917: warning: unused variable 'i' 
+avr-gcc -c source/memory.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/memory.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/memory.o 
+In file included from source/memory.c:1: 
+source/memory.h:13: warning: function declaration isn't a prototype 
+source/memory.h:21: warning: function declaration isn't a prototype 
+source/memory.h:23: warning: function declaration isn't a prototype 
+source/memory.h:25: warning: function declaration isn't a prototype 
+source/memory.h:27: warning: function declaration isn't a prototype 
+source/memory.h:28: warning: function declaration isn't a prototype 
+source/memory.h:33: warning: function declaration isn't a prototype 
+source/memory.c:5: warning: function declaration isn't a prototype 
+source/memory.c: In function 'memory_init': 
+source/memory.c:7: warning: implicit declaration of function 'NutNvMemLoad' 
+source/memory.c:10: warning: implicit declaration of function 'puts' 
+source/memory.c:11: warning: implicit declaration of function 'reset' 
+source/memory.c:13: warning: implicit declaration of function 'printf' 
+source/memory.c:13: warning: incompatible implicit declaration of built-in function 'printf' 
+source/memory.c:19: warning: implicit declaration of function 'save' 
+source/memory.c: At top level: 
+source/memory.c:22: warning: function declaration isn't a prototype 
+source/memory.c:22: warning: conflicting types for 'reset' 
+source/memory.c:11: warning: previous implicit declaration of 'reset' was here 
+source/memory.c:31: warning: function declaration isn't a prototype 
+source/memory.c:31: warning: conflicting types for 'save' 
+source/memory.c:19: warning: previous implicit declaration of 'save' was here 
+source/memory.c: In function 'save': 
+source/memory.c:32: warning: implicit declaration of function 'NutNvMemSave' 
+source/memory.c: At top level: 
+source/memory.c:35: warning: function declaration isn't a prototype 
+source/memory.c:40: warning: function declaration isn't a prototype 
+source/memory.c:44: warning: function declaration isn't a prototype 
+source/memory.c:54: warning: function declaration isn't a prototype 
+source/memory.c:64: warning: function declaration isn't a prototype 
+source/memory.c:68: warning: function declaration isn't a prototype 
+avr-gcc -c source/menu.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/menu.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/menu.o 
+In file included from source/menu.c:4: 
+source/main.h:5: warning: function declaration isn't a prototype 
+source/main.h:7: warning: function declaration isn't a prototype 
+source/main.h:8: warning: function declaration isn't a prototype 
+source/main.h:9: warning: function declaration isn't a prototype 
+avr-gcc -c source/mmc.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/mmc.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/mmc.o 
+avr-gcc -c source/mmcdrv.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/mmcdrv.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/mmcdrv.o 
+avr-gcc -c source/NTP.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/NTP.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/NTP.o 
+In file included from source/NTP.c:3: 
+source/memory.h:13: warning: function declaration isn't a prototype 
+source/memory.h:21: warning: function declaration isn't a prototype 
+source/memory.h:23: warning: function declaration isn't a prototype 
+source/memory.h:25: warning: function declaration isn't a prototype 
+source/memory.h:27: warning: function declaration isn't a prototype 
+source/memory.h:28: warning: function declaration isn't a prototype 
+source/memory.h:33: warning: function declaration isn't a prototype 
+avr-gcc -c source/remcon.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/remcon.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/remcon.o 
+avr-gcc -c source/rtc.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/rtc.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/rtc.o 
+source/rtc.c: In function 'X12RtcIncrementAlarm': 
+source/rtc.c:277: warning: passing argument 3 of 'X12RtcGetAlarm' from incompatible pointer type 
+avr-gcc -c source/showtime.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/showtime.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/showtime.o 
+In file included from source/showtime.c:6: 
+source/display.h:59: warning: parameter names (without types) in function declaration 
+source/showtime.c: In function 'showAlarmTime': 
+source/showtime.c:18: warning: implicit declaration of function 'strlen' 
+source/showtime.c:18: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:30: warning: implicit declaration of function 'malloc' 
+source/showtime.c:30: warning: incompatible implicit declaration of built-in function 'malloc' 
+source/showtime.c:30: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:30: warning: implicit declaration of function 'stlren' 
+source/showtime.c:34: warning: assignment from incompatible pointer type 
+source/showtime.c: In function 'showTimeAndDate': 
+source/showtime.c:44: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:56: warning: incompatible implicit declaration of built-in function 'malloc' 
+source/showtime.c:56: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:60: warning: assignment from incompatible pointer type 
+source/showtime.c:68: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:78: warning: incompatible implicit declaration of built-in function 'malloc' 
+source/showtime.c:78: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:82: warning: assignment from incompatible pointer type 
+source/showtime.c: In function 'showTimeNoSeconds': 
+source/showtime.c:91: warning: implicit declaration of function 'strcpy' 
+source/showtime.c:91: warning: incompatible implicit declaration of built-in function 'strcpy' 
+source/showtime.c:96: warning: incompatible implicit declaration of built-in function 'strcpy' 
+source/showtime.c:102: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:114: warning: incompatible implicit declaration of built-in function 'malloc' 
+source/showtime.c:114: warning: incompatible implicit declaration of built-in function 'strlen' 
+source/showtime.c:118: warning: assignment from incompatible pointer type 
+source/showtime.c:120:2: warning: no newline at end of file 
+avr-gcc -c source/spidrv.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/spidrv.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/spidrv.o 
+avr-gcc -c source/threads.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/threads.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/threads.o 
+In file included from source/threads.c:39: 
+source/main.h:5: warning: function declaration isn't a prototype 
+source/main.h:7: warning: function declaration isn't a prototype 
+source/main.h:8: warning: function declaration isn't a prototype 
+source/main.h:9: warning: function declaration isn't a prototype 
+source/threads.c: In function 'tone': 
+source/threads.c:48: warning: large integer implicitly truncated to unsigned type 
+source/threads.c: At top level: 
+source/threads.c:57: warning: function declaration isn't a prototype 
+source/threads.c: In function 'playTone': 
+source/threads.c:60: warning: large integer implicitly truncated to unsigned type 
+source/threads.c:64: warning: 'return' with a value, in function returning void 
+source/threads.c:65:2: warning: no newline at end of file 
+source/threads.c: In function 'tone': 
+source/threads.c:55: warning: 'noreturn' function does return 
+avr-gcc -c source/uart0driver.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/uart0driver.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/uart0driver.o 
+avr-gcc -c source/vs10xx.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/vs10xx.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/vs10xx.o 
+In file included from source/vs10xx.c:69: 
+source/memory.h:13: warning: function declaration isn't a prototype 
+source/memory.h:21: warning: function declaration isn't a prototype 
+source/memory.h:23: warning: function declaration isn't a prototype 
+source/memory.h:25: warning: function declaration isn't a prototype 
+source/memory.h:27: warning: function declaration isn't a prototype 
+source/memory.h:28: warning: function declaration isn't a prototype 
+source/memory.h:33: warning: function declaration isn't a prototype 
+source/vs10xx.c: In function 'showVolume': 
+source/vs10xx.c:844: warning: implicit declaration of function 'LcdDDRamStartPos' 
+source/vs10xx.c:845: warning: implicit declaration of function 'LcdStr' 
+source/vs10xx.c:847: warning: statement with no effect 
+source/vs10xx.c: At top level: 
+source/vs10xx.c:94: warning: 'VsPlayMode' defined but not used 
+source/vs10xx.c:1005: warning: 'VsLoadProgramCode' defined but not used 
+avr-gcc -c source/watchdog.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/watchdog.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/watchdog.o 
+avr-gcc -c source/weather.c -mmcu=atmega2561 -Os -Wall -Wstrict-prototypes -DNUT_CPU_FREQ=14745600 -D__HARVARD_ARCH__ -DNUTOS_VERSION=433 -Wa,-ahlms=./source/weather.lst -I./include -Ic:/ethernut-4.3.3/nut/include -Ic:/winavr/avr/include -o source/weather.o 
+In file included from source/weather.c:5: 
+source/weather.h:8: warning: function declaration isn't a prototype 
+source/weather.c:230: warning: function declaration isn't a prototype 
+source/weather.c: In function 'get_weather_temp': 
+source/weather.c:236: warning: implicit declaration of function 'socket' 
+source/weather.c:247: warning: implicit declaration of function 'connect' 
+source/weather.c:247: warning: type-punning to incomplete type might break strict-aliasing rules 
+source/weather.c:257: warning: implicit declaration of function 'send' 
+source/weather.c:265: warning: implicit declaration of function 'recv' 
+avr-gcc ./source/alarm.o ./source/audiostream.o ./source/display.o ./source/fat.o ./source/flash.o ./source/keyboard.o ./source/led.o ./source/log.o ./source/main.o ./source/memory.o ./source/menu.o ./source/mmc.o ./source/mmcdrv.o ./source/NTP.o ./source/remcon.o ./source/rtc.o ./source/showtime.o ./source/spidrv.o ./source/threads.o ./source/uart0driver.o ./source/vs10xx.o ./source/watchdog.o ./source/weather.o -mmcu=atmega2561 -Wl,--defsym=main=0,-Map=TIStreamer.map,--cref -Lc:/ethernut-4.3.3/build/gcc/atmega2561/lib c:/ethernut-4.3.3/build/gcc/atmega2561/lib/nutinit.o -lnutpro -lnutnet -lnutpro -lnutfs -lnutos -lnutdev -lnutarch -lnutnet -lnutcrt -lnutdev -o ipac.elf 
+./source/weather.o: In function `get_weather_temp': 
+weather.c:(.text+0x2a): undefined reference to `socket' 
+weather.c:(.text+0x7a): undefined reference to `connect' 
+weather.c:(.text+0x9e): undefined reference to `send' 
+weather.c:(.text+0xd2): undefined reference to `recv' 
+make: *** [ipac] Error 1 
+Errors when making; Stopped

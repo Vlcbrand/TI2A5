@@ -1,0 +1,1 @@
+int initNtp(void);

@@ -66,7 +66,7 @@
 #include "portio.h"    // for debug purposes only
 #include "spidrv.h"    // for debug purposes only
 #include "watchdog.h"
-
+#include "memory.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
@@ -798,6 +798,177 @@ int VsSetVolume(u_char left, u_char right)
 }
 
 
+/*
+* VS_BASS_REG = 0x0000. 0x00FF voor bass, 0xff00 voor treble, 0xffff voor beide (de maximalen dan)
+*/
+int VsSetBass(u_char treble, u_char bass)
+{
+    u_char ief;
+
+    ief = VsPlayerInterrupts(0);
+
+    VsRegWrite(VS_BASS_REG, (((u_short) treble) << 8) | (u_short) bass); //0x00f0
+
+    VsPlayerInterrupts(ief);
+
+    return(0);
+}
+
+u_short VsfixByte(u_char left, u_char right)
+{
+	u_short temp;
+	
+	temp = ((u_short)left  << 4) | (u_short) right;
+	
+    return(temp);
+}
+
+/*!
+ * \brief Set volume calculate real volume.
+ *
+ * \param volume  volume between 1-15.
+ *
+ * \return 0 on success, -1 otherwise.
+ */
+int set_bass(int bass)
+{
+	
+	printf(" SET: %d", bass);
+	u_char realBass = VsfixByte(bass, 0x6);
+	printf(" SET: %u", (unsigned)realBass);
+	VsSetBass(VsfixByte(get_treble(), 0x6), realBass);
+	save_bass(bass);
+	return(0);
+}
+
+int set_treble(int treble)
+{
+	
+	printf(" SET: %d", treble);
+	u_char realTreble = VsfixByte(treble, 0x6);
+	printf(" SET: %u", (unsigned)realTreble);
+	VsSetBass(realTreble, VsfixByte(get_bass(), 0x6));
+	save_treble(treble);
+	return(0);
+}
+
+int set_volume(int volume)
+{
+	
+	printf(" SET: %d", volume);
+	u_char realVol = 128u - ((u_char)volume*9);
+	printf(" SET: %u", (unsigned)realVol);
+	VsSetVolume(realVol, realVol);
+	save_volume(volume);
+	return(0);
+}
+
+int bass_up(int curBass)
+{
+	int tempBass = curBass;
+	if(tempBass < 7)
+	{
+		tempBass += 1;
+		set_bass(tempBass);
+	}
+	return(0);
+}
+
+int bass_down(int curBass)
+{
+	int tempBass = curBass;
+	if(tempBass != 0)
+	{
+		tempBass -= 1;
+		set_bass(tempBass);
+	}
+	return(0);
+}
+
+void showBass(int bass)
+{
+	int i = 0;
+			LcdDDRamStartPos(0,3);
+		LcdStr("Bass");
+		
+	for(i; i <= bass; i++)
+	{		
+		LcdDDRamStartPos(1, i+1);
+		LcdStr((char)0xFF);
+	}
+}
+
+int treble_up(int curTreble)
+{
+	int tempTreble = curTreble;
+	if(tempTreble < 7)
+	{
+		tempTreble += 1;
+		set_treble(tempTreble);
+	}
+	return(0);
+}
+
+int treble_down(int curTreble)
+{
+	int tempTreble = curTreble;
+	if(tempTreble != 0)
+	{
+		tempTreble -= 1;
+		set_treble(tempTreble);
+	}
+	return(0);
+}
+
+void showTreble(int treble)
+{
+	int i = 0;
+			LcdDDRamStartPos(0,5);
+		LcdStr("Treble");
+		
+	for(i; i <= treble; i++)
+	{		
+		LcdDDRamStartPos(1, i+1);
+		LcdStr((char)0xFF);
+	}
+}
+
+int volume_up(int curVol)
+{
+	int tempVol = curVol;
+	if(tempVol < 14)
+	{
+		tempVol += 1;
+		set_volume(tempVol);
+	}
+	return(0);
+}
+
+int volume_down(int curVol)
+{
+	int tempVol = curVol;
+	if(tempVol != 0)
+	{
+		tempVol -= 1;
+		set_volume(tempVol);
+	}
+	return(0);
+}
+
+void showVolume(int volume)
+{
+	int i = 0;
+			LcdDDRamStartPos(0,5);
+		LcdStr("Volume");
+		
+	for(i; i <= volume; i++)
+	{		
+		LcdDDRamStartPos(1, i+1);
+		LcdStr((char)0xFF);
+	}
+}
+
+
 /*!
  * \brief Get volume.
  *
@@ -822,7 +993,6 @@ u_short VsGetType(void)
 {
     return(g_vs_type);
 }
-
 
 /*!
  * \brief Return the number of the VS10xx chip.

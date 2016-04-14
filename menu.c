@@ -82,14 +82,29 @@ void AddChildNode(MenuNode* node)
 
 void init_menu(void)
 {
-    MenuNode *taalNode = Level1Node("Taal",  NULL); //de laatste is de functiepointer
+//    MenuNode *taalNode = Level1Node("Taal",  NULL); //de laatste is de functiepointer
     MenuNode *tijdNode = Level1Node("Tijd", &time_loop);
-
+    MenuNode *audioNode = Level1Node("Audio", NULL);
+	MenuNode *tijdzoneNode = Level1Node("Tijdzone", &timezone_loop);
     MenuNode *alarmNode = Level1Node("Alarm", &alarm_loop);
+	MenuNode *resetNode = Level1Node("Reset", &factory_reset_loop);
+	MenuNode *weatherNode = Level1Node("Weer", &weather_loop);
+
+	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
+	MenuNode *bassNode = ChildNode("Bass", audioNode, NULL, &bass_loop);
+	MenuNode *trebleNode = ChildNode("Treble", audioNode, NULL, &treble_loop);
 	
-	AddL1Node(taalNode);
+//	AddL1Node(taalNode);
 	AddL1Node(tijdNode);
+	AddL1Node(tijdzoneNode);
 	AddL1Node(alarmNode);
+	AddL1Node(audioNode);
+	AddL1Node(resetNode);
+	AddL1Node(weatherNode);
+
+	AddChildNode(volumeNode);
+	AddChildNode(bassNode);
+	AddChildNode(trebleNode);
 	
 	currentMenuItem = head;
 	printf("\nMenu Initialized");

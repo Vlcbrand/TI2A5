@@ -61,11 +61,22 @@
 #include "memory.h"
 
 #include "audiostream.h"
+#include "NTP.h"
+
+#include "weather.h"
 
 /*-------------------------------------------------------------------------*/
 /* global variable definitions                                             */
 /*-------------------------------------------------------------------------*/
+int aan = 0;
+int theSnoozes = 0;
+int aantalSnoozes = 0;
 
+int nr1 = 0;
+int nr2 = 0;
+int operand = 0;
+int result = -1;
+int userInput = 0;
 /*-------------------------------------------------------------------------*/
 /* local variable definitions                                              */
 /*-------------------------------------------------------------------------*/
@@ -74,6 +85,7 @@
 /* local routines (prototyping)                                            */
 /*-------------------------------------------------------------------------*/
 static void SysMainBeatInterrupt(void *);
+
 static void SysControlMainBeat(u_char);
 
 /*!
@@ -104,7 +116,7 @@ static void SysMainBeatInterrupt(void *p) {
     CardCheckCard();
 }
 
-
+static char oplist[3] = {'+','-','*'};
 /*!
  * \brief Initialise Digital IO
  *  init inputs to '0', outputs to '1' (DDRxn='0' or '1')
@@ -197,7 +209,145 @@ void print_time(tm *t) {
     printf("sec: %d\n", t->tm_sec);
 }
 
-void alarm_loop(){
+void timezone_loop() {
+    NutSleep(500);
+	LcdBackLight(LCD_BACKLIGHT_ON);
+    char timezoneStr[10] = "Tijdzone";
+    int timezone = get_timezone();
+    char amount[10] = "";
+
+    for (; ;) {
+        u_char x = KbGetKey();
+        switch (x) {
+            case KEY_UP:
+                timezone++;
+                if(timezone>12) {
+                    timezone = 12;
+                }
+                break;
+            case KEY_DOWN:
+                timezone--;
+                if(timezone<-12) {
+                    timezone = -12;
+                }
+                break;
+            case KEY_OK:
+                set_timezone(timezone);
+                printf("Bye\n");
+                return;
+            case KEY_ESC:
+                return;
+
+        }
+
+//        printf("timezonestr is %s\n", timezoneStr);
+        LcdClear();
+        LcdDDRamStartPos(0, 4);
+        LcdStr(timezoneStr);
+        sprintf(amount, "GMT  %d", timezone);
+
+        LcdDDRamStartPos(1, 3);
+
+        LcdStr(amount);
+//        printf("Amount is %s\n", amount);
+//        printf("Strlen amount : %d\n", strlen(amount));
+        LcdCursorOff();
+        NutSleep(200);
+    }
+}
+
+/*
+ * select the stream
+ */
+void select_stream_loop(int alarm_id){
+    int pos = 0;
+
+    if(alarm_id == 0){
+        pos = get_alarm1_stream_id();
+    }else{
+        pos = get_alarm2_stream_id();
+    }
+
+    if(pos != 0 && pos != 1 && pos != 2){
+        pos = 0;
+    }
+
+    char cursor[4] = "<--";
+
+    //clear screen
+    LcdClear();
+
+
+    while(1){
+        u_char x = KbGetKey();
+        switch (x){
+            case KEY_UP:
+                if(pos == 2){
+                    pos = 1;
+                }else{
+                    pos = 0;
+                }
+                break;
+            case KEY_DOWN:
+                if(pos == 1){
+                    pos = 2;
+                }else{
+                    pos = 1;
+                }
+                break;
+            case KEY_OK:
+                //save
+                if(alarm_id == 0){
+                    set_alarm1_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1, pos 2 -> stream 2
+                }else{
+                    set_alarm2_stream_id(pos); //pos 0 -> stream 0, pos 1 -> stream 1, pos 2 -> stream 2
+                }
+                //return
+                return;
+            case KEY_ESC:
+                return;
+        }
+        LcdClear();
+
+
+        //show streams
+        switch (pos){
+            case 0:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(yorick->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(radio_3fm->name);
+
+                //cursor
+                LcdDDRamStartPos(LINE_0, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+            case 1:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(yorick->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(radio_3fm->name);
+
+                //cursor
+                LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+            case 2:
+                LcdDDRamStartPos(LINE_0, 0);
+                LcdStr(radio_3fm->name);
+                LcdDDRamStartPos(LINE_1, 0);
+                LcdStr(funx_reggae->name);
+
+                //cursor
+                LcdDDRamStartPos(LINE_1, 16 - strlen(cursor));
+                LcdStr(cursor);
+                break;
+        }
+        NutSleep(200);
+    }
+}
+
+void alarm_loop() {
     char *alarms[20];
     alarms[0] = "Alarm 1";
     alarms[1] = "Alarm 2";
@@ -205,7 +355,7 @@ void alarm_loop(){
     int pos = 0;
     char cursor[5] = "<--";
     NutSleep(500);
-    for(;;) {
+    for (; ;) {
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
@@ -218,7 +368,11 @@ void alarm_loop(){
                 set_alarm_loop(pos);
                 NutSleep(500);
                 printf("Setting alarm ended\n");
-                break;
+
+                //select the stream
+                select_stream_loop(pos);
+
+                return;
             case KEY_ESC:
                 return;
 
@@ -240,7 +394,8 @@ void alarm_loop(){
     }
 }
 
-void set_alarm_loop(int alarmid){
+
+void set_alarm_loop(int alarmid) {
     tm time;
     time = get_alarm(alarmid);
     printf("Alarm id is %d\n", alarmid);
@@ -255,23 +410,23 @@ void set_alarm_loop(int alarmid){
     int cursor = n1;
     LcdCursorBlink(BLINK_ON);
     NutSleep(300);
-    for(;;) {
+    for (; ;) {
         u_char x = KbGetKey();
         switch (x) {
             case KEY_UP:
-                if(cursor == n1){
+                if (cursor == n1) {
                     X12RtcIncrementAlarm(1, 0, alarmid);
                 }
-                else if(cursor == n2) {
+                else if (cursor == n2) {
                     X12RtcIncrementAlarm(0, 1, alarmid);
                 }
 
                 break;
             case KEY_DOWN:
-                if(cursor == n1){
+                if (cursor == n1) {
                     X12RtcIncrementAlarm(-1, 0, alarmid);
                 }
-                else if(cursor == n2) {
+                else if (cursor == n2) {
                     X12RtcIncrementAlarm(0, -1, alarmid);
                 }
                 break;
@@ -298,23 +453,22 @@ void set_alarm_loop(int alarmid){
     }
 }
 
-void time_loop()
-{
-	int cursorpos = 5;
-	LcdCursorBlink(BLINK_OFF);
-	tm gmt;
-	X12RtcGetClock(&gmt);
+void time_loop() {
+    int cursorpos = 5;
+    LcdCursorBlink(BLINK_OFF);
+    tm gmt;
+    X12RtcGetClock(&gmt);
 
     for (; ;) {
-        if(checkAlarm(0)){
+        if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
-        if(checkAlarm(1)){
+        if (checkAlarm(1)) {
             alarm_afspeel_loop(1);
         }
         u_char x = KbGetKey();
-		time_show();
-		LcdDDRamStartPos(0,cursorpos);
+        time_show();
+        LcdDDRamStartPos(0, cursorpos);
         switch (x) {
             case KEY_DOWN:
                 switch (cursorpos) {
@@ -324,11 +478,11 @@ void time_loop()
                         break;
                     case 8:
                         //min
-                        X12RtcIncrementClock(0,-1, 0);
+                        X12RtcIncrementClock(0, -1, 0);
                         break;
                     case 11:
                         //sec
-						X12RtcIncrementClock(0,0, -1);
+                        X12RtcIncrementClock(0, 0, -1);
                         break;
                 }
                 break;
@@ -340,11 +494,11 @@ void time_loop()
                         break;
                     case 8:
                         //min
-                        X12RtcIncrementClock(0,1, 0);
+                        X12RtcIncrementClock(0, 1, 0);
                         break;
                     case 11:
                         //sec
-						X12RtcIncrementClock(0,0, 1);
+                        X12RtcIncrementClock(0, 0, 1);
                         break;
                 }
                 break;
@@ -355,48 +509,47 @@ void time_loop()
                 break;
             case KEY_LEFT:
                 if (cursorpos > 4) {
-                    cursorpos-= 3;
+                    cursorpos -= 3;
                 }
                 break;
-				case KEY_ALT:
-					LcdClear();
-					showMenuItem();
-					return;
+            case KEY_OK:
+                LcdClear();
+                showMenuItem();
+                return;
                 break;
-				case KEY_ESC:
-					LcdClear();
-					X12RtcSetClock(&gmt);
-					showMenuItem();
-					return;
-			break;
+            case KEY_ESC:
+                LcdClear();
+                X12RtcSetClock(&gmt);
+                showMenuItem();
+                return;
+                break;
         }
-		NutSleep(300);
-}
+        NutSleep(300);
+    }
 
 }
 
-void time_show()
-{
-		 tm gmt;
-		char* timeStr = malloc(sizeof(char) * 50);
-		char* dateStr = malloc(sizeof(char) * 50);
-        X12RtcGetClock(&gmt);
-        sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
-        sprintf(dateStr, "%02d/%02d/%04d",gmt.tm_mday,gmt.tm_mon, gmt.tm_year + 1900);
-        showTimeAndDate(timeStr,dateStr);
-		
-		free(timeStr);
-		free(dateStr);
+void time_show() {
+    tm gmt;
+    char *timeStr = malloc(sizeof(char) * 50);
+    char *dateStr = malloc(sizeof(char) * 50);
+    X12RtcGetClock(&gmt);
+    sprintf(timeStr, "%02d:%02d:%02d", gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+    sprintf(dateStr, "%02d/%02d/%04d", gmt.tm_mday, gmt.tm_mon, gmt.tm_year + 1900);
+    showTimeAndDate(timeStr, dateStr);
+
+    free(timeStr);
+    free(dateStr);
 }
 
-void menu_loop(){
-	
-    for (;;) {
+void menu_loop() {
+
+    for (; ;) {
         u_char x = KbGetKey();
-        if(checkAlarm(0)){
+        if (checkAlarm(0)) {
             alarm_afspeel_loop(0);
         }
-        if(checkAlarm(1)){
+        if (checkAlarm(1)) {
             alarm_afspeel_loop(1);
         }
 
@@ -411,15 +564,17 @@ void menu_loop(){
                 LcdClear();
                 prevMenuItem();
                 showMenuItem();
-				break;
+                break;
             case KEY_OK:
                 LcdClear();
                 menuAction();
-				break;
+                LcdClear();
+                showMenuItem();
+                break;
             case KEY_ESC:
                 LcdClear();
-                if( parentMenuItem() == -1 ){ return; }                  
-				parentMenuItem();
+                if (parentMenuItem() == -1) { return; }
+                parentMenuItem();
                 showMenuItem();
                 break;
         }
@@ -427,54 +582,174 @@ void menu_loop(){
     }
 }
 
-void main_loop(){
-		LcdCursorOff();
-		int count = 0;
-		
-	     for (; ;) 
-		 {
-             if(checkAlarm(0)){
-                 alarm_afspeel_loop(0);
-             }
-             if(checkAlarm(1)){
-                 alarm_afspeel_loop(1);
-             }
-			time_show();
-		 u_char x = KbGetKey();
-		 if(x != KEY_UNDEFINED)
-		 {
-			if(count != 0)
-			{
-				count = 0;
-				LcdBackLight(LCD_BACKLIGHT_ON);
-			}
-			
-			switch (x){
-            case KEY_ALT:
+
+void volume_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				volume_up(get_volume());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                volume_down(get_volume());
+				break;
+            case KEY_OK:
                 LcdClear();
 				showMenuItem();
-                menu_loop();
-		}
-			
-		 }
-		 else{
-        
-			if(count < 10)
-			{
-				count++;
-			}
-				else{
-				LcdBackLight(LCD_BACKLIGHT_OFF);
-			}
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showVolume(get_volume());
+		printf("%d\n", get_volume());
 		
+        NutSleep(500);
+    }
+	
+}
+
+void bass_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				bass_up(get_bass());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                bass_down(get_bass());
+				break;
+            case KEY_OK:
+                LcdClear();
+				showMenuItem();
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showBass(get_bass());
+		printf("%d\n", get_bass());
+		
+        NutSleep(500);
+    }
+	
+}
+void treble_loop()
+{
+	 for (;;) {
+        u_char x = KbGetKey();
+
+        switch (x) {
+            case KEY_RIGHT:
+                LcdClear();
+				treble_up(get_treble());
+                break;
+            case KEY_LEFT:
+                LcdClear();
+                treble_down(get_treble());
+				break;
+            case KEY_OK:
+                LcdClear();
+				showMenuItem();
+				return;
+				break;
+            case KEY_ESC:
+                LcdClear();
+                showMenuItem();
+				return;
+                break;
+        }
+		showTreble(get_treble());
+		printf("%d\n", get_treble());
+		
+        NutSleep(500);
+    }
+	
+}
+
+void main_loop() {
+    LcdCursorOff();
+    int count = 0;
+
+    for (; ;) {
+        if (checkAlarm(0)) {
+            alarm_afspeel_loop(0);
+        }
+        if (checkAlarm(1)) {
+            alarm_afspeel_loop(1);
+        }
+        time_show();
+        u_char x = KbGetKey();
+        if (x != KEY_UNDEFINED) {
+            if (count != 0) {
+                count = 0;
+                LcdBackLight(LCD_BACKLIGHT_ON);
+            }
+
+            switch (x) {
+                case KEY_ALT:
+                    LcdClear();
+                    showMenuItem();
+                    menu_loop();
+            }
+
+        }
+        else {
+
+            if (count < 10) {
+                count++;
+            }
+            else {
+                LcdBackLight(LCD_BACKLIGHT_OFF);
+            }
+
         }
         NutSleep(500);
     }
 }
 
 
+void generate_Sum()
+{
+    //operand = rand() % 3;
+    //printf("\n %d \n",operand);
+    switch(operand)
+    {
+        case 0:
+            nr1 = rand() % 100;
+            nr2 = rand() % 100;
+            result = nr1 + nr2;
+            break;
+        case 1:
+            nr1 = rand() % 100;
+            printf("\n %d", nr1);
+            nr2 = rand() % 100;
+            printf("\n %d", nr2);
+            result = nr1 - nr2;
+            break;
+        case 2:
+            nr1 = rand() % 10;
+            nr2 = rand() % 10;
+            result = nr1 * nr2;
+            break;
+    }
+}
 
-void alarm_afspeel_loop(int alarmloop){
+void alarm_afspeel_loop(int alarmloop) {
     tm gmt;
     char *timeStr = malloc(sizeof(char) * 50);
     //char *dateStr = malloc(sizeof(char) * 50);
@@ -485,42 +760,200 @@ void alarm_afspeel_loop(int alarmloop){
     LcdCursorOff();
     LcdClear();
 
-    showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
+    //showTimeNoSeconds(timeStr, "Alarm gaat af", 1);
 
-    NutThreadCreate("play stream", PlayStream, yorick, 512);
+	LcdDDRamStartPos(0,1);
+	LcdStr("Alarm");
+	LcdDDRamStartPos(0,7);
+	char str[2];
+	sprintf(str, "%d", alarm_loop);
+	LcdStr(alarmloop);
+	LcdDDRamStartPos(0,9);
+	LcdStr("gaat af!");
 
-    for(;;){
+	generate_Sum();
+	/*
+	10 + 10 = 100
+  ----------------
+	*/
+
+    //play stream
+    if(alarmloop == 0){
+        switch (get_alarm1_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }else{
+        switch (get_alarm2_stream_id()){
+            case 0:
+                NutThreadCreate("play stream", PlayStream, yorick, 512);
+                break;
+            case 1:
+                NutThreadCreate("play stream", PlayStream, radio_3fm, 512);
+                break;
+            case 2:
+                NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                break;
+        }
+    }
+    int *snoozes;
+    snoozes = (int)&aantalSnoozes;
+
+    int i;
+
+    for (; ;) {
         //playTone();
         //test
 
-        printf("TOON SPEELT AF\n");
+//        printf("TOON SPEELT AF\n");
         NutSleep(500);
 
         u_char x = KbGetKey();
-
-
-        switch (x){
+			LcdDDRamStartPos(1,2);
+			char *tempSum = malloc(sizeof(char) * 50);
+			char *tempResult = malloc(sizeof(char) * 50);
+			sprintf(tempSum, "%d %c %d = ", nr1, oplist[operand], nr2);
+			LcdStr(tempSum);
+			int i = 0;
+        switch (x) {
             case KEY_OK:
+                if (aan == 1)
+				{
+					if(result == userInput)
+					{
+						printf("doei snooze\n");
+						for(i = 0; i < snoozes; i++){
+							gmt.tm_min = gmt.tm_min - 2;
+							theSnoozes = 0;
+						}
+						set_alarm(alarmloop, gmt);
+						aan = 0;
+                        STOP_THREAD = 1;
+						LcdClear();
+						return;
+					}
+					else
+					{
+						generate_Sum();
+						userInput = 0;
+					}
+                }
+
+                aan = 0;
+
                 LcdClear();
-                menuAction();
-
-                //stop alarm
-                STOP_THREAD = 1;
-                puts("!!!!!!!!!!!!!!!!!!!!!!stop thread!");
-
-                break;
+                return;
             case KEY_ESC:
+                theSnoozes++;
+                printf("aantal snoozes bitch\n");
                 gmt.tm_min = gmt.tm_min + 2;
                 set_alarm(alarmloop, gmt);
+                aan = 0;
                 LcdClear();
                 menuAction();
+                STOP_THREAD = 1;
+                break;
+            case KEY_UP:
+				if(userInput < 999)
+					userInput++;
+                break;
+			case KEY_DOWN:
+				if(userInput > 0)
+					userInput--;
+				else
+					userInput = 999;
+                break;
+			case KEY_RIGHT:
+				if(userInput < 999)
+					userInput = userInput + 10;
+				else
+					userInput = 0;
+                break;
+			case KEY_LEFT:
+				if(userInput > 0)
+					userInput = userInput - 10;
+				else
+					userInput = 999;
                 break;
         }
+		//printf("\n %d ",userInput);
+		free(tempSum);
+		LcdDDRamStartPos(1,12);
+		sprintf(tempResult,"%d", userInput);
+		LcdStr(tempResult);
+		free(tempResult);
+
+//		playTone();
+        NutSleep(500);
 
     }
 }
 
-int checkAlarm(int alarm){
+void weather_loop(){
+    LcdCursorOff();
+    int count = 0;
+    LcdBackLight(LCD_BACKLIGHT_ON);
+
+    LcdDDRamStartPos(LINE_0, 0);
+    char text[17] = "Temperatuur:";
+    LcdStr(text);
+    get_weather_temp();
+
+    NutSleep(500);
+    for (; ;) {
+        u_char x = KbGetKey();
+        if (x != KEY_UNDEFINED) {
+            switch (x) {
+                case KEY_OK:
+                    //return
+                    return;
+                case KEY_ESC:
+                    //return
+                    return;
+            }
+
+        }
+        NutSleep(500);
+    }
+}
+
+void factory_reset_loop(){
+    LcdCursorOff();
+    int count = 0;
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    NutSleep(500);
+    for (; ;) {
+        u_char x = KbGetKey();
+        LcdClear();
+        LcdDDRamStartPos(0, 0);
+        LcdStr("Wilt u resetten?");
+        LcdDDRamStartPos(1,0);
+        LcdStr("OK=ja, ESC=nee");
+        if (x != KEY_UNDEFINED) {
+
+            switch (x) {
+                case KEY_OK:
+                    //Reset this shit
+                    factory_reset();
+                    return;
+                case KEY_ESC:
+                    return;
+            }
+
+        }
+        NutSleep(500);
+    }
+}
+
+
+int checkAlarm(int alarm) {
     tm time;
     tm gmt;
 
@@ -528,10 +961,11 @@ int checkAlarm(int alarm){
 
     X12RtcGetClock(&gmt);
     time = get_alarm(alarm);
-    print_time(&time);
+//    print_time(&time);
 
     cmp_ret = compare_time_minhour(&time, &gmt);
-    if(cmp_ret == 0){
+    if (cmp_ret == 0) {
+        aan = 1;
         return 1;
     }
     return 0;
@@ -550,6 +984,10 @@ int checkAlarm(int alarm){
 /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 int main(void) {
     int i;
+	int t;
+	int k;
+	t = get_bass();
+	k = get_treble();
     /*
      * Kroeske: time struct uit nut/os time.h (http://www.ethernut.de/api/time_8h-source.html)
      *
@@ -596,6 +1034,7 @@ int main(void) {
 
     //audio stream test
     VsPlayerInit();
+
     initAudioStreams();
     LcdSetupDisplay();
 
@@ -603,18 +1042,48 @@ int main(void) {
 		###				Start Menu		###
 		################################### */
     init_menu();
-	LcdClear();
+    LcdClear();
 
     memory_init();
+
+//	 NutThreadCreate("play stream", PlayStream, yorick, 512);
+//	 NutSleep(700);
 
     gmt.tm_min = gmt.tm_min + 1;
     NutSleep(200);
     set_alarm(0, gmt);
+//
+//    set_alarm1_stream_id(2);
 
-    gmt.tm_min = gmt.tm_min + 2;
-    set_alarm(1,gmt);
-    NutSleep(200);
+//
+//    gmt.tm_min = gmt.tm_min + 2;
+//    set_alarm(1,gmt);
+//    NutSleep(200);
 
+//    timezone_loop();
+    if (get_bootcount() == 0) {
+        timezone_loop();
+    }
+
+	set_volume(get_volume());
+	
+	if(t < 7){
+		set_bass(t);
+	} else{
+		save_bass(7);
+		set_bass(get_bass());
+	}
+	if(k < 7){
+		set_treble(k);
+	} else{
+		save_treble(7);
+		set_treble(get_treble());
+	}		
+	
+    while(get_timezone_set()!= 1) {
+        timezone_loop();
+    }
+	//initNtp();
     main_loop();
     return (0);      // never reached, but 'main()' returns a non-void, so...
 }

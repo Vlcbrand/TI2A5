@@ -25,6 +25,8 @@
 #include "rtc.h"
 #include "portio.h"
 
+#include "NTP.h"
+
 #define I2C_SLA_RTC         0x6F
 #define I2C_SLA_EEPROM      0x57
 #define EEPROM_PAGE_SIZE    64
@@ -162,6 +164,10 @@ int X12RtcGetClock(struct _tm *tm)
             tm->tm_year += 100;
         }
         tm->tm_wday = data[6];
+		
+		if(tm->tm_hour == 4 && tm->tm_min == 0 && (tm->tm_sec >= 0 && tm->tm_sec <= 1)){
+			initNtp();
+		}
     }
     return(rc);
 }
