@@ -1117,7 +1117,7 @@ void fallingAsleep_loop(){
                     if (fallingAan == 0) {
                         fallingAan = 1;
                         puts("falling asleep is aan");
-                        //NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                        NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
                     }
                     break;
                 case KEY_ESC:
