@@ -91,6 +91,7 @@ void init_menu(void)
 	MenuNode *resetNode = Level1Node("Reset", &factory_reset_loop);
 	MenuNode *weatherNode = Level1Node("Weer", &weather_loop);
 	MenuNode *radioNode = Level1Node("Radio", &radio_loop);
+	MenuNode *fallingNode = Level1Node("FallAsleep", &fallingAsleep_loop);
 
 	MenuNode *volumeNode = ChildNode("Volume", audioNode, NULL, &volume_loop);
 	MenuNode *bassNode = ChildNode("Bass", audioNode, NULL, &bass_loop);
@@ -104,6 +105,7 @@ void init_menu(void)
 	AddL1Node(resetNode);
 	AddL1Node(weatherNode);
 	AddL1Node(radioNode);
+	AddL1Node(fallingNode);
 
 	AddChildNode(volumeNode);
 	AddChildNode(bassNode);

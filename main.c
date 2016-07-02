@@ -1079,6 +1079,96 @@ void radio_loop() {
     }
 }
 
+//individuele deel Tim van Lieshout
+void fallingAsleep_loop(){
+
+    //vanaf huidig volume
+    int hetVolume = get_volume();
+
+    // vanaf standaard volume
+    //set_volume(8);
+
+
+
+    tm tempGmt;
+    tm gmt;
+
+    X12RtcGetClock(&tempGmt);
+    tempGmt.tm_min = tempGmt.tm_min + 1;
+
+    NutSleep(100);
+    LcdClear();
+
+    LcdCursorOff();
+    int count = 0;
+    LcdBackLight(LCD_BACKLIGHT_ON);
+    NutSleep(500);
+    LcdClear();
+
+    int fallingAan = 0;
+
+    for(;;){
+        X12RtcGetClock(&gmt);
+        u_char x = KbGetKey();
+        if (x != KEY_UNDEFINED) {
+            switch (x) {
+                case KEY_OK:
+                    //zet het falling asleep aan
+                    if (fallingAan == 0) {
+                        fallingAan = 1;
+                        puts("falling asleep is aan");
+                        //NutThreadCreate("play stream", PlayStream, funx_reggae, 512);
+                    }
+                    break;
+                case KEY_ESC:
+                    //zet het falling asleep uit
+                    //zet het volume op wat er eerst was, zet de stream uit, en ga terug naar het menu
+                    set_volume(hetVolume);
+                    fallingAan = 0;
+                    puts("falling asleep is uit");
+                    STOP_THREAD = 1;
+                    LcdClear();
+                    showMenuItem();
+                    return;
+            }
+        }
+        //wat er gebeurt als falling asleep aan staat
+        if(fallingAan){
+
+            LcdClear();
+            LcdDDRamStartPos(LINE_0, 0);
+            LcdStr("Falling asleep");
+            LcdDDRamStartPos(LINE_1, 0);
+            LcdStr("AAN");
+            //check of het volume hoger is dan 0 en er een minuut voorbij is gegaan
+            //zet dan het volume lager
+            if((get_volume() > 0) && (gmt.tm_min == tempGmt.tm_min)){
+                tempGmt = gmt;
+                tempGmt.tm_min = tempGmt.tm_min + 1;
+                //temVolume -= 1;
+                volume_down(get_volume());
+                puts("\nhet volume is lager");
+            }
+            //als het volume 0 is stopt de muziek en gaat falling asleep uit. Het volume wordt gereset naar wat het was voordat fallingasleep aan ging
+            if(get_volume() == 0){
+                STOP_THREAD = 1;
+                fallingAan = 0;
+                puts("falling asleep is uit");
+                set_volume(hetVolume);
+
+            }
+        }
+            //wat er gebeurt als falling asleep uit staat
+        else{
+            LcdClear();
+            LcdDDRamStartPos(LINE_0, 0);
+            LcdStr("Falling asleep");
+            LcdDDRamStartPos(LINE_1, 0);
+            LcdStr("UIT");
+        }
+        NutSleep(500);
+    }
+}
 
 /*!
  * \brief Main entry of the SIR firmware
