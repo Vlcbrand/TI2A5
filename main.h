@@ -2,6 +2,7 @@
 #ifndef _main_h
 #define _main_h
 
+void fallingAsleep_loop(void);
 void factory_reset_loop(void);
 void timezone_loop(void);
 void time_loop(void);
